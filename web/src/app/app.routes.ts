@@ -57,6 +57,11 @@ export const routes: Routes = [
     title: 'Autor — Propuesta de Diseño Experimental',
   },
   {
+    path: 'laboratorio',
+    loadComponent: () => import('./pages/laboratorio/laboratorio.component').then(m => m.LaboratorioComponent),
+    title: 'Laboratorio — Propuesta de Diseño Experimental',
+  },
+  {
     path: '**',
     redirectTo: '',
   },

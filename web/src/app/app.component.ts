@@ -202,5 +202,10 @@ export class AppComponent {
       label: 'Autor',
       iconPath: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
     },
+    {
+      route: '/laboratorio',
+      label: 'Laboratorio',
+      iconPath: 'M9 2v6.5L3 19a2 2 0 0 0 1.73 3h14.54A2 2 0 0 0 21 19L15 8.5V2M9 2h6M9 14h6',
+    },
   ];
 }
