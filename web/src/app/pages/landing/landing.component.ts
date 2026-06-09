@@ -333,7 +333,7 @@ export class LandingComponent {
       modalCta: { label: 'Ver rúbrica detallada →', route: '/redaccion' },
     },
     {
-      id: 'rigor', label: 'Peso del rigor', numeric: 40, suffix: '%', delay: 200, highlight: true,
+      id: 'rigor', label: 'Peso del rigor', numeric: 40, suffix: '%', delay: 200,
       desc: 'Criterio 3 (el más alto)',
       modalTitle: 'Rigor metodológico · 40%',
       modalSubtitle: 'El criterio más pesado de la rúbrica',
