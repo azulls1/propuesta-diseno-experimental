@@ -1,0 +1,40 @@
+# Dependencies (se reinstalan en el contenedor)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist
+.angular
+.cache
+
+# Tests
+coverage
+.nyc_output
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker (no copiar a sí mismo)
+Dockerfile
+.dockerignore
+
+# Documentación
+README.md
+LICENSE
+
+# Environment
+.env
+.env.*

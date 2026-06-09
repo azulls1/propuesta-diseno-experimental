@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 interface RubricCriterion {
   id: string;
@@ -8,7 +9,7 @@ interface RubricCriterion {
 }
 
 interface Section {
-  id: string;
+  id: string;      // route path (e.g. 'motivacion')
   number: string;
   title: string;
   description: string;
@@ -18,6 +19,7 @@ interface Section {
 @Component({
   selector: 'app-landing',
   standalone: true,
+  imports: [RouterLink],
   template: `
     <!-- HERO -->
     <section class="relative overflow-hidden">
@@ -54,8 +56,8 @@ interface Section {
         </p>
 
         <div class="mt-8 flex flex-wrap items-center gap-3">
-          <a href="#secciones" class="btn-primary">
-            Explorar secciones
+          <a routerLink="/motivacion" class="btn-primary">
+            Empezar por Motivación
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="m12 5 7 7-7 7M5 12h14"/>
@@ -143,7 +145,7 @@ interface Section {
 
       <div class="grid gap-4 lg:grid-cols-2">
         @for (section of sections; track section.id) {
-          <a [href]="'#' + section.id" class="card card-hover group">
+          <a [routerLink]="'/' + section.id" class="card card-hover group">
             <div class="flex items-start gap-4">
               <div class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-brand-500/10 ring-1 ring-brand-500/20 text-brand-300 font-mono font-semibold">
                 {{ section.number }}
@@ -225,28 +227,28 @@ export class LandingComponent {
       number: '01',
       title: 'Motivación',
       description: 'Problema real en IA que esta propuesta busca atacar, sustentado con literatura previa.',
-      status: 'pending',
+      status: 'in-progress',
     },
     {
       id: 'hipotesis',
       number: '02',
       title: 'Hipótesis',
       description: 'Afirmación falsable con variables, métricas y criterio explícito de refutación.',
-      status: 'pending',
+      status: 'in-progress',
     },
     {
       id: 'metodologia',
       number: '03',
       title: 'Metodología',
       description: 'Diseño, datos, muestreo, train/val/test, procedimiento, métricas y control de sesgos.',
-      status: 'pending',
+      status: 'in-progress',
     },
     {
       id: 'comparacion',
       number: '04',
       title: 'Comparación',
       description: 'Baselines y estudios previos contra los que se medirán los resultados del experimento.',
-      status: 'pending',
+      status: 'in-progress',
     },
   ];
 }

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive],
   template: `
     <header class="sticky top-0 z-40 border-b border-ink-800/80 bg-ink-950/70 backdrop-blur-md">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
@@ -22,10 +22,22 @@ import { RouterLink } from '@angular/router';
         </a>
 
         <nav class="hidden md:flex items-center gap-1 text-sm">
-          <a href="#motivacion" class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60">Motivación</a>
-          <a href="#hipotesis" class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60">Hipótesis</a>
-          <a href="#metodologia" class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60">Metodología</a>
-          <a href="#comparacion" class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60">Comparación</a>
+          <a routerLink="/motivacion" routerLinkActive="text-brand-300 bg-ink-900/60"
+             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+            Motivación
+          </a>
+          <a routerLink="/hipotesis" routerLinkActive="text-brand-300 bg-ink-900/60"
+             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+            Hipótesis
+          </a>
+          <a routerLink="/metodologia" routerLinkActive="text-brand-300 bg-ink-900/60"
+             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+            Metodología
+          </a>
+          <a routerLink="/comparacion" routerLinkActive="text-brand-300 bg-ink-900/60"
+             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+            Comparación
+          </a>
         </nav>
 
         <div class="flex items-center gap-2">

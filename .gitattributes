@@ -1,0 +1,25 @@
+# Default: usar autocrlf normal del repo (Git decide)
+* text=auto
+
+# Shell scripts SIEMPRE LF (evitar que el VPS reciba CRLF)
+*.sh    text eol=lf
+deployment/deploy.sh text eol=lf
+
+# Dockerfile y configs de servicios: LF
+Dockerfile         text eol=lf
+*.dockerfile       text eol=lf
+nginx.conf         text eol=lf
+docker-compose.yml text eol=lf
+stack.yml          text eol=lf
+*.yml              text eol=lf
+*.yaml             text eol=lf
+
+# Binarios — no tocar
+*.docx binary
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
