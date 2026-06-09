@@ -48,7 +48,9 @@ interface NavItem {
             <span class="font-display text-sm font-semibold text-forest truncate">
               Diseño Experimental
             </span>
-            <span class="text-[10px] text-moss font-mono">Actividad 1 · MIA</span>
+            <span class="text-[10px] text-moss font-mono truncate" title="Actividad 1 · Investigación en IA · MIA">
+              Act 1 · Investigación en IA
+            </span>
           </div>
         </a>
 
@@ -116,12 +118,12 @@ interface NavItem {
               <img src="/images/logo_ia_withe.webp" alt="iagentek" class="h-8 w-auto">
               <div class="flex flex-col leading-tight text-left">
                 <span class="font-display text-white font-semibold text-sm">iagentek</span>
-                <span class="text-white/60 text-[11px]">Maestría en IA · Investigación · 2026</span>
+                <span class="text-white/60 text-[11px]">Maestría en IA · 2026</span>
               </div>
             </div>
             <div class="flex flex-col leading-tight text-right">
-              <span>Propuesta de Diseño Experimental</span>
-              <span class="font-mono text-white/60">propuesta-diseno-experimental</span>
+              <span>Actividad 1 · Propuesta de Diseño Experimental</span>
+              <span class="font-mono text-white/60 text-[11px]">Asignatura: Investigación en Inteligencia Artificial</span>
             </div>
           </div>
         </footer>

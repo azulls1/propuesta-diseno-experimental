@@ -81,11 +81,12 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
           <app-expand-card>
             <div summary>
               <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Asignatura</div>
-              <div class="text-forest font-display font-semibold">Investigación en IA</div>
-              <div class="text-sm text-pine mt-1">Primer semestre, Maestría en IA</div>
+              <div class="text-forest font-display font-semibold">Investigación en Inteligencia Artificial</div>
+              <div class="text-sm text-pine mt-1">Primer semestre · Maestría en IA</div>
             </div>
             <div details>
               <div class="space-y-2 text-sm text-pine">
+                <p><strong class="text-forest">Asignatura completa:</strong> Investigación en Inteligencia Artificial.</p>
                 <p><strong class="text-forest">Modalidad:</strong> Mixta — clases sincrónicas + entregables.</p>
                 <p><strong class="text-forest">Carga:</strong> 8 actividades semestrales.</p>
                 <p><strong class="text-forest">Esta:</strong> Actividad 1 — Propuesta de diseño experimental (10 pts).</p>
@@ -134,7 +135,8 @@ export class AutorComponent {
     { label: 'GitHub user',    value: 'azulls1' },
     { label: 'Email',          value: 'azull.samael@gmail.com' },
     { label: 'Entregable',     value: 'mexmiart07_act2' },
-    { label: 'Asignatura',     value: 'Investigación en IA · 1er semestre' },
+    { label: 'Asignatura',     value: 'Investigación en Inteligencia Artificial' },
+    { label: 'Programa',       value: 'Maestría en IA · 1er semestre' },
     { label: 'Año',            value: '2026 · Junio' },
   ];
 }

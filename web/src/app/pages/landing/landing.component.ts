@@ -30,8 +30,8 @@ interface ModuleLink {
     <section class="card-hero mb-8">
       <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
         <span class="badge badge-info">Actividad 1</span>
-        <span class="badge badge-inactive">Maestría en IA</span>
-        <span class="badge badge-inactive">1er semestre</span>
+        <span class="badge badge-inactive">Asignatura · Investigación en Inteligencia Artificial</span>
+        <span class="badge badge-inactive">Maestría en IA · 1er semestre</span>
       </div>
       <h1 class="card-hero__title">
         Propuesta de diseño experimental
