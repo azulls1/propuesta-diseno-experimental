@@ -29,9 +29,9 @@ documentclass: article
 
 # 1. Introducción y motivación
 
-Los modelos de detección de discurso de odio en español han alcanzado, en variantes peninsulares, F1-scores superiores a 0.85 sobre benchmarks como **HatEval 2019** [1]. Sin embargo, su desempeño cae sistemáticamente entre 12 y 18 puntos cuando se evalúan sobre variantes dialectales latinoamericanas, particularmente las mexicanas [2]. En México, la moderación de contenido en plataformas con mayor base de usuarios (X, TikTok, Facebook) se apoya en clasificadores entrenados predominantemente con corpus ibéricos, lo cual genera dos errores opuestos: falsos positivos al censurar expresiones culturales no agresivas (por ejemplo, el uso afectivo de "güey" o "cabrón") y falsos negativos al dejar pasar agresiones encubiertas en jerga regional.
+Los modelos de detección de discurso de odio en español han alcanzado niveles competitivos sobre benchmarks como **HatEval 2019** [1, 4], con F1-scores reportados en el rango 0.80–0.85 para subtask A en variantes peninsulares. Sin embargo, encuestas recientes en detección de lenguaje abusivo *multilingüe* y *multidialectal* documentan caídas sistemáticas de desempeño cuando los modelos se evalúan en variantes dialectales distintas a aquella con la que fueron entrenados [2]. En México, la moderación de contenido en plataformas con mayor base de usuarios (X, TikTok, Facebook) se apoya en clasificadores entrenados predominantemente con corpus ibéricos, lo cual genera dos errores opuestos: falsos positivos al censurar expresiones culturales no agresivas (por ejemplo, el uso afectivo de "güey" o "cabrón") y falsos negativos al dejar pasar agresiones encubiertas en jerga regional.
 
-Existen aproximaciones recientes para variantes latinoamericanas, como **RoBERTuito** [3], pero su validación se ha concentrado en el español rioplatense (Argentina, Uruguay) y no en variantes norteñas o centrales del español mexicano. Aunque parcialmente resuelto, el problema no cuenta con un *benchmark* dialectal mexicano público con anotación de hablantes nativos, ni con comparaciones estadísticamente rigurosas entre el estado del arte zero-shot y modelos afinados para esa variante. Esta propuesta busca cerrar ese hueco mediante un experimento controlado y reproducible.
+Existen aproximaciones recientes para variantes latinoamericanas, como **RoBERTuito** [3], cuyo entrenamiento se basa en más de 500 millones de tuits en español. No obstante, su validación reportada se ha concentrado en variantes rioplatenses y peninsulares, sin un estudio cuantitativo sobre variantes mexicanas. El problema permanece parcialmente resuelto: no existe un *benchmark* dialectal mexicano público con anotación de hablantes nativos, ni comparaciones estadísticamente rigurosas entre estado del arte *zero-shot* y modelos afinados para esa variante específica. Esta propuesta busca cerrar ese hueco mediante un experimento controlado y reproducible.
 
 # 2. Hipótesis
 
@@ -57,7 +57,7 @@ Estudio **experimental controlado** de tipo cuantitativo. Se compara la variable
 
 ## 3.2. Dataset y preprocesamiento
 
-Construiremos un dataset original, *HateSpeech-MX*, a partir de la API académica de X con la consulta `lang:es place_country:MX` durante seis meses. El tamaño objetivo es de **50 000 tuits**, con un balance estimado de 30 % *hate* y 70 % *no-hate*, reflejando la prevalencia observada en muestras piloto. Cada tuit será anotado por **tres hablantes nativos** reclutados vía Prolific con filtros de nacionalidad y país de residencia. Se descartarán los tuits con acuerdo inter-anotador *κ* < 0.70 (coeficiente Cohen). El preprocesamiento sustituye URLs y menciones por *placeholders* (`[URL]`, `[USER]`) para anonimización y reducción de ruido lexical. Las anotaciones serán liberadas bajo licencia CC BY-SA 4.0; el contenido textual se distribuirá por `tweet_id` (rehidratable), conforme a los TOS de X.
+Construiremos un dataset original, *HateSpeech-MX*, a partir de la API académica de X con la consulta `lang:es place_country:MX` durante seis meses. El tamaño objetivo es de **50 000 tuits**, justificado por la literatura de *fine-tuning* de modelos transformer de tamaño medio sobre tareas binarias [3, 5]. El balance esperado es de aproximadamente 30 % *hate* y 70 % *no-hate*, ajustable tras un piloto de calibración. Cada tuit será anotado por **tres hablantes nativos** reclutados vía Prolific con filtros de nacionalidad y país de residencia. Se descartarán los tuits con acuerdo inter-anotador *κ* < 0.70 (coeficiente Cohen). El preprocesamiento sustituye URLs y menciones por *placeholders* (`[URL]`, `[USER]`) para anonimización y reducción de ruido lexical. Las anotaciones se liberarán bajo licencia CC BY-SA 4.0; el contenido textual se distribuirá por `tweet_id` (rehidratable), conforme a los términos de uso de la plataforma.
 
 ## 3.3. Conjuntos de entrenamiento y validación
 
@@ -89,23 +89,25 @@ La métrica principal es **F1 macro**, robusta a desbalance y alineada con la hi
 
 # 4. Comparación con otras técnicas
 
-Se evalúa la propuesta frente a cuatro baselines bajo las mismas condiciones de test, métricas y presupuesto computacional (≤ 4 GPU-horas por método):
+Se evalúa la propuesta frente a cuatro *baselines* bajo las mismas condiciones de test, métricas y presupuesto computacional (≤ 4 GPU-horas por método). Los F1 esperados se reportan como rangos plausibles a partir de mediciones de la literatura citada [1–4]; el valor final se computará en el experimento. La **Tabla 1** resume la configuración.
 
-| Método                                       | Tipo            | F1 esperado |
-|----------------------------------------------|-----------------|-------------|
-| Mayoría (clase frecuente)                    | Trivial         | ≈ 0.42      |
-| Logistic Regression + TF-IDF                 | Clásico         | ≈ 0.62      |
-| XLM-RoBERTa-large zero-shot                  | Estado del arte | ≈ 0.71      |
-| RoBERTuito-MX (ours) sin preprocesamiento    | Ablación        | ≈ 0.78      |
-| **RoBERTuito-MX (ours) con preprocesamiento**| **Propuesto**   | **≥ 0.83**  |
+**Tabla 1.** Configuración de baselines y F1 macro esperado.
 
-**Condiciones de comparación justa**: mismo *test set* intocado, métricas idénticas (scikit-learn), mismas cinco semillas, mismo presupuesto computacional, mismos hiperparámetros tuneados con el mismo protocolo sobre *val*. Las diferencias se evalúan con **Wilcoxon signed-rank** pareado y corrección de Holm.
+| Método                                          | Tipo            | F1 esperado |
+|-------------------------------------------------|-----------------|-------------|
+| Mayoría (clase frecuente)                       | Trivial         | 0.40 – 0.45 |
+| Logistic Regression + TF-IDF                    | Clásico         | 0.55 – 0.65 |
+| XLM-RoBERTa-large *zero-shot*                   | Estado del arte | 0.68 – 0.74 |
+| RoBERTuito-MX (esta propuesta) sin preprocesamiento | Ablación    | 0.75 – 0.80 |
+| **RoBERTuito-MX (esta propuesta) con preprocesamiento** | **Propuesto** | **≥ 0.83**  |
+
+**Condiciones de comparación justa**: mismo *test set* intocado, métricas idénticas (scikit-learn 1.4+), mismas cinco semillas aleatorias, mismo presupuesto computacional, mismos hiperparámetros tuneados con el mismo protocolo sobre *val*. Las diferencias entre métodos se evalúan con la prueba **Wilcoxon signed-rank pareada** y corrección de Holm para múltiples comparaciones.
 
 # 5. Resultados esperados y discusión
 
-Si la hipótesis se confirma, esperamos F1 ≥ 0.83 con *p* < 0.01 tras corrección de Holm, lo cual demostraría que el *shift* dialectal puede mitigarse con *fine-tuning* específico, sin recurrir a arquitecturas mayores. La contribución sería un *benchmark* MX reproducible y un modelo con licencia abierta.
+Si la hipótesis se confirma, esperamos F1 ≥ 0.83 con *p* < 0.01 tras corrección de Holm, lo cual demostraría que el *shift* dialectal puede mitigarse con *fine-tuning* específico, sin recurrir a arquitecturas mayores. La contribución sería un *benchmark* dialectal mexicano reproducible y un modelo con licencia abierta para uso académico.
 
-Si la hipótesis se refuta —incremento menor a 8 puntos o *p* ≥ 0.05—, la implicación práctica es que el *shift* dialectal mexicano requiere intervenciones más profundas que el simple *fine-tuning*: posiblemente *prompt engineering*, generación de datos sintéticos vía LLM, o ajuste de arquitectura. En cualquier caso, el dataset *HateSpeech-MX* publicado servirá como base para investigación posterior.
+Si la hipótesis se refuta —incremento menor a 8 puntos o *p* ≥ 0.05—, la implicación práctica es que el *shift* dialectal mexicano requiere intervenciones más profundas que el *fine-tuning* simple: posiblemente *prompt engineering*, generación de datos sintéticos vía LLM, o ajuste de arquitectura. La inestabilidad del *fine-tuning* sobre datasets de tamaño moderado documentada en [5] motiva además reportar todas las semillas (no solo la mejor), de modo que un resultado negativo siga siendo informativo. En cualquier caso, el dataset *HateSpeech-MX* y la metodología publicada servirán como base para investigación posterior.
 
 # 6. Referencias
 
