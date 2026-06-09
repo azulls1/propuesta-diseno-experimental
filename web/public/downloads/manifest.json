@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-09T18:56:38.278673+00:00",
+  "generated_at": "2026-06-09T18:56:59.951818+00:00",
   "zip": {
     "name": "entregable-actividad-1-samuel-hernandez.zip",
-    "size": 127478,
-    "sha256": "c12b9672718593b6fec30ad29939a9b17756d3c602a33678f16a477864de0b12"
+    "size": 143375,
+    "sha256": "13c5aa1b5ee3150d17859c13c8e386d9fe5b3d112da5a2d1f530f12038081020"
   },
   "contents": [
     {
@@ -13,6 +13,10 @@
     {
       "path": "01-reporte/reporte.pdf",
       "sha256": "f68af777d1e831c74df15ea022ddc523275cb06c0ca5bcb30f5343a9fab558f3"
+    },
+    {
+      "path": "01-reporte/reporte.docx",
+      "sha256": "95ec11b95804843e189dcecd35887f76bd654c90b206e362be4454868ad4b281"
     },
     {
       "path": "01-reporte/_header.tex",
