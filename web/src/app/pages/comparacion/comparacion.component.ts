@@ -1,6 +1,7 @@
 import { Component, computed, signal } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
 import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
+import { ChecklistComponent, ChecklistItem } from '../../shared/interactive/checklist.component';
 
 type BaselineType = 'trivial' | 'classical' | 'sota' | 'ablation';
 
@@ -15,7 +16,7 @@ interface Baseline {
 @Component({
   selector: 'app-comparacion',
   standalone: true,
-  imports: [SectionLayoutComponent, ExpandCardComponent],
+  imports: [SectionLayoutComponent, ExpandCardComponent, ChecklistComponent],
   template: `
     <app-section-layout
       sectionNumber="04"
@@ -86,20 +87,16 @@ interface Baseline {
         </article>
 
         <article class="card">
-          <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
-            <span class="section-num">4.2</span><span>Condiciones de comparación justa</span>
-          </h2>
-          <p class="text-sm text-pine mb-4">
-            Todos los métodos se evalúan bajo las mismas condiciones para que la comparación sea científicamente válida.
-          </p>
-          <div class="grid form-grid">
-            @for (c of fairness; track c) {
-              <div class="rounded-md border border-fog bg-gray-50 p-3 flex items-start gap-2 text-sm">
-                <span style="color:#059669" class="mt-0.5">✓</span>
-                <span class="text-pine">{{ c }}</span>
-              </div>
-            }
+          <div class="flex items-center justify-between gap-4 mb-3 flex-wrap">
+            <h2 class="font-display text-xl font-semibold text-forest flex items-center gap-2">
+              <span class="section-num">4.2</span><span>Condiciones de comparación justa</span>
+            </h2>
+            <span class="text-xs text-moss font-mono">marca las que ya cumples →</span>
           </div>
+          <p class="text-sm text-pine mb-4">
+            Self-audit: click cada condición conforme la cumples en tu experimento. Persiste localmente.
+          </p>
+          <app-checklist storageKey="comparacion-fairness" [initialItems]="fairnessChecklist" />
         </article>
 
         <article class="card">
@@ -124,25 +121,43 @@ interface Baseline {
           </div>
         </article>
 
-        <article class="card" style="border-color: #04202C">
-          <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                 class="w-5 h-5">
-              <path d="M3 3v18h18M7 14l4-4 3 3 5-5"/>
-            </svg>
-            Resultados esperados
-          </h2>
-          <p class="text-pine leading-relaxed">
-            Si la hipótesis se confirma, esperamos
-            <strong class="text-forest">F1 ≥ 0.83</strong> para RoBERTuito-MX
-            (vs <span class="font-mono">0.71</span> del baseline zero-shot),
-            con <span class="font-mono">p &lt; 0.01</span> tras corrección de Holm.
-            Si la hipótesis se refuta, la mejora será inferior al umbral de
-            <span class="font-mono">8 puntos</span>, lo que sugeriría que el shift dialectal
-            requiere intervenciones más profundas que el simple fine-tuning.
-          </p>
-        </article>
+        <app-expand-card>
+          <div summary>
+            <div class="flex items-center gap-2 text-forest font-display font-semibold text-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="w-5 h-5"><path d="M3 3v18h18M7 14l4-4 3 3 5-5"/></svg>
+              Resultados esperados
+            </div>
+            <p class="text-sm text-pine mt-2">Click para ver los dos escenarios y su interpretación.</p>
+          </div>
+          <div details>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="rounded-lg p-4" style="background:#ECFDF5; border: 1px solid #A7F3D0">
+                <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#059669">Escenario A — Hipótesis confirmada</div>
+                <p class="text-sm text-pine mb-2">
+                  <strong class="text-forest">F1 ≥ 0.83</strong> para RoBERTuito-MX
+                  (vs <span class="font-mono">0.71</span> del baseline zero-shot),
+                  con <span class="font-mono">p &lt; 0.01</span> tras corrección de Holm.
+                </p>
+                <div class="text-xs text-pine mt-2">
+                  <strong>Interpretación:</strong> el shift dialectal se mitiga con fine-tuning específico.
+                  Contribuimos un benchmark replicable.
+                </div>
+              </div>
+              <div class="rounded-lg p-4" style="background:#FEF2F2; border: 1px solid #FECACA">
+                <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#DC2626">Escenario B — Hipótesis refutada</div>
+                <p class="text-sm text-pine mb-2">
+                  Mejora &lt; <span class="font-mono">8 puntos</span> o p ≥ 0.05.
+                </p>
+                <div class="text-xs text-pine mt-2">
+                  <strong>Interpretación:</strong> el dialecto MX requiere intervenciones más profundas
+                  (más datos, arquitectura distinta, prompt engineering, etc.).
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-expand-card>
 
       </div>
     </app-section-layout>
@@ -183,13 +198,13 @@ export class ComparacionComponent {
       details: 'Mismo modelo, sin las normalizaciones de URL/mention/emoji.' },
   ];
 
-  readonly fairness = [
-    'Mismo conjunto de test, intocado durante desarrollo.',
-    'Mismas métricas con la misma implementación (scikit-learn).',
-    'Mismo presupuesto computacional (≤ 4 GPU-horas por método).',
-    'Mismas 5 semillas aleatorias para promediar varianza.',
-    'Mismo preprocesamiento aplicado a todos (o ablación explícita).',
-    'Hiperparámetros tuneados con el mismo protocolo sobre val.',
+  readonly fairnessChecklist: ChecklistItem[] = [
+    { text: 'Mismo conjunto de test, intocado durante desarrollo.',           done: false },
+    { text: 'Mismas métricas con la misma implementación (scikit-learn).',     done: false },
+    { text: 'Mismo presupuesto computacional (≤ 4 GPU-horas por método).',    done: false },
+    { text: 'Mismas 5 semillas aleatorias para promediar varianza.',          done: false },
+    { text: 'Mismo preprocesamiento aplicado a todos (o ablación explícita).',done: false },
+    { text: 'Hiperparámetros tuneados con el mismo protocolo sobre val.',     done: false },
   ];
 
   readonly tests = [

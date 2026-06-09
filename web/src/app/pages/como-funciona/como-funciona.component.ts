@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
 import { CopyButtonComponent } from '../../shared/interactive/copy-button.component';
 import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
@@ -7,6 +7,13 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
   selector: 'app-como-funciona',
   standalone: true,
   imports: [SectionLayoutComponent, CopyButtonComponent, ExpandCardComponent],
+  styles: [`
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fade-in 200ms ease-out; }
+  `],
   template: `
     <app-section-layout
       sectionNumber="09"
@@ -20,16 +27,42 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
 
       <div class="stack-xl">
         <article class="card">
-          <h2 class="font-display text-xl font-semibold text-forest mb-4">Stack tecnológico</h2>
+          <div class="flex items-center justify-between gap-4 mb-3 flex-wrap">
+            <h2 class="font-display text-xl font-semibold text-forest">Stack tecnológico</h2>
+            <span class="text-xs text-moss font-mono">click cada tech para más info →</span>
+          </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             @for (t of stack; track t.name) {
-              <div class="rounded-lg border border-fog bg-gray-50 p-4 text-center hover:border-forest hover:shadow-card transition-all cursor-default">
+              <button type="button"
+                      (click)="selectedTech.set(selectedTech() === t.name ? null : t.name)"
+                      class="rounded-lg border bg-gray-50 p-4 text-center transition-all"
+                      [class.border-fog]="selectedTech() !== t.name"
+                      [class.border-forest]="selectedTech() === t.name"
+                      [class.shadow-card]="selectedTech() === t.name"
+                      [class.hover:border-forest]="selectedTech() !== t.name">
                 <div class="text-2xl mb-1">{{ t.icon }}</div>
                 <div class="text-forest font-display font-medium text-sm">{{ t.name }}</div>
                 <div class="text-xs text-moss font-mono mt-1">{{ t.version }}</div>
-              </div>
+              </button>
             }
           </div>
+          @if (selectedTech() !== null) {
+            @let t = currentTech();
+            @if (t) {
+              <div class="mt-4 rounded-lg border border-forest bg-white p-4 animate-fade-in">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xl">{{ t.icon }}</span>
+                    <span class="text-forest font-display font-semibold">{{ t.name }}</span>
+                    <span class="tag">{{ t.version }}</span>
+                  </div>
+                  <button type="button" (click)="selectedTech.set(null)"
+                          class="text-moss hover:text-forest text-xs">✕ cerrar</button>
+                </div>
+                <p class="text-sm text-pine">{{ t.role }}</p>
+              </div>
+            }
+          }
         </article>
 
         <article class="card">
@@ -90,15 +123,26 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
   `,
 })
 export class ComoFuncionaComponent {
+  protected selectedTech = signal<string | null>(null);
+  protected currentTech = computed(() => this.stack.find(t => t.name === this.selectedTech()) ?? null);
+
   readonly stack = [
-    { icon: '🅰️',  name: 'Angular',     version: '19.x' },
-    { icon: '🌬️',  name: 'Tailwind',    version: '4.x' },
-    { icon: '🌲', name: 'Forest DS',   version: 'v1.0' },
-    { icon: '⚡',  name: 'FastAPI',     version: 'pendiente' },
-    { icon: '🟢', name: 'Supabase',    version: 'self-hosted' },
-    { icon: '🔴', name: 'Redis',       version: '7.x' },
-    { icon: '🥬', name: 'Celery',      version: '5.x' },
-    { icon: '🐳', name: 'Docker',      version: '29.x' },
+    { icon: '🅰️',  name: 'Angular',   version: '19.x',
+      role: 'Framework SPA del frontend. Standalone components, signals, lazy routing y SSR-ready.' },
+    { icon: '🌬️',  name: 'Tailwind',  version: '4.x',
+      role: 'CSS atomic con @theme overrides. Permite Forest DS como capa de design tokens.' },
+    { icon: '🌲', name: 'Forest DS', version: 'v1.0',
+      role: 'Design system propio de iagentek. Light-only, paleta forest #04202C, fuentes Sora + DM Sans.' },
+    { icon: '⚡',  name: 'FastAPI',   version: 'pendiente',
+      role: 'API REST + WebSockets en Python. Manejará la lógica de validación de hipótesis y los endpoints.' },
+    { icon: '🟢', name: 'Supabase',  version: 'self-hosted',
+      role: 'PostgreSQL + Auth + Storage. Stack supabase_maestria corriendo en el VPS de iagentek.' },
+    { icon: '🔴', name: 'Redis',     version: '7.x',
+      role: 'Message broker para Celery y cache de sesiones FastAPI.' },
+    { icon: '🥬', name: 'Celery',    version: '5.x',
+      role: 'Workers asíncronos en Python. Ejecutan tareas pesadas (entrenamiento, evaluación batch).' },
+    { icon: '🐳', name: 'Docker',    version: '29.x',
+      role: 'Containerización del frontend (multi-stage build → nginx alpine) y orquestación Swarm.' },
   ];
 
   readonly pipeline = [

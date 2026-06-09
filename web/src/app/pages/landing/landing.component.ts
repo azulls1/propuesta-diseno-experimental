@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CounterComponent } from '../../shared/interactive/animated-counter.component';
+import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
+import { CopyButtonComponent } from '../../shared/interactive/copy-button.component';
 
 interface RubricCriterion {
   id: string;
   title: string;
   weight: number;
   description: string;
+  max: string[];
+  lose: string[];
 }
 
 interface ModuleLink {
@@ -20,7 +24,7 @@ interface ModuleLink {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, CounterComponent],
+  imports: [RouterLink, CounterComponent, ExpandCardComponent, CopyButtonComponent],
   template: `
     <!-- HERO -->
     <section class="card-hero mb-8">
@@ -84,31 +88,53 @@ interface ModuleLink {
     <!-- RÚBRICA -->
     <section class="mb-10">
       <header class="page-header">
-        <span class="badge-forest mb-3 inline-flex">Rúbrica</span>
-        <h2 class="page-header__title">Cómo se evaluará el trabajo</h2>
-        <p class="page-header__desc">Cuatro criterios. El rigor metodológico pesa el doble que los demás.</p>
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <span class="badge-forest mb-3 inline-flex">Rúbrica</span>
+            <h2 class="page-header__title">Cómo se evaluará el trabajo</h2>
+            <p class="page-header__desc">Click en cada criterio para ver cómo maximizarlo y cómo se pierden puntos.</p>
+          </div>
+        </div>
       </header>
 
       <div class="grid-cards">
         @for (c of criteria; track c.id) {
-          <article class="card">
-            <div class="flex items-start justify-between gap-4 mb-2">
-              <div>
-                <div class="text-xs uppercase tracking-wider text-moss font-mono">{{ c.id }}</div>
-                <h3 class="font-display text-lg font-semibold text-forest mt-1">{{ c.title }}</h3>
+          <app-expand-card>
+            <div summary>
+              <div class="flex items-start justify-between gap-4 mb-2">
+                <div>
+                  <div class="text-xs uppercase tracking-wider text-moss font-mono">{{ c.id }}</div>
+                  <h3 class="font-display text-lg font-semibold text-forest mt-1">{{ c.title }}</h3>
+                </div>
+                <div class="text-right">
+                  <div class="font-display font-bold text-2xl"
+                       [style.color]="c.weight >= 40 ? '#04202C' : '#5B7065'">
+                    {{ c.weight }}%
+                  </div>
+                </div>
               </div>
-              <div class="text-right">
-                <div class="font-display font-bold text-2xl"
-                     [style.color]="c.weight >= 40 ? '#04202C' : '#5B7065'">
-                  {{ c.weight }}%
+              <p class="text-sm text-pine leading-relaxed">{{ c.description }}</p>
+              <div class="mt-3 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+                <div class="h-full rounded-full bg-forest" [style.width.%]="c.weight"></div>
+              </div>
+            </div>
+            <div details>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <div class="rounded-lg p-3" style="background:#ECFDF5; border: 1px solid #A7F3D0">
+                  <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#059669">Cómo maximizar</div>
+                  <ul class="text-xs space-y-1.5 text-pine">
+                    @for (p of c.max; track p) { <li class="flex gap-1.5"><span style="color:#059669">↑</span><span>{{ p }}</span></li> }
+                  </ul>
+                </div>
+                <div class="rounded-lg p-3" style="background:#FEF2F2; border: 1px solid #FECACA">
+                  <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#DC2626">Cómo perder puntos</div>
+                  <ul class="text-xs space-y-1.5 text-pine">
+                    @for (p of c.lose; track p) { <li class="flex gap-1.5"><span style="color:#DC2626">↓</span><span>{{ p }}</span></li> }
+                  </ul>
                 </div>
               </div>
             </div>
-            <p class="text-sm text-pine leading-relaxed">{{ c.description }}</p>
-            <div class="mt-3 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-              <div class="h-full rounded-full bg-forest" [style.width.%]="c.weight"></div>
-            </div>
-          </article>
+          </app-expand-card>
         }
       </div>
     </section>
@@ -156,12 +182,15 @@ interface ModuleLink {
         <div>
           <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Stack</div>
           <div class="font-display text-forest font-semibold">Angular 19 · Tailwind 4 · Forest DS</div>
-          <div class="text-sm text-pine">FastAPI · Supabase · Redis · Celery (en construcción)</div>
+          <div class="text-sm text-pine">FastAPI · Supabase · Redis · Celery</div>
         </div>
         <div>
           <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Despliegue</div>
-          <div class="font-display text-forest font-semibold font-mono text-sm">propuesta-diseno-experimental</div>
-          <div class="text-sm text-pine">.iagentek.com.mx · Swarm + Traefik</div>
+          <div class="flex items-center gap-2 mb-1">
+            <div class="font-display text-forest font-semibold font-mono text-sm">propuesta-diseno-experimental.iagentek.com.mx</div>
+            <app-copy text="https://propuesta-diseno-experimental.iagentek.com.mx" label="" />
+          </div>
+          <div class="text-sm text-pine">Swarm + Traefik + Let's Encrypt</div>
         </div>
       </div>
     </section>
@@ -170,13 +199,21 @@ interface ModuleLink {
 export class LandingComponent {
   readonly criteria: RubricCriterion[] = [
     { id: 'Criterio 1', title: 'Motivación argumentada', weight: 20,
-      description: 'Problema real, sustentado en literatura, parcialmente resuelto y susceptible de mejora.' },
+      description: 'Problema real, sustentado en literatura, parcialmente resuelto y susceptible de mejora.',
+      max: ['Cita 2-3 papers reales (Google Scholar)', 'Cuantifica el problema con números', 'Identifica el hueco específico', 'Conecta motivación con hipótesis'],
+      lose: ['Texto genérico sin referencias', 'Problema demasiado amplio', 'Sin estadísticas del problema', 'Desconexión con hipótesis'] },
     { id: 'Criterio 2', title: 'Hipótesis y experimentos refutables', weight: 20,
-      description: 'Hipótesis falsable, con variables y métricas claras. Experimentos que puedan refutarla.' },
+      description: 'Hipótesis falsable, con variables y métricas claras. Experimentos que puedan refutarla.',
+      max: ['Hipótesis en una frase clara', 'Incluye H0 y H1 explícitas', 'Define umbral cuantitativo', 'Indica qué resultado la refutaría'],
+      lose: ['Hipótesis vaga ("será mejor")', 'No falsable', 'Sin métrica concreta', 'Experimento que no testea la hipótesis'] },
     { id: 'Criterio 3', title: 'Rigor del experimento', weight: 40,
-      description: 'Formalidad, equilibrio poblacional, calidad del muestreo, evitación de sesgos.' },
+      description: 'Formalidad, equilibrio poblacional, calidad del muestreo, evitación de sesgos.',
+      max: ['Documenta cada decisión con justificación', 'Sección dedicada a sesgos', 'Justifica tamaño muestral', 'Especifica pruebas estadísticas + α', 'Discute limitaciones'],
+      lose: ['Sin versiones/seeds/hp', 'Muestreo no justificado', 'Sin mención de sesgos', 'Sin análisis estadístico', 'Comparaciones insuficientes'] },
     { id: 'Criterio 4', title: 'Redacción y presentación', weight: 20,
-      description: 'Claridad, estructura tipo paper, tablas numeradas, citación consistente.' },
+      description: 'Claridad, estructura tipo paper, tablas numeradas, citación consistente.',
+      max: ['Estructura tipo paper numerada', 'Tablas/figuras con descripción', 'Citas en el texto', 'Una idea por párrafo', 'Tiempos y voz consistentes'],
+      lose: ['Exceder 5 páginas', 'Faltas de ortografía', 'Sin referencias', 'Formato distinto al pedido', 'Tono coloquial'] },
   ];
 
   readonly modules: ModuleLink[] = [

@@ -1,11 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
 import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component';
+import { ChecklistComponent, ChecklistItem } from '../../shared/interactive/checklist.component';
+import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
 
 @Component({
   selector: 'app-hipotesis',
   standalone: true,
-  imports: [SectionLayoutComponent, TabsComponent],
+  imports: [SectionLayoutComponent, TabsComponent, ChecklistComponent, ExpandCardComponent],
   template: `
     <app-section-layout
       sectionNumber="02"
@@ -101,30 +103,50 @@ import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component'
 
         <!-- Sidebar -->
         <aside class="stack">
-          <div class="card" style="border-color: rgba(4,32,44,0.2)">
-            <div class="text-forest text-sm font-display font-medium mb-2">Falsabilidad</div>
-            <p class="text-sm text-pine leading-relaxed">
-              Una hipótesis es <strong class="text-forest">científica</strong>
-              cuando es posible diseñar un experimento que la refute.
-              La nuestra cumple porque define un umbral cuantitativo concreto.
-            </p>
-          </div>
+          <app-expand-card>
+            <div summary>
+              <div class="text-forest text-sm font-display font-medium">🔬 Falsabilidad</div>
+              <p class="text-xs text-pine mt-1">Por qué nuestra H1 es científica.</p>
+            </div>
+            <div details>
+              <p class="text-sm text-pine leading-relaxed mb-3">
+                Una hipótesis es <strong class="text-forest">científica</strong>
+                cuando es posible diseñar un experimento que la refute (Karl Popper).
+                La nuestra cumple porque:
+              </p>
+              <ul class="text-xs space-y-1.5 text-pine">
+                <li>· Define un umbral cuantitativo (8 puntos)</li>
+                <li>· Especifica una métrica concreta (F1 macro)</li>
+                <li>· Indica el método estadístico (Wilcoxon, α=0.05)</li>
+                <li>· Dice qué resultado la refutaría</li>
+              </ul>
+            </div>
+          </app-expand-card>
 
           <div class="card">
-            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Checklist</div>
-            <ul class="text-sm space-y-2 text-pine">
-              @for (it of checklist; track it) {
-                <li class="flex gap-2"><span style="color:#059669">✓</span> {{ it }}</li>
-              }
-            </ul>
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-3">Checklist · click para marcar</div>
+            <app-checklist storageKey="hipotesis-checklist" [initialItems]="checklist" />
           </div>
 
-          <div class="card">
-            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Plantilla aplicada</div>
-            <p class="text-xs text-moss font-mono leading-relaxed">
-              [técnica X] mejorará [métrica M] en al menos [umbral] en [tarea T] sobre [población] frente a [baseline].
-            </p>
-          </div>
+          <app-expand-card>
+            <div summary>
+              <div class="text-forest text-sm font-display font-medium">📝 Plantilla aplicada</div>
+              <p class="text-xs text-pine mt-1">La fórmula que usamos para escribir H1.</p>
+            </div>
+            <div details>
+              <p class="text-xs text-moss font-mono leading-relaxed mb-3">
+                [técnica X] mejorará [métrica M] en al menos [umbral] en [tarea T] sobre [población] frente a [baseline].
+              </p>
+              <div class="rounded border border-fog bg-gray-50 p-3 text-xs space-y-1">
+                <div><span class="text-moss font-mono">X:</span> <span class="text-forest">fine-tuning de RoBERTuito</span></div>
+                <div><span class="text-moss font-mono">M:</span> <span class="text-forest">F1-score macro</span></div>
+                <div><span class="text-moss font-mono">umbral:</span> <span class="text-forest">8 puntos</span></div>
+                <div><span class="text-moss font-mono">T:</span> <span class="text-forest">detección de discurso de odio</span></div>
+                <div><span class="text-moss font-mono">población:</span> <span class="text-forest">español dialectal MX</span></div>
+                <div><span class="text-moss font-mono">baseline:</span> <span class="text-forest">XLM-RoBERTa-large zero-shot</span></div>
+              </div>
+            </div>
+          </app-expand-card>
         </aside>
       </div>
 
@@ -157,8 +179,12 @@ export class HipotesisComponent {
       detail: 'Variables que mantenemos constantes para aislar el efecto.' },
   ];
 
-  readonly checklist = [
-    'Falsable', 'Variables nombradas', 'Métrica cuantificable',
-    'Umbral explícito', 'Prueba estadística', 'H0 declarada'
+  readonly checklist: ChecklistItem[] = [
+    { text: 'Falsable',              done: true },
+    { text: 'Variables nombradas',   done: true },
+    { text: 'Métrica cuantificable', done: true },
+    { text: 'Umbral explícito',      done: true },
+    { text: 'Prueba estadística',    done: true },
+    { text: 'H0 declarada',          done: true },
   ];
 }
