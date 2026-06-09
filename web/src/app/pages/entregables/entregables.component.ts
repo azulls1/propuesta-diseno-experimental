@@ -60,11 +60,11 @@ const COLOR: Record<Criterio, string> = {
             descripción del sitio web.
           </p>
           <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a href="entregables/entregable-actividad-1-samuel-hernandez.zip"
+            <a href="downloads/entregable-actividad-1-samuel-hernandez.zip"
                download class="btn-cta">
               ⇩ Descargar entregable completo (ZIP)
             </a>
-            <a href="entregables/reporte.pdf"
+            <a href="downloads/reporte.pdf"
                target="_blank" rel="noopener"
                class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
               ↗ Solo el reporte PDF
@@ -207,7 +207,7 @@ export class EntregablesComponent implements OnInit {
   protected activeFilter = signal<Criterio | 'all'>('all');
 
   ngOnInit() {
-    this.http.get<Manifest>('entregables/manifest.json').subscribe({
+    this.http.get<Manifest>('downloads/manifest.json').subscribe({
       next: (m) => this.manifest.set(m),
       error: () => this.manifest.set(null),
     });
@@ -218,7 +218,7 @@ export class EntregablesComponent implements OnInit {
       criterio: 'C3', tipo: 'Reporte PDF',
       nombre: 'reporte.pdf',
       detalle: 'Propuesta académica completa: introducción, hipótesis, metodología (40% de la rúbrica), comparación y referencias.',
-      url: 'entregables/reporte.pdf',
+      url: 'downloads/reporte.pdf',
       size: '58 KB',
       pesoRubrica: 'Cubre C1+C2+C3+C4',
     },
@@ -226,14 +226,14 @@ export class EntregablesComponent implements OnInit {
       criterio: '—', tipo: 'Reporte MD',
       nombre: 'reporte.md (fuente)',
       detalle: 'Markdown fuente del reporte. Editar aquí para regenerar el PDF.',
-      url: 'entregables/reporte.pdf',
+      url: 'downloads/reporte.pdf',
       size: '11 KB',
     },
     {
       criterio: '—', tipo: 'ZIP completo',
       nombre: 'entregable-actividad-1-samuel-hernandez.zip',
       detalle: 'Bundle final con reporte, wiki, enunciado original y README del sitio. Incluye LEEME.md con mapeo a rúbrica + hashes de cada archivo.',
-      url: 'entregables/entregable-actividad-1-samuel-hernandez.zip',
+      url: 'downloads/entregable-actividad-1-samuel-hernandez.zip',
       size: '127 KB',
     },
     {
@@ -279,7 +279,7 @@ export class EntregablesComponent implements OnInit {
       criterio: '—', tipo: 'Manifest',
       nombre: 'manifest.json',
       detalle: 'Listado completo de archivos en el ZIP + sus hashes SHA-256, para verificación de integridad.',
-      url: 'entregables/manifest.json',
+      url: 'downloads/manifest.json',
       size: '3 KB',
     },
   ];
