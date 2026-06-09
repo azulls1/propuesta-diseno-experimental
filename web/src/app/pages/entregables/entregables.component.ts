@@ -8,7 +8,7 @@ type Criterio = 'C1' | 'C2' | 'C3' | 'C4' | '—';
 
 interface EntregableRow {
   criterio: Criterio;
-  tipo: 'Reporte PDF' | 'Reporte MD' | 'ZIP completo' | 'Wiki' | 'Enunciado' | 'Manifest';
+  tipo: 'Reporte PDF' | 'Reporte DOCX' | 'Reporte MD' | 'ZIP completo' | 'Wiki' | 'Enunciado' | 'Manifest';
   nombre: string;
   detalle: string;
   url: string;
@@ -67,7 +67,12 @@ const COLOR: Record<Criterio, string> = {
             <a href="downloads/reporte.pdf"
                target="_blank" rel="noopener"
                class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
-              ↗ Solo el reporte PDF
+              ↗ Reporte PDF
+            </a>
+            <a href="downloads/reporte.docx"
+               download
+               class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
+              ⇩ Reporte DOCX (Word)
             </a>
           </div>
           @if (manifest()) {
@@ -215,18 +220,26 @@ export class EntregablesComponent implements OnInit {
 
   readonly rows: EntregableRow[] = [
     {
+      criterio: 'C3', tipo: 'Reporte DOCX',
+      nombre: 'reporte.docx (Word — formato Calibri 12 nativo)',
+      detalle: 'Versión Word del reporte. Cumple Calibri 12 + interlineado 1.5 al abrirlo en Word. ESTE es el formato más alineado con el enunciado.',
+      url: 'downloads/reporte.docx',
+      size: '17 KB',
+      pesoRubrica: 'Cubre C1+C2+C3+C4',
+    },
+    {
       criterio: 'C3', tipo: 'Reporte PDF',
-      nombre: 'reporte.pdf',
-      detalle: 'Propuesta académica completa: introducción, hipótesis, metodología (40% de la rúbrica), comparación y referencias.',
+      nombre: 'reporte.pdf (alternativa)',
+      detalle: 'Misma propuesta en PDF (5 páginas exactas). Útil para visualización sin Word. Fuente Latin Modern (no Calibri).',
       url: 'downloads/reporte.pdf',
       size: '58 KB',
       pesoRubrica: 'Cubre C1+C2+C3+C4',
     },
     {
       criterio: '—', tipo: 'Reporte MD',
-      nombre: 'reporte.md (fuente)',
-      detalle: 'Markdown fuente del reporte. Editar aquí para regenerar el PDF.',
-      url: 'downloads/reporte.pdf',
+      nombre: 'reporte.md (fuente Markdown)',
+      detalle: 'Markdown fuente del reporte. Editar aquí para regenerar PDF y DOCX.',
+      url: 'https://github.com/azulls1/propuesta-diseno-experimental/blob/main/entregables/reporte/reporte.md',
       size: '11 KB',
     },
     {

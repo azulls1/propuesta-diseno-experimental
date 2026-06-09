@@ -41,10 +41,12 @@ LEEME = """# Entregable — Actividad 1: Propuesta de Diseño Experimental
 
 | Criterio                                      | Peso | Ubicación en este entregable                     |
 |-----------------------------------------------|-----:|--------------------------------------------------|
-| C1 — Motivación argumentada                   | 20%  | `01-reporte/reporte.pdf` § 1                     |
-| C2 — Hipótesis + experimentos refutables      | 20%  | `01-reporte/reporte.pdf` § 2                     |
-| **C3 — Rigor, muestreo, sesgos, suficiencia** | **40%** | `01-reporte/reporte.pdf` § 3 + § 4            |
-| C4 — Redacción y presentación                 | 20%  | `01-reporte/reporte.pdf` (todo el documento)     |
+| C1 — Motivación argumentada                   | 20%  | `01-reporte/reporte.docx` § 1                    |
+| C2 — Hipótesis + experimentos refutables      | 20%  | `01-reporte/reporte.docx` § 2                    |
+| **C3 — Rigor, muestreo, sesgos, suficiencia** | **40%** | `01-reporte/reporte.docx` § 3 + § 4           |
+| C4 — Redacción y presentación                 | 20%  | `01-reporte/reporte.docx` (todo el documento)    |
+
+**Formato del entregable principal**: `reporte.docx` se abre con Calibri 12 e interlineado 1.5 en Word (cumple el enunciado). El `reporte.pdf` está incluido como alternativa para visualización rápida.
 
 ## Contenido
 
@@ -122,7 +124,7 @@ def main():
     with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
         # 01-reporte
         rd = REPO / "entregables" / "reporte"
-        for fname in ("reporte.md", "reporte.pdf", "_header.tex"):
+        for fname in ("reporte.md", "reporte.pdf", "reporte.docx", "_header.tex"):
             src = rd / fname
             if src.exists():
                 add_file(zf, src, f"01-reporte/{fname}", hashes)
