@@ -4,61 +4,119 @@
 
 @layer base {
   html {
-    @apply bg-ink-950 text-ink-100 antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-sage-50 text-brand-500 antialiased;
+    font-family: 'Sora', system-ui, -apple-system, sans-serif;
   }
 
   body {
     @apply min-h-screen;
+    background-color: #F7F8F7;
     background-image:
-      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(6, 182, 212, 0.10), transparent 60%),
-      linear-gradient(180deg, #020617 0%, #0f172a 100%);
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(4, 32, 44, 0.04), transparent 50%);
     background-attachment: fixed;
   }
 
   h1, h2, h3, h4 {
-    @apply font-semibold tracking-tight text-white;
+    @apply font-display font-semibold tracking-tight text-brand-500;
   }
 
+  h1 { @apply text-4xl sm:text-5xl; letter-spacing: -0.02em; }
+  h2 { @apply text-2xl sm:text-3xl; letter-spacing: -0.015em; }
+  h3 { @apply text-lg sm:text-xl; }
+
   code, pre, .mono {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  a { @apply transition-colors; }
+
+  ::selection {
+    @apply bg-brand-500 text-white;
   }
 }
 
 @layer components {
+  /* Cards — fondo blanco, borde sage, sombra suave */
   .card {
-    @apply rounded-xl border border-ink-800 bg-ink-900/60 backdrop-blur-sm p-6 shadow-card;
+    @apply rounded-xl border border-sage-200 bg-white p-6 shadow-card;
   }
 
   .card-hover {
-    @apply transition-all duration-200 hover:border-brand-500/50 hover:shadow-glow;
+    @apply transition-all duration-200;
+  }
+  .card-hover:hover {
+    @apply -translate-y-0.5 shadow-card-hover border-brand-300;
   }
 
+  /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium font-ui transition-all;
   }
 
   .btn-primary {
-    @apply btn bg-brand-500 text-ink-950 hover:bg-brand-400;
+    @apply btn bg-brand-500 text-white hover:bg-brand-600 shadow-card hover:shadow-card-hover;
   }
 
   .btn-ghost {
-    @apply btn border border-ink-700 text-ink-200 hover:border-brand-500/60 hover:text-brand-300;
+    @apply btn border border-sage-300 bg-white text-brand-500 hover:bg-sage-100 hover:border-brand-300;
   }
 
+  .btn-forest {
+    @apply btn bg-forest-500 text-white hover:bg-forest-600;
+  }
+
+  /* Badges & chips */
   .badge {
-    @apply inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium border;
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium font-ui border;
   }
 
   .badge-brand {
-    @apply badge border-brand-500/40 bg-brand-500/10 text-brand-300;
+    @apply badge border-brand-500/15 bg-brand-500/5 text-brand-500;
+  }
+
+  .badge-forest {
+    @apply badge border-forest-500/20 bg-forest-500/10 text-forest-600;
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-ink-700 bg-ink-900/60 px-3 py-1 text-xs text-ink-300;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-sage-200 bg-sage-50 px-3 py-1 text-xs text-sage-700 font-ui;
   }
 
+  .chip-dark {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-brand-500 text-white px-3 py-1 text-xs font-ui;
+  }
+
+  /* Divider */
   .section-divider {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-brand-500/30 to-transparent;
+    @apply h-px w-full;
+    background: linear-gradient(to right, transparent, rgba(4,32,44,0.12), transparent);
+  }
+
+  /* Headings con número de sección */
+  .section-num {
+    @apply font-mono text-brand-300 text-sm font-medium;
+  }
+
+  /* Tablas */
+  .table-iagentek {
+    @apply w-full text-sm;
+  }
+  .table-iagentek thead {
+    @apply text-left text-sage-600 text-xs uppercase tracking-wider;
+  }
+  .table-iagentek thead tr {
+    @apply border-b border-sage-200;
+  }
+  .table-iagentek tbody tr {
+    @apply border-b border-sage-100;
+  }
+  .table-iagentek tbody tr:last-child {
+    @apply border-b-0;
+  }
+  .table-iagentek td {
+    @apply py-2.5 pr-4 text-brand-500;
+  }
+  .table-iagentek th {
+    @apply pb-2 pr-4 font-medium;
   }
 }

@@ -6,43 +6,43 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <header class="sticky top-0 z-40 border-b border-ink-800/80 bg-ink-950/70 backdrop-blur-md">
+    <header class="sticky top-0 z-40 border-b border-sage-200 bg-white/85 backdrop-blur-md">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-        <a routerLink="/" class="flex items-center gap-2.5 text-white font-semibold tracking-tight">
-          <span class="grid h-8 w-8 place-items-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/30">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4 text-brand-400">
+        <a routerLink="/" class="flex items-center gap-2.5 text-brand-500 font-display font-semibold tracking-tight">
+          <span class="grid h-9 w-9 place-items-center rounded-lg bg-brand-500 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 3v6l-5 9a2 2 0 0 0 1.7 3h12.6A2 2 0 0 0 20 18l-5-9V3M9 3h6M9 14h6"/>
             </svg>
           </span>
-          <span class="text-sm">
-            <span class="text-white">Propuesta</span>
-            <span class="text-ink-400">de Diseño Experimental</span>
+          <span class="text-sm leading-tight">
+            <span class="block text-brand-500">Propuesta</span>
+            <span class="block text-sage-600 text-xs font-ui font-normal">de Diseño Experimental</span>
           </span>
         </a>
 
-        <nav class="hidden md:flex items-center gap-1 text-sm">
-          <a routerLink="/motivacion" routerLinkActive="text-brand-300 bg-ink-900/60"
-             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+        <nav class="hidden md:flex items-center gap-1 text-sm font-ui">
+          <a routerLink="/motivacion" routerLinkActive="text-brand-500 bg-sage-100"
+             class="px-3 py-1.5 rounded-md text-sage-700 hover:text-brand-500 hover:bg-sage-100 transition-colors">
             Motivación
           </a>
-          <a routerLink="/hipotesis" routerLinkActive="text-brand-300 bg-ink-900/60"
-             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+          <a routerLink="/hipotesis" routerLinkActive="text-brand-500 bg-sage-100"
+             class="px-3 py-1.5 rounded-md text-sage-700 hover:text-brand-500 hover:bg-sage-100 transition-colors">
             Hipótesis
           </a>
-          <a routerLink="/metodologia" routerLinkActive="text-brand-300 bg-ink-900/60"
-             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+          <a routerLink="/metodologia" routerLinkActive="text-brand-500 bg-sage-100"
+             class="px-3 py-1.5 rounded-md text-sage-700 hover:text-brand-500 hover:bg-sage-100 transition-colors">
             Metodología
           </a>
-          <a routerLink="/comparacion" routerLinkActive="text-brand-300 bg-ink-900/60"
-             class="px-3 py-1.5 rounded-md text-ink-300 hover:text-brand-300 hover:bg-ink-900/60 transition-colors">
+          <a routerLink="/comparacion" routerLinkActive="text-brand-500 bg-sage-100"
+             class="px-3 py-1.5 rounded-md text-sage-700 hover:text-brand-500 hover:bg-sage-100 transition-colors">
             Comparación
           </a>
         </nav>
 
         <div class="flex items-center gap-2">
           <span class="hidden sm:inline-flex chip">
-            <span class="h-1.5 w-1.5 rounded-full bg-accent-success animate-pulse"></span>
+            <span class="h-1.5 w-1.5 rounded-full bg-success animate-pulse"></span>
             Activo
           </span>
           <a href="https://github.com/azulls1/propuesta-diseno-experimental"
