@@ -156,7 +156,8 @@ interface Gap {
           </button>
 
           <div class="card">
-            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-3">Checklist · click para marcar</div>
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Self-audit · Criterio 1</div>
+            <p class="text-xs text-pine mb-3">Marca cada punto cuando lo verifiques en TU documento. Persiste en este navegador.</p>
             <app-checklist storageKey="motivacion-checklist" [initialItems]="checklist" />
           </div>
 
@@ -400,9 +401,9 @@ export class MotivacionComponent {
   ];
 
   readonly checklist: ChecklistItem[] = [
-    { text: 'Problema con datos cuantitativos', done: true },
-    { text: '2-3 referencias reales citadas', done: true },
-    { text: 'Hueco específico identificado', done: true },
-    { text: 'Conexión explícita con hipótesis', done: false },
+    { text: 'Problema con datos cuantitativos en el documento', done: false },
+    { text: '2-3 referencias reales citadas en el documento',  done: false },
+    { text: 'Hueco específico identificado en el documento',   done: false },
+    { text: 'Conexión explícita motivación → hipótesis',       done: false },
   ];
 }

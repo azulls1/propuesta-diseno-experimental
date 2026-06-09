@@ -124,7 +124,8 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
           </app-expand-card>
 
           <div class="card">
-            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-3">Checklist · click para marcar</div>
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Self-audit · Criterio 2</div>
+            <p class="text-xs text-pine mb-3">Marca cada punto cuando lo verifiques en TU documento. Persiste en este navegador.</p>
             <app-checklist storageKey="hipotesis-checklist" [initialItems]="checklist" />
           </div>
 
@@ -180,11 +181,11 @@ export class HipotesisComponent {
   ];
 
   readonly checklist: ChecklistItem[] = [
-    { text: 'Falsable',              done: true },
-    { text: 'Variables nombradas',   done: true },
-    { text: 'Métrica cuantificable', done: true },
-    { text: 'Umbral explícito',      done: true },
-    { text: 'Prueba estadística',    done: true },
-    { text: 'H0 declarada',          done: true },
+    { text: 'Mi hipótesis es falsable',                done: false },
+    { text: 'Tiene variables nombradas (VI/VD/control)', done: false },
+    { text: 'Tiene métrica cuantificable',              done: false },
+    { text: 'Tiene umbral explícito',                   done: false },
+    { text: 'Especifica prueba estadística + α',        done: false },
+    { text: 'H0 declarada',                              done: false },
   ];
 }
