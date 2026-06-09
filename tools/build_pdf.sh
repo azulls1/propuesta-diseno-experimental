@@ -29,7 +29,6 @@ docker run --rm \
   pandoc/extra:latest \
   --from markdown --to pdf --pdf-engine=xelatex \
   -V geometry:margin=2cm \
-  -V mainfont="Carlito" \
   -V fontsize=11pt \
   -V linestretch=1.4 \
   -V documentclass=article \
