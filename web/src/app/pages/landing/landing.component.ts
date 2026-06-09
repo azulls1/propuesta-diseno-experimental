@@ -22,6 +22,26 @@ interface ModuleLink {
   criterio?: string;
 }
 
+interface StatCard {
+  id: string;
+  label: string;
+  numeric?: number;
+  numericSuffix?: string;
+  suffix?: string;
+  staticValue?: string;
+  desc: string;
+  delay?: number;
+  highlight?: boolean;
+  modalTitle: string;
+  modalSubtitle?: string;
+  modalCite?: string;
+  modalCiteSource?: string;
+  modalBody: string;
+  modalList?: string[];
+  modalRubric?: { label: string; weight: number; highlight?: boolean }[];
+  modalCta?: { label: string; route: string };
+}
+
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -58,33 +78,83 @@ interface ModuleLink {
       </div>
     </section>
 
-    <!-- STATS (animated counters) -->
+    <!-- STATS (animated counters · clickeables → modal) -->
     <section class="grid-stats mb-10">
-      <div class="card-stat">
-        <div class="card-stat__label">Páginas máx.</div>
-        <div class="card-stat__value"><app-counter [value]="5" /></div>
-        <div class="card-stat__desc">Calibri 12 · 1.5</div>
-      </div>
-      <div class="card-stat">
-        <div class="card-stat__label">Criterios rúbrica</div>
-        <div class="card-stat__value"><app-counter [value]="4" [startDelay]="100" /></div>
-        <div class="card-stat__desc">10 puntos · 100%</div>
-      </div>
-      <div class="card-stat" style="border-color: #04202C">
-        <div class="card-stat__label">Peso del rigor</div>
-        <div class="card-stat__value" style="color:#04202C">
-          <app-counter [value]="40" [startDelay]="200" suffix="%" />
-        </div>
-        <div class="card-stat__desc">Criterio 3 (el más alto)</div>
-      </div>
-      <div class="card-stat">
-        <div class="card-stat__label">Calificación obj.</div>
-        <div class="card-stat__value">
-          <app-counter [value]="10" [startDelay]="300" />/10
-        </div>
-        <div class="card-stat__desc">Sin descuentos</div>
-      </div>
+      @for (s of stats; track s.id) {
+        <button type="button"
+                (click)="selectedStat.set(s)"
+                class="card-stat text-left hover:border-forest hover:shadow-card-hover transition-all cursor-pointer"
+                [style.border-color]="s.highlight ? '#04202C' : ''">
+          <div class="card-stat__label">{{ s.label }}</div>
+          <div class="card-stat__value" [style.color]="s.highlight ? '#04202C' : ''">
+            @if (s.numeric != null) {
+              <app-counter [value]="s.numeric" [startDelay]="s.delay || 0" [suffix]="s.suffix || ''" />{{ s.numericSuffix || '' }}
+            } @else {
+              {{ s.staticValue }}
+            }
+          </div>
+          <div class="card-stat__desc">{{ s.desc }}</div>
+        </button>
+      }
     </section>
+
+    <!-- MODAL: stat detail -->
+    @if (selectedStat(); as s) {
+      <app-modal [open]="true"
+                 [eyebrow]="'Dato · ' + s.label"
+                 [title]="s.modalTitle"
+                 [subtitle]="s.modalSubtitle"
+                 maxWidth="640px"
+                 (closeRequest)="selectedStat.set(null)">
+        <div class="stack-lg">
+          @if (s.modalCite) {
+            <div class="rounded-lg border-l-4 border-forest bg-gray-50 p-4 italic text-pine">
+              "{{ s.modalCite }}"
+              <div class="text-xs not-italic text-moss mt-2 font-mono">— {{ s.modalCiteSource }}</div>
+            </div>
+          }
+          <p class="text-pine leading-relaxed">{{ s.modalBody }}</p>
+          @if (s.modalList?.length) {
+            <ul class="space-y-2">
+              @for (li of s.modalList; track li) {
+                <li class="flex gap-2 text-sm text-pine">
+                  <span class="text-forest mt-0.5">·</span>
+                  <span>{{ li }}</span>
+                </li>
+              }
+            </ul>
+          }
+          @if (s.modalRubric?.length) {
+            <div class="rounded-lg border border-fog overflow-hidden">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="text-left text-xs uppercase tracking-wider text-moss font-mono px-3 py-2">Criterio</th>
+                    <th class="text-right text-xs uppercase tracking-wider text-moss font-mono px-3 py-2">Peso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (r of s.modalRubric; track r.label) {
+                    <tr class="border-t border-fog">
+                      <td class="px-3 py-2 text-forest">{{ r.label }}</td>
+                      <td class="px-3 py-2 text-right font-mono text-forest font-semibold"
+                          [class.text-lg]="r.highlight">{{ r.weight }}%</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          @if (s.modalCta) {
+            <div class="pt-2">
+              <a [routerLink]="s.modalCta.route" (click)="selectedStat.set(null)" class="btn-primary">
+                {{ s.modalCta.label }}
+              </a>
+            </div>
+          }
+        </div>
+      </app-modal>
+    }
 
     <!-- RÚBRICA -->
     <section class="mb-10">
@@ -227,6 +297,73 @@ interface ModuleLink {
 })
 export class LandingComponent {
   protected selectedCriterion = signal<RubricCriterion | null>(null);
+  protected selectedStat = signal<StatCard | null>(null);
+
+  readonly stats: StatCard[] = [
+    {
+      id: 'pages', label: 'Páginas máx.', numeric: 5, delay: 0,
+      desc: 'Calibri 12 · 1.5',
+      modalTitle: '5 páginas máximas',
+      modalSubtitle: 'Cómo distribuirlas según el plan de redacción',
+      modalCite: 'Extensión máxima: 5 páginas, fuente Calibri 12 e interlineado 1,5.',
+      modalCiteSource: 'Enunciado de la Actividad 1 (mexmiart07_act2.docx)',
+      modalBody: 'El límite es estricto. Toda la propuesta científica debe caber en 5 páginas. Esto obliga a ser sintético sin sacrificar rigor. Aquí el reparto que recomendamos:',
+      modalList: [
+        '§ 1 Introducción y motivación → 0.75 pg',
+        '§ 2 Hipótesis → 0.5 pg',
+        '§ 3 Metodología (la más larga, 6 sub-secciones) → 1.75 pg',
+        '§ 4 Comparación con baselines → 0.75 pg',
+        '§ 5 Resultados esperados → 0.5 pg',
+        '§ 6 Referencias → 0.75 pg',
+      ],
+      modalCta: { label: 'Ver plan de redacción completo →', route: '/redaccion' },
+    },
+    {
+      id: 'rubric', label: 'Criterios rúbrica', numeric: 4, delay: 100,
+      desc: '10 puntos · 100%',
+      modalTitle: '4 criterios · 10 puntos · 100%',
+      modalSubtitle: 'Cómo se distribuye la calificación',
+      modalBody: 'El maestro evalúa con 4 criterios cuya suma da 10 puntos (100%). El reparto NO es uniforme — el Criterio 3 (rigor) pesa el doble que cualquier otro.',
+      modalRubric: [
+        { label: 'C1 — Motivación argumentada',                 weight: 20 },
+        { label: 'C2 — Hipótesis + experimentos que la refuten', weight: 20 },
+        { label: 'C3 — Rigor del experimento',                   weight: 40, highlight: true },
+        { label: 'C4 — Redacción y presentación',                weight: 20 },
+      ],
+      modalCta: { label: 'Ver rúbrica detallada →', route: '/redaccion' },
+    },
+    {
+      id: 'rigor', label: 'Peso del rigor', numeric: 40, suffix: '%', delay: 200, highlight: true,
+      desc: 'Criterio 3 (el más alto)',
+      modalTitle: 'Rigor metodológico · 40%',
+      modalSubtitle: 'El criterio más pesado de la rúbrica',
+      modalCite: 'Formalidad y rigor del experimento planteado, equilibrio en la población seleccionada, calidad del muestreo, evitación de sesgos, ¿las pruebas son suficientes para validar o no la hipótesis?',
+      modalCiteSource: 'Descripción del Criterio 3 en el enunciado',
+      modalBody: 'El C3 vale el doble que cualquier otro criterio. Si te falta tiempo, sacrifica volumen en otras secciones para que ésta brille. Cinco sub-aspectos lo componen:',
+      modalList: [
+        'Formalidad y rigor del experimento',
+        'Equilibrio en la población seleccionada',
+        'Calidad del muestreo',
+        'Evitación de sesgos',
+        '¿Las pruebas son suficientes para validar o refutar la hipótesis?',
+      ],
+      modalCta: { label: 'Ir a Metodología →', route: '/metodologia' },
+    },
+    {
+      id: 'goal', label: 'Calificación obj.', numeric: 10, numericSuffix: '/10', delay: 300,
+      desc: 'Sin descuentos',
+      modalTitle: 'Calificación objetivo: 10/10',
+      modalSubtitle: 'La estrategia para no perder puntos',
+      modalBody: 'Apuntar a 10/10 obliga a cuidar las cuatro métricas, no solo el C3. Lo que las pierde más comúnmente:',
+      modalList: [
+        'C1: motivación sin referencias reales — pierdes 5-10 pts',
+        'C2: hipótesis no falsable — pierdes 5-10 pts',
+        'C3: omitir la subsección de sesgos — pierdes 10-15 pts',
+        'C4: pasarte de 5 páginas o faltas de ortografía — pierdes 5-10 pts',
+      ],
+      modalCta: { label: 'Checklist pre-entrega →', route: '/entregables' },
+    },
+  ];
 
   readonly criteria: RubricCriterion[] = [
     { id: 'Criterio 1', title: 'Motivación argumentada', weight: 20,
