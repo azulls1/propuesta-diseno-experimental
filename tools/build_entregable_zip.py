@@ -127,11 +127,18 @@ def main():
             if src.exists():
                 add_file(zf, src, f"01-reporte/{fname}", hashes)
 
-        # 02-wiki
-        wiki = REPO.parent / "wiki-actividad-1"
+        # 02-wiki (vive en docs/wiki/ dentro del repo)
+        wiki = REPO / "docs" / "wiki"
+        if not wiki.exists():
+            wiki = REPO.parent / "wiki-actividad-1"  # fallback local dev
         if wiki.exists():
             for md in sorted(wiki.glob("*.md")):
                 add_file(zf, md, f"02-wiki-analisis/{md.name}", hashes)
+
+        # Original .docx del enunciado (si está disponible)
+        enunciado = REPO / "docs" / "enunciado" / "mexmiart07_act2.docx"
+        if enunciado.exists():
+            add_file(zf, enunciado, "00-enunciado-original/mexmiart07_act2.docx", hashes)
 
         # 03-sitio
         add_file(zf, sitio_readme, "03-sitio-web/README-sitio.md", hashes)
