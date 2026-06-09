@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CounterComponent } from '../../shared/interactive/animated-counter.component';
-import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
 import { CopyButtonComponent } from '../../shared/interactive/copy-button.component';
+import { ModalComponent } from '../../shared/interactive/modal.component';
 
 interface RubricCriterion {
   id: string;
@@ -11,6 +11,7 @@ interface RubricCriterion {
   description: string;
   max: string[];
   lose: string[];
+  tip: string;
 }
 
 interface ModuleLink {
@@ -24,7 +25,7 @@ interface ModuleLink {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, CounterComponent, ExpandCardComponent, CopyButtonComponent],
+  imports: [RouterLink, CounterComponent, CopyButtonComponent, ModalComponent],
   template: `
     <!-- HERO -->
     <section class="card-hero mb-8">
@@ -99,45 +100,73 @@ interface ModuleLink {
 
       <div class="grid-cards">
         @for (c of criteria; track c.id) {
-          <app-expand-card>
-            <div summary>
-              <div class="flex items-start justify-between gap-4 mb-2">
-                <div>
-                  <div class="text-xs uppercase tracking-wider text-moss font-mono">{{ c.id }}</div>
-                  <h3 class="font-display text-lg font-semibold text-forest mt-1">{{ c.title }}</h3>
-                </div>
-                <div class="text-right">
-                  <div class="font-display font-bold text-2xl"
-                       [style.color]="c.weight >= 40 ? '#04202C' : '#5B7065'">
-                    {{ c.weight }}%
-                  </div>
-                </div>
+          <button type="button" (click)="selectedCriterion.set(c)"
+                  class="card card-hover text-left w-full">
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <div>
+                <div class="text-xs uppercase tracking-wider text-moss font-mono">{{ c.id }}</div>
+                <h3 class="font-display text-lg font-semibold text-forest mt-1">{{ c.title }}</h3>
               </div>
-              <p class="text-sm text-pine leading-relaxed">{{ c.description }}</p>
-              <div class="mt-3 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
-                <div class="h-full rounded-full bg-forest" [style.width.%]="c.weight"></div>
-              </div>
-            </div>
-            <div details>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div class="rounded-lg p-3" style="background:#ECFDF5; border: 1px solid #A7F3D0">
-                  <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#059669">Cómo maximizar</div>
-                  <ul class="text-xs space-y-1.5 text-pine">
-                    @for (p of c.max; track p) { <li class="flex gap-1.5"><span style="color:#059669">↑</span><span>{{ p }}</span></li> }
-                  </ul>
-                </div>
-                <div class="rounded-lg p-3" style="background:#FEF2F2; border: 1px solid #FECACA">
-                  <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#DC2626">Cómo perder puntos</div>
-                  <ul class="text-xs space-y-1.5 text-pine">
-                    @for (p of c.lose; track p) { <li class="flex gap-1.5"><span style="color:#DC2626">↓</span><span>{{ p }}</span></li> }
-                  </ul>
+              <div class="text-right">
+                <div class="font-display font-bold text-2xl"
+                     [style.color]="c.weight >= 40 ? '#04202C' : '#5B7065'">
+                  {{ c.weight }}%
                 </div>
               </div>
             </div>
-          </app-expand-card>
+            <p class="text-sm text-pine leading-relaxed">{{ c.description }}</p>
+            <div class="mt-3 h-1.5 w-full rounded-full bg-gray-100 overflow-hidden">
+              <div class="h-full rounded-full bg-forest" [style.width.%]="c.weight"></div>
+            </div>
+            <div class="mt-3 flex items-center text-xs text-moss font-mono gap-1">
+              <span>click para ver detalle</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="w-3 h-3">
+                <path d="m9 5 7 7-7 7"/>
+              </svg>
+            </div>
+          </button>
         }
       </div>
     </section>
+
+    <!-- MODAL: criterio detail -->
+    @if (selectedCriterion(); as c) {
+      <app-modal [open]="true"
+                 [eyebrow]="c.id + ' · ' + c.weight + '%'"
+                 [title]="c.title"
+                 [subtitle]="c.description"
+                 maxWidth="720px"
+                 (closeRequest)="selectedCriterion.set(null)">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="rounded-lg p-4" style="background:#ECFDF5; border: 1px solid #A7F3D0">
+            <div class="text-xs uppercase tracking-wider font-mono mb-3 flex items-center gap-1.5" style="color:#059669">
+              <span>↑</span> Cómo maximizar
+            </div>
+            <ul class="text-sm space-y-2 text-pine">
+              @for (p of c.max; track p) {
+                <li class="flex gap-2"><span style="color:#059669">✓</span><span>{{ p }}</span></li>
+              }
+            </ul>
+          </div>
+          <div class="rounded-lg p-4" style="background:#FEF2F2; border: 1px solid #FECACA">
+            <div class="text-xs uppercase tracking-wider font-mono mb-3 flex items-center gap-1.5" style="color:#DC2626">
+              <span>↓</span> Cómo perder puntos
+            </div>
+            <ul class="text-sm space-y-2 text-pine">
+              @for (p of c.lose; track p) {
+                <li class="flex gap-2"><span style="color:#DC2626">✗</span><span>{{ p }}</span></li>
+              }
+            </ul>
+          </div>
+        </div>
+        <div class="mt-5 rounded-lg border border-fog bg-gray-50 p-4">
+          <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Tip estratégico</div>
+          <p class="text-sm text-pine leading-relaxed">{{ c.tip }}</p>
+        </div>
+      </app-modal>
+    }
 
     <!-- MÓDULOS DEL SITIO -->
     <section class="mb-10">
@@ -197,23 +226,29 @@ interface ModuleLink {
   `,
 })
 export class LandingComponent {
+  protected selectedCriterion = signal<RubricCriterion | null>(null);
+
   readonly criteria: RubricCriterion[] = [
     { id: 'Criterio 1', title: 'Motivación argumentada', weight: 20,
       description: 'Problema real, sustentado en literatura, parcialmente resuelto y susceptible de mejora.',
       max: ['Cita 2-3 papers reales (Google Scholar)', 'Cuantifica el problema con números', 'Identifica el hueco específico', 'Conecta motivación con hipótesis'],
-      lose: ['Texto genérico sin referencias', 'Problema demasiado amplio', 'Sin estadísticas del problema', 'Desconexión con hipótesis'] },
+      lose: ['Texto genérico sin referencias', 'Problema demasiado amplio', 'Sin estadísticas del problema', 'Desconexión con hipótesis'],
+      tip: 'Invierte tiempo en Google Scholar antes de escribir. Una motivación con 3 papers reales y un número concreto vale mucho más que dos páginas de generalidades.' },
     { id: 'Criterio 2', title: 'Hipótesis y experimentos refutables', weight: 20,
       description: 'Hipótesis falsable, con variables y métricas claras. Experimentos que puedan refutarla.',
       max: ['Hipótesis en una frase clara', 'Incluye H0 y H1 explícitas', 'Define umbral cuantitativo', 'Indica qué resultado la refutaría'],
-      lose: ['Hipótesis vaga ("será mejor")', 'No falsable', 'Sin métrica concreta', 'Experimento que no testea la hipótesis'] },
+      lose: ['Hipótesis vaga ("será mejor")', 'No falsable', 'Sin métrica concreta', 'Experimento que no testea la hipótesis'],
+      tip: 'Pregúntate: "¿qué resultado haría que tirara la hipótesis a la basura?" Si no tienes respuesta, no es falsable.' },
     { id: 'Criterio 3', title: 'Rigor del experimento', weight: 40,
       description: 'Formalidad, equilibrio poblacional, calidad del muestreo, evitación de sesgos.',
       max: ['Documenta cada decisión con justificación', 'Sección dedicada a sesgos', 'Justifica tamaño muestral', 'Especifica pruebas estadísticas + α', 'Discute limitaciones'],
-      lose: ['Sin versiones/seeds/hp', 'Muestreo no justificado', 'Sin mención de sesgos', 'Sin análisis estadístico', 'Comparaciones insuficientes'] },
+      lose: ['Sin versiones/seeds/hp', 'Muestreo no justificado', 'Sin mención de sesgos', 'Sin análisis estadístico', 'Comparaciones insuficientes'],
+      tip: 'Este criterio vale el doble. Si te falta tiempo, sacrifica volumen en otras secciones para que ésta brille. Sección dedicada de sesgos = diferencial.' },
     { id: 'Criterio 4', title: 'Redacción y presentación', weight: 20,
       description: 'Claridad, estructura tipo paper, tablas numeradas, citación consistente.',
       max: ['Estructura tipo paper numerada', 'Tablas/figuras con descripción', 'Citas en el texto', 'Una idea por párrafo', 'Tiempos y voz consistentes'],
-      lose: ['Exceder 5 páginas', 'Faltas de ortografía', 'Sin referencias', 'Formato distinto al pedido', 'Tono coloquial'] },
+      lose: ['Exceder 5 páginas', 'Faltas de ortografía', 'Sin referencias', 'Formato distinto al pedido', 'Tono coloquial'],
+      tip: '20% por redacción es mucho — no lo dejes para el último día. Lee tu propio texto en voz alta antes de entregar.' },
   ];
 
   readonly modules: ModuleLink[] = [

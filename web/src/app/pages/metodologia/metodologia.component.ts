@@ -1,11 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
 import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component';
+import { ModalComponent } from '../../shared/interactive/modal.component';
+
+interface DesignItem { label: string; value: string; note: string; detail: string }
+interface MetricItem { name: string; scope: string; why: string; formula?: string; range?: string }
+interface BiasItem   { name: string; mitigation: string; how: string; example: string }
 
 @Component({
   selector: 'app-metodologia',
   standalone: true,
-  imports: [SectionLayoutComponent, TabsComponent],
+  imports: [SectionLayoutComponent, TabsComponent, ModalComponent],
   template: `
     <app-section-layout
       sectionNumber="03"
@@ -23,14 +28,15 @@ import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component'
 
         @if (active() === 'design') {
           <div class="animate-tab">
-            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.1 Diseño experimental</h2>
+            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.1 Diseño experimental <span class="text-xs text-moss font-mono">· click una card →</span></h2>
             <div class="grid form-grid--3">
               @for (d of design; track d.label) {
-                <div class="rounded-lg border border-fog bg-gray-50 p-4">
+                <button type="button" (click)="selectedDesign.set(d)"
+                        class="rounded-lg border border-fog bg-gray-50 p-4 text-left hover:border-forest hover:shadow-card transition-all">
                   <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">{{ d.label }}</div>
                   <div class="text-forest font-display font-medium">{{ d.value }}</div>
                   <div class="text-xs text-pine mt-1">{{ d.note }}</div>
-                </div>
+                </button>
               }
             </div>
           </div>
@@ -118,16 +124,17 @@ import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component'
 
         @if (active() === 'metrics') {
           <div class="animate-tab">
-            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.5 Métricas y análisis estadístico</h2>
+            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.5 Métricas y análisis estadístico <span class="text-xs text-moss font-mono">· click una métrica →</span></h2>
             <div class="grid form-grid">
               @for (m of metrics; track m.name) {
-                <div class="rounded-lg border border-fog bg-gray-50 p-4">
+                <button type="button" (click)="selectedMetric.set(m)"
+                        class="rounded-lg border border-fog bg-gray-50 p-4 text-left hover:border-forest hover:shadow-card transition-all">
                   <div class="flex items-center justify-between mb-1">
                     <div class="text-forest font-display font-medium">{{ m.name }}</div>
                     <span class="tag">{{ m.scope }}</span>
                   </div>
                   <div class="text-xs text-pine">{{ m.why }}</div>
-                </div>
+                </button>
               }
             </div>
           </div>
@@ -135,19 +142,65 @@ import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component'
 
         @if (active() === 'biases') {
           <div class="animate-tab card" style="border-color: #D97706; background: rgba(255,251,235,0.5); box-shadow: none">
-            <h2 class="font-display text-lg font-semibold text-forest mb-2">3.6 Control de sesgos</h2>
+            <h2 class="font-display text-lg font-semibold text-forest mb-2">3.6 Control de sesgos <span class="text-xs text-moss font-mono">· click un sesgo →</span></h2>
             <p class="text-sm text-pine mb-4">Esta subsección marca la diferencia para el Criterio 3 (40%).</p>
             <div class="grid form-grid">
               @for (b of biases; track b.name) {
-                <div class="rounded-md border border-fog bg-white p-3">
+                <button type="button" (click)="selectedBias.set(b)"
+                        class="rounded-md border border-fog bg-white p-3 text-left hover:border-forest hover:shadow-card transition-all">
                   <div class="text-xs uppercase tracking-wider text-amber-700 font-mono mb-1">{{ b.name }}</div>
                   <div class="text-sm text-pine">{{ b.mitigation }}</div>
-                </div>
+                </button>
               }
             </div>
           </div>
         }
       </article>
+
+      <!-- MODALES -->
+      @if (selectedDesign(); as d) {
+        <app-modal [open]="true" [eyebrow]="'3.1 Diseño · ' + d.label"
+                   [title]="d.value" [subtitle]="d.note"
+                   (closeRequest)="selectedDesign.set(null)">
+          <p class="text-pine leading-relaxed">{{ d.detail }}</p>
+        </app-modal>
+      }
+      @if (selectedMetric(); as m) {
+        <app-modal [open]="true" [eyebrow]="'3.5 Métrica · ' + m.scope"
+                   [title]="m.name" [subtitle]="m.why"
+                   (closeRequest)="selectedMetric.set(null)">
+          @if (m.formula) {
+            <div class="rounded-lg border border-fog bg-gray-50 p-4 mb-3">
+              <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Fórmula</div>
+              <div class="font-mono text-forest text-sm">{{ m.formula }}</div>
+            </div>
+          }
+          @if (m.range) {
+            <div class="rounded-lg border border-fog bg-gray-50 p-4">
+              <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Rango / interpretación</div>
+              <div class="text-sm text-pine">{{ m.range }}</div>
+            </div>
+          }
+        </app-modal>
+      }
+      @if (selectedBias(); as b) {
+        <app-modal [open]="true" [eyebrow]="'3.6 Sesgo · control'"
+                   [title]="b.name"
+                   (closeRequest)="selectedBias.set(null)">
+          <div class="rounded-lg p-4 mb-3" style="background:#ECFDF5; border: 1px solid #A7F3D0">
+            <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#059669">Mitigación</div>
+            <p class="text-sm text-pine">{{ b.mitigation }}</p>
+          </div>
+          <div class="rounded-lg border border-fog bg-gray-50 p-4 mb-3">
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Cómo aplicarla</div>
+            <p class="text-sm text-pine">{{ b.how }}</p>
+          </div>
+          <div class="rounded-lg p-4" style="background:#FEF2F2; border: 1px solid #FECACA">
+            <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#DC2626">Ejemplo de error</div>
+            <p class="text-sm text-pine">{{ b.example }}</p>
+          </div>
+        </app-modal>
+      }
 
     </app-section-layout>
   `,
@@ -162,6 +215,9 @@ import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component'
 export class MetodologiaComponent {
   protected active = signal<string>('design');
   protected expandedStep = signal<string | null>(null);
+  protected selectedDesign = signal<DesignItem | null>(null);
+  protected selectedMetric = signal<MetricItem | null>(null);
+  protected selectedBias   = signal<BiasItem | null>(null);
 
   readonly tabs: TabItem[] = [
     { id: 'design',  label: '3.1 Diseño' },
@@ -172,10 +228,13 @@ export class MetodologiaComponent {
     { id: 'biases',  label: '3.6 Sesgos' },
   ];
 
-  readonly design = [
-    { label: 'Tipo',      value: 'Experimental controlado', note: 'Comparación pareada entre 2 condiciones.' },
-    { label: 'Paradigma', value: 'Cuantitativo',            note: 'Métricas numéricas + pruebas de significancia.' },
-    { label: 'Unidad',    value: 'Tuit individual',         note: 'Etiqueta binaria: hate / no-hate.' },
+  readonly design: DesignItem[] = [
+    { label: 'Tipo', value: 'Experimental controlado', note: 'Comparación pareada entre 2 condiciones.',
+      detail: 'Un experimento controlado manipula deliberadamente la variable independiente (estrategia de entrenamiento: zero-shot vs fine-tuned) y mide el efecto en la variable dependiente (F1 macro). Se contrasta con cuasi-experimental (sin asignación aleatoria) y observacional (sin manipulación). Aquí podemos asignar libremente las semillas y configs, así que cumple el criterio de "controlado".' },
+    { label: 'Paradigma', value: 'Cuantitativo', note: 'Métricas numéricas + pruebas de significancia.',
+      detail: 'Cuantitativo significa que la evidencia se expresa en números y se evalúa con métodos estadísticos. Es la opción correcta cuando la hipótesis se puede traducir a una métrica (F1). Un paradigma cualitativo (entrevistas, análisis temático) no aplicaría aquí porque no hay "interpretación de discurso" — hay clasificación binaria evaluada contra ground truth.' },
+    { label: 'Unidad', value: 'Tuit individual', note: 'Etiqueta binaria: hate / no-hate.',
+      detail: 'La unidad de análisis es la observación más pequeña sobre la que se aplica la métrica. Aquí es cada tuit por separado. Alternativas hubieran sido: unidad por usuario (agregando sus tuits), unidad por conversación (varios tuits enlazados). Elegimos tuit por simplicidad y porque la moderación de plataforma se aplica por tuit individual.' },
   ];
 
   readonly dataset = [
@@ -205,19 +264,49 @@ export class MetodologiaComponent {
     { id: '08', title: 'Pruebas estadísticas', detail: 'Wilcoxon signed-rank pareado entre métodos, α=0.05.', more: 'scipy.stats.wilcoxon(scores_ours, scores_baseline). Corrección Holm si comparamos contra varios.' },
   ];
 
-  readonly metrics = [
-    { name: 'F1 macro',          scope: 'principal',    why: 'Robusta a desbalance, alineada con la hipótesis.' },
-    { name: 'AUROC',             scope: 'soporte',      why: 'Independiente del umbral, útil para análisis fino.' },
-    { name: 'Precision / Recall',scope: 'desglose',     why: 'Identifica si falla en FP o FN.' },
-    { name: 'Wilcoxon p-value',  scope: 'estadística',  why: 'Comparación pareada no paramétrica entre seeds.' },
+  readonly metrics: MetricItem[] = [
+    { name: 'F1 macro', scope: 'principal',
+      why: 'Robusta a desbalance, alineada con la hipótesis.',
+      formula: 'F1_macro = (1/C) · Σ 2·(P_c · R_c) / (P_c + R_c)',
+      range: '[0, 1]. F1=1 perfecto. F1=0.5 baseline trivial. F1 macro promedia sin ponderar por tamaño de clase, así que castiga el ignorar la clase minoritaria.' },
+    { name: 'AUROC', scope: 'soporte',
+      why: 'Independiente del umbral, útil para análisis fino.',
+      formula: 'AUROC = ∫ TPR(t) dFPR(t)',
+      range: '[0, 1]. AUC=0.5 azar. AUC=1 separación perfecta. Útil cuando el umbral de decisión es ajustable en producción.' },
+    { name: 'Precision / Recall', scope: 'desglose',
+      why: 'Identifica si el modelo falla más en falsos positivos o falsos negativos.',
+      formula: 'P = TP/(TP+FP)  ·  R = TP/(TP+FN)',
+      range: 'Ambas [0,1]. Tradeoff típico: subir P sacrifica R y viceversa. Importante reportar ambas, no solo F1.' },
+    { name: 'Wilcoxon p-value', scope: 'estadística',
+      why: 'Comparación pareada no paramétrica entre seeds.',
+      formula: 'W = Σ rank(|x_i - y_i|) · sign(x_i - y_i)',
+      range: 'p ∈ [0, 1]. Rechazamos H0 si p < α (=0.05). No asume normalidad — adecuado para muestras pequeñas (5 seeds).' },
   ];
 
-  readonly biases = [
-    { name: 'Selección',       mitigation: 'Muestreo aleatorio con filtro geográfico verificable.' },
-    { name: 'Anotador',        mitigation: 'Triple anotación + descarte por κ bajo + ronda de consenso.' },
-    { name: 'Sobreajuste',     mitigation: 'Test intocado; hp tuning solo sobre val; 5 seeds para varianza.' },
-    { name: 'Fuga de datos',   mitigation: 'Split por usuario (no por tuit) para evitar mismo autor en train y test.' },
-    { name: 'Demográfico',     mitigation: 'Verificar distribución regional MX y reportar limitaciones.' },
-    { name: 'Publicación',     mitigation: 'Reportar resultados negativos y todas las seeds, no solo la mejor.' },
+  readonly biases: BiasItem[] = [
+    { name: 'Selección',
+      mitigation: 'Muestreo aleatorio con filtro geográfico verificable.',
+      how: 'Documentar la query exacta usada en la API académica (lang:es place_country:MX) y el rango temporal. Hacer pública la lista de tweet_id para que terceros puedan auditar la selección.',
+      example: 'Filtrar solo tuits con muchos likes — sesga la muestra hacia contenido viral, no representativo del discurso ordinario.' },
+    { name: 'Anotador',
+      mitigation: 'Triple anotación + descarte por κ bajo + ronda de consenso.',
+      how: 'Cada tuit se envía a 3 anotadores independientes. Calculamos Cohen\'s κ por par de anotadores. Si κ promedio < 0.70, descartamos el tuit. Los casos en disputa van a una ronda de consenso con un cuarto anotador experto.',
+      example: 'Un solo anotador interpreta "güey" como agresión cuando culturalmente es informal — sesgo individual queda como ground truth.' },
+    { name: 'Sobreajuste',
+      mitigation: 'Test intocado; hp tuning solo sobre val; 5 seeds para varianza.',
+      how: 'El test set NUNCA se ve durante desarrollo. Cualquier decisión (arquitectura, hp, early stopping) usa solo val. El test se mira UNA vez para reportar la métrica final. Repetimos con 5 semillas distintas para que la varianza no nos engañe.',
+      example: 'Tunear hiperparámetros para minimizar loss en test — el F1 reportado infla artificialmente y no generaliza a datos nuevos.' },
+    { name: 'Fuga de datos',
+      mitigation: 'Split por usuario (no por tuit) para evitar mismo autor en train y test.',
+      how: 'Antes del split estratificado, agrupamos los tuits por user_id. Asignamos usuarios enteros a train, val o test. Así el mismo autor jamás aparece en dos splits — evita que el modelo "memorice" estilos.',
+      example: 'Dos tuits del mismo usuario, uno en train y uno en test. El modelo aprende rasgos idiosincráticos (emojis, jerga personal) y "ahorra" puntos en test.' },
+    { name: 'Demográfico',
+      mitigation: 'Verificar distribución regional MX y reportar limitaciones.',
+      how: 'Analizamos place_name de los tuits para verificar que estén distribuidos por regiones (CDMX, MTY, GDL, Sur, etc.). Si una región domina >50%, lo reportamos como limitación de validez externa.',
+      example: 'Todos los tuits son de CDMX. El modelo aprende dialecto chilango y falla en yucateco o norteño — pero el paper dice "español mexicano" sin matizar.' },
+    { name: 'Publicación',
+      mitigation: 'Reportar resultados negativos y todas las seeds, no solo la mejor.',
+      how: 'Tabla con media ± std de las 5 seeds. Reportamos también las seeds individuales en el apéndice. Si la hipótesis se refuta, lo decimos — no escondemos el experimento.',
+      example: 'Mostrar solo la seed con mejor F1. Otros investigadores no pueden replicar y la "evidencia" es ruido seleccionado.' },
   ];
 }
