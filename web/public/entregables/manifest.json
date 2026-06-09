@@ -1,0 +1,82 @@
+{
+  "generated_at": "2026-06-09T18:35:11.521742+00:00",
+  "zip": {
+    "name": "entregable-actividad-1-samuel-hernandez.zip",
+    "size": 127327,
+    "sha256": "55ebbfc5f87e987ae48dd59f28e4d4844c643cebe0444c7cd355dea8361b4305"
+  },
+  "contents": [
+    {
+      "path": "01-reporte/reporte.md",
+      "sha256": "762eab1d1e96c66f9a5649612776675efbe29e91f80047a89ce9678d9cbc59fe"
+    },
+    {
+      "path": "01-reporte/reporte.pdf",
+      "sha256": "0528b6162b49e4955d46ac48dc69dc915b9a1bfb8d50c26fa707481a03f25795"
+    },
+    {
+      "path": "01-reporte/_header.tex",
+      "sha256": "6fdd3248876e6ca3e0b6f30d9b7faef6858a4432ebfa6f8f77df61683a80bec0"
+    },
+    {
+      "path": "02-wiki-analisis/00-tldr.md",
+      "sha256": "e0e98e990ce2e043d7529b2222ceedb6d93a864afa5bf0e910197cb95b66c305"
+    },
+    {
+      "path": "02-wiki-analisis/01-objetivo.md",
+      "sha256": "1bde2b2e756d5baa04ff2c235a561afd217fe048d7a99448e17fbf08e4e20c08"
+    },
+    {
+      "path": "02-wiki-analisis/02-descripcion-detallada.md",
+      "sha256": "51ec12dcce805247aa1372449afa4f72f90d7d50f5367c9bd803220080e62a45"
+    },
+    {
+      "path": "02-wiki-analisis/03-req-1-hipotesis.md",
+      "sha256": "3b0a3c32931a401f305a73fe6fa8a601f7f46daaf8546d582a1ab4b2ca7a23dc"
+    },
+    {
+      "path": "02-wiki-analisis/04-req-2-metodologia.md",
+      "sha256": "f087935cb468819fc2066f84c5cc9b2700ecead98c9bb14aa2e6080b786ef89f"
+    },
+    {
+      "path": "02-wiki-analisis/05-req-3-train-val.md",
+      "sha256": "0d25a232178c4ec9ba9af8c7624ce7849c02f54b021ef356cd5a175b96363da0"
+    },
+    {
+      "path": "02-wiki-analisis/06-req-4-comparacion.md",
+      "sha256": "7bc1d93e5150e42f2b534e6cc5b773f940818fc1d63f1aa079fd88c9b9ef4d11"
+    },
+    {
+      "path": "02-wiki-analisis/07-rubrica-explicada.md",
+      "sha256": "46c3551e0c42c5660254c3bd0aa5b24c649119a76d901990fb659a13659ef0c9"
+    },
+    {
+      "path": "02-wiki-analisis/08-glosario.md",
+      "sha256": "6ba4e13459365d118d901a8ecc9af986aa96967a4b333537e3c6cfa87dcb6b5b"
+    },
+    {
+      "path": "02-wiki-analisis/09-plan-redaccion.md",
+      "sha256": "2da8fc29823f9c1807206441a8b9e65eb489522cbe807c030358da28cd9715f3"
+    },
+    {
+      "path": "02-wiki-analisis/10-checklist-final.md",
+      "sha256": "cb15903bcdab8f492d1c0830802f0f52574d577fcddc3533bdedca8a41b736f1"
+    },
+    {
+      "path": "02-wiki-analisis/11-decisiones-pendientes.md",
+      "sha256": "2aa8a51f5823c95d0869f9b7e77ac869ef6feaab22608881bb2313b42e8457a2"
+    },
+    {
+      "path": "02-wiki-analisis/README.md",
+      "sha256": "60013c03a6fb9e3fba5e382998083910321e84ce26006dc8fcd7b04f8cb99de9"
+    },
+    {
+      "path": "00-enunciado-original/mexmiart07_act2.docx",
+      "sha256": "9dc306fbb7b01eabcaf0fdb373b29252f49550ae7eafff0b0562adc1a3751616"
+    },
+    {
+      "path": "03-sitio-web/README-sitio.md",
+      "sha256": "7718f2017f7275420b6689b0cfabc441b7885d4cabcd5b180f29a3f95c734a20"
+    }
+  ]
+}
