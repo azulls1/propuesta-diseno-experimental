@@ -37,9 +37,12 @@ if [[ "$DO_PULL" -eq 1 ]]; then
   git pull --ff-only
 fi
 
+STACK_EXISTS=0
+docker stack ls --format '{{.Name}}' | grep -q "^${STACK_NAME}$" && STACK_EXISTS=1
+
 if [[ "$DO_BUILD" -eq 1 ]]; then
-  color "Construyendo imagen $IMAGE_NAME"
-  docker build -t "$IMAGE_NAME" ./web
+  color "Construyendo imagen $IMAGE_NAME (--no-cache --pull para evitar layers viejos)"
+  docker build --no-cache --pull -t "$IMAGE_NAME" ./web
   ok "Imagen construida"
 fi
 
@@ -51,6 +54,14 @@ fi
 
 color "Desplegando stack '$STACK_NAME'"
 docker stack deploy -c "$STACK_FILE" "$STACK_NAME" --resolve-image=never --detach=false
+
+# Si el stack ya existía y solo cambió la imagen (mismo :latest tag),
+# Swarm no detecta diferencias en el spec → no actualiza el servicio.
+# Forzamos el update para que tome la imagen nueva.
+if [[ "$STACK_EXISTS" -eq 1 && "$DO_BUILD" -eq 1 ]]; then
+  color "Forzando update del servicio (stack ya existía, refrescando imagen)"
+  docker service update --force --image "$IMAGE_NAME" "${STACK_NAME}_frontend" --quiet
+fi
 
 ok "Stack desplegado"
 color "Servicios:"
