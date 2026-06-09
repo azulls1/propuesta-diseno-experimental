@@ -3,7 +3,7 @@
 Genera el ZIP final del entregable de la Actividad 1.
 
 Estructura del ZIP:
-    entregable-actividad-1-samuel-hernandez.zip
+    entregable-actividad-1-adonai-hernandez-mata.zip
     ├── LEEME.md                       (mapeo a rúbrica + cómo navegar)
     ├── 01-reporte/
     │   ├── reporte.md                 (fuente Markdown)
@@ -27,12 +27,12 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 OUT_DIR = REPO / "entregables"
-ZIP_NAME = "entregable-actividad-1-samuel-hernandez.zip"
+ZIP_NAME = "entregable-actividad-1-adonai-hernandez-mata.zip"
 ZIP_PATH = OUT_DIR / ZIP_NAME
 
 LEEME = """# Entregable — Actividad 1: Propuesta de Diseño Experimental
 
-**Autor:** Samuel Hernández (azulls1) · azull.samael@gmail.com
+**Autor:** Adonai Samael Hernández Mata (azulls1) · azull.samael@gmail.com
 **Asignatura:** Investigación en Inteligencia Artificial
 **Programa:** Maestría en IA · 1er semestre
 **Fecha:** {date}

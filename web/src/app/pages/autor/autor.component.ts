@@ -27,7 +27,7 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
               <circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
-          <h2 class="font-display text-2xl font-semibold text-forest">Samuel Hernández</h2>
+          <h2 class="font-display text-2xl font-semibold text-forest">Adonai Samael Hernández Mata</h2>
           <div class="flex items-center justify-center gap-2 mt-1">
             <span class="text-sm text-moss font-mono">azulls1</span>
             <app-copy text="azulls1" label="" />

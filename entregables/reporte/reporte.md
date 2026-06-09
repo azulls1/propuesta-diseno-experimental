@@ -1,7 +1,7 @@
 ---
 title: "Actividad 1 — Propuesta de Diseño Experimental"
 subtitle: "Detección de discurso de odio en español dialectal mexicano: fine-tuning de RoBERTuito vs zero-shot XLM-RoBERTa"
-author: "Samuel Hernández (azulls1)"
+author: "Adonai Samael Hernández Mata (azulls1)"
 date: "Junio 2026"
 lang: es
 documentclass: article
@@ -18,7 +18,7 @@ documentclass: article
 {\huge\textbf{en español dialectal mexicano}}\\[10pt]
 {\large Fine-tuning de RoBERTuito vs zero-shot XLM-RoBERTa}\\[2.5cm]
 
-\textbf{Autor:} Samuel Hernández (azulls1)\\
+\textbf{Autor:} Adonai Samael Hernández Mata (azulls1)\\
 \textbf{Correo:} azull.samael@gmail.com\\
 \textbf{Fecha:} Junio 2026\\[6pt]
 \textbf{Sitio del proyecto:} \href{https://propuesta-diseno-experimental.iagentek.com.mx}{propuesta-diseno-experimental.iagentek.com.mx}\\

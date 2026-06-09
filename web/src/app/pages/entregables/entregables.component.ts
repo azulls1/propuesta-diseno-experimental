@@ -60,7 +60,7 @@ const COLOR: Record<Criterio, string> = {
             descripción del sitio web.
           </p>
           <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a href="downloads/entregable-actividad-1-samuel-hernandez.zip"
+            <a href="downloads/entregable-actividad-1-adonai-hernandez-mata.zip"
                download class="btn-cta">
               ⇩ Descargar entregable completo (ZIP)
             </a>
@@ -244,9 +244,9 @@ export class EntregablesComponent implements OnInit {
     },
     {
       criterio: '—', tipo: 'ZIP completo',
-      nombre: 'entregable-actividad-1-samuel-hernandez.zip',
+      nombre: 'entregable-actividad-1-adonai-hernandez-mata.zip',
       detalle: 'Bundle final con reporte, wiki, enunciado original y README del sitio. Incluye LEEME.md con mapeo a rúbrica + hashes de cada archivo.',
-      url: 'downloads/entregable-actividad-1-samuel-hernandez.zip',
+      url: 'downloads/entregable-actividad-1-adonai-hernandez-mata.zip',
       size: '127 KB',
     },
     {
