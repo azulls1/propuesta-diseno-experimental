@@ -1,0 +1,101 @@
+@import "tailwindcss" source(none);
+@source "./**/*.{html,ts,js}";
+@import "./forest/forest.css";
+
+/* Tailwind v4 input — compilado externamente por la CLI @tailwindcss/cli
+   y emitido como `styles.css` (que es lo que Angular carga).
+
+   - `source(none)` desactiva auto-detection (que falla en este pipeline).
+   - `@source "./**"` apunta a templates inline en .ts del directorio src.
+*/
+
+/* Reglas no-negociables del Forest DS:
+   - Light mode ONLY
+   - Fondo de página: bg-gray-50 (#F7F8F7)
+   - Forest #04202C primario
+*/
+
+/* ─────────────────────────────────────────────────────────
+   EXTENSIONES PROPIAS DEL PROYECTO
+   (badges adicionales y card-hover utility)
+   ───────────────────────────────────────────────────────── */
+
+.badge-forest {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  background: rgba(4, 32, 44, 0.08);
+  color: #04202C;
+}
+
+.badge-moss {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  background: rgba(91, 112, 101, 0.1);
+  color: #5B7065;
+}
+
+.badge-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.badge-muted {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  background: #F7F8F7;
+  color: #7D8F84;
+  border: 1px solid #DFE4E0;
+}
+
+.card-hover {
+  cursor: pointer;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+}
+
+.chip-mono {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  color: #5B7065;
+  background: #F7F8F7;
+  border: 1px solid #DFE4E0;
+}
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9EADA3;
+}

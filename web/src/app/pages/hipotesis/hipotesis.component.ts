@@ -17,117 +17,101 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
       nextLink="/metodologia"
       nextLabel="Metodología">
 
-      <div class="grid gap-6 lg:grid-cols-3">
-        <div class="lg:col-span-2 space-y-6">
+      <div class="grid-content">
+        <div class="stack-lg">
 
-          <!-- H1 destacada -->
-          <article class="card relative overflow-hidden border-brand-300">
-            <div class="absolute -top-12 -right-12 h-40 w-40 rounded-full bg-brand-500/8 blur-3xl"></div>
-            <div class="relative">
-              <div class="flex items-center gap-2 mb-3">
-                <span class="badge-brand">H1</span>
-                <span class="chip">Alternativa</span>
-              </div>
-              <h2 class="mb-3">Hipótesis alternativa</h2>
-              <p class="text-lg text-brand-500 leading-relaxed italic border-l-4 border-brand-500 pl-4 font-display">
-                El fine-tuning de RoBERTuito sobre un corpus anotado de
-                <strong class="not-italic">50 000 tuits en español mexicano</strong>
-                incrementará el F1-score macro de detección de discurso de odio en
-                <strong class="text-forest-500 not-italic">al menos 8 puntos</strong>
-                respecto al baseline XLM-RoBERTa-large zero-shot
-                (<span class="mono text-sm">α = 0.05</span>, prueba pareada).
-              </p>
+          <!-- H1 -->
+          <article class="card relative overflow-hidden" style="border-color: #04202C">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="badge-forest">H1</span>
+              <span class="badge-inactive">Alternativa</span>
             </div>
+            <h2 class="font-display text-xl font-semibold text-forest mb-3">Hipótesis alternativa</h2>
+            <p class="text-lg text-forest leading-relaxed italic border-l-4 border-forest pl-4 font-display">
+              El fine-tuning de RoBERTuito sobre un corpus anotado de
+              <strong class="not-italic">50 000 tuits en español mexicano</strong>
+              incrementará el F1-score macro de detección de discurso de odio en
+              <strong class="not-italic">al menos 8 puntos</strong>
+              respecto al baseline XLM-RoBERTa-large zero-shot
+              (<span class="font-mono text-sm">α = 0.05</span>, prueba pareada).
+            </p>
           </article>
 
           <!-- H0 -->
           <article class="card">
             <div class="flex items-center gap-2 mb-3">
-              <span class="chip">H0</span>
-              <span class="chip">Nula</span>
+              <span class="badge-muted">H0</span>
+              <span class="badge-inactive">Nula</span>
             </div>
-            <h2 class="mb-3">Hipótesis nula</h2>
-            <p class="text-sage-700 leading-relaxed italic border-l-2 border-sage-300 pl-4">
+            <h2 class="font-display text-xl font-semibold text-forest mb-3">Hipótesis nula</h2>
+            <p class="text-pine leading-relaxed italic border-l-2 border-fog pl-4">
               No existe diferencia estadísticamente significativa
-              (<span class="mono">p &gt; 0.05</span>) entre el F1-score del modelo
+              (<span class="font-mono">p &gt; 0.05</span>) entre el F1-score del modelo
               afinado y el baseline zero-shot sobre el corpus dialectal mexicano.
             </p>
           </article>
 
           <!-- Variables -->
           <article class="card">
-            <h2 class="mb-4">Variables del experimento</h2>
-            <div class="grid sm:grid-cols-3 gap-3">
-              <div class="rounded-lg border border-sage-200 bg-sage-50/50 p-4">
-                <div class="text-xs uppercase tracking-wider text-forest-500 font-ui mb-1">Independiente</div>
-                <div class="text-brand-500 font-display font-medium">Estrategia de entrenamiento</div>
-                <div class="text-xs text-sage-600 mt-1 mono">zero-shot · fine-tuned</div>
-              </div>
-              <div class="rounded-lg border border-sage-200 bg-sage-50/50 p-4">
-                <div class="text-xs uppercase tracking-wider text-forest-500 font-ui mb-1">Dependiente</div>
-                <div class="text-brand-500 font-display font-medium">F1-score macro</div>
-                <div class="text-xs text-sage-600 mt-1 mono">{{ '{' }}0, 1{{ '}' }}</div>
-              </div>
-              <div class="rounded-lg border border-sage-200 bg-sage-50/50 p-4">
-                <div class="text-xs uppercase tracking-wider text-forest-500 font-ui mb-1">Control</div>
-                <div class="text-brand-500 font-display font-medium">Semilla, hardware, hp</div>
-                <div class="text-xs text-sage-600 mt-1 mono">seed=42 · A100 · lr=2e-5</div>
-              </div>
+            <h2 class="font-display text-xl font-semibold text-forest mb-4">Variables del experimento</h2>
+            <div class="grid form-grid--3">
+              @for (v of variables; track v.role) {
+                <div class="rounded-lg border border-fog bg-gray-50 p-4">
+                  <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">{{ v.role }}</div>
+                  <div class="text-forest font-display font-medium">{{ v.name }}</div>
+                  <div class="text-xs text-moss mt-1 font-mono">{{ v.value }}</div>
+                </div>
+              }
             </div>
           </article>
 
           <!-- Criterio de refutación -->
-          <article class="card border-warning/40 bg-warning/5">
-            <div class="flex items-center gap-2 text-warning text-sm font-display font-medium mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/>
+          <article class="card" style="border-color: #D97706; background: #FFFBEB">
+            <div class="flex items-center gap-2 text-amber-700 text-sm font-display font-medium mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                   class="w-4 h-4">
+                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <path d="M12 9v4M12 17h.01"/>
               </svg>
               Criterio explícito de refutación
             </div>
-            <p class="text-sage-700 leading-relaxed">
+            <p class="text-pine leading-relaxed">
               La hipótesis H1 se considerará
-              <strong class="text-brand-500">refutada</strong>
+              <strong class="text-forest">refutada</strong>
               si, tras ejecutar el experimento con 5 semillas aleatorias distintas,
               el incremento promedio en F1-score es
-              <span class="mono text-forest-500">&lt; 8 puntos</span>
+              <span class="font-mono text-forest">&lt; 8 puntos</span>
               o si la prueba de Wilcoxon pareada arroja
-              <span class="mono text-forest-500">p ≥ 0.05</span>.
+              <span class="font-mono text-forest">p ≥ 0.05</span>.
               En ese caso aceptaríamos H0.
             </p>
           </article>
         </div>
 
         <!-- Sidebar -->
-        <aside class="space-y-4">
-          <div class="card border-forest-500/30">
-            <div class="flex items-center gap-2 text-forest-500 text-sm font-display font-medium mb-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 12 2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-              </svg>
-              Falsabilidad
-            </div>
-            <p class="text-sm text-sage-700 leading-relaxed">
-              Una hipótesis es <strong class="text-brand-500">científica</strong>
+        <aside class="stack">
+          <div class="card" style="border-color: rgba(4,32,44,0.2)">
+            <div class="text-forest text-sm font-display font-medium mb-2">Falsabilidad</div>
+            <p class="text-sm text-pine leading-relaxed">
+              Una hipótesis es <strong class="text-forest">científica</strong>
               cuando es posible diseñar un experimento que la refute.
               La nuestra cumple porque define un umbral cuantitativo concreto.
             </p>
           </div>
 
           <div class="card">
-            <div class="text-xs uppercase tracking-wider text-sage-500 font-ui mb-2">Checklist</div>
-            <ul class="text-sm space-y-2 text-sage-700">
-              <li class="flex gap-2"><span class="text-success">✓</span> Falsable</li>
-              <li class="flex gap-2"><span class="text-success">✓</span> Variables nombradas</li>
-              <li class="flex gap-2"><span class="text-success">✓</span> Métrica cuantificable</li>
-              <li class="flex gap-2"><span class="text-success">✓</span> Umbral explícito</li>
-              <li class="flex gap-2"><span class="text-success">✓</span> Prueba estadística</li>
-              <li class="flex gap-2"><span class="text-success">✓</span> H0 declarada</li>
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Checklist</div>
+            <ul class="text-sm stack-sm text-pine">
+              @for (it of checklist; track it) {
+                <li class="flex gap-2"><span style="color:#059669">✓</span> {{ it }}</li>
+              }
             </ul>
           </div>
 
           <div class="card">
-            <div class="text-xs uppercase tracking-wider text-sage-500 font-ui mb-2">Plantilla aplicada</div>
-            <p class="text-xs text-sage-600 mono leading-relaxed">
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Plantilla aplicada</div>
+            <p class="text-xs text-moss font-mono leading-relaxed">
               [técnica X] mejorará [métrica M] en al menos [umbral] en [tarea T] sobre [población] frente a [baseline].
             </p>
           </div>
@@ -137,4 +121,15 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
     </app-section-layout>
   `,
 })
-export class HipotesisComponent {}
+export class HipotesisComponent {
+  readonly variables = [
+    { role: 'Independiente', name: 'Estrategia de entrenamiento', value: 'zero-shot · fine-tuned' },
+    { role: 'Dependiente',   name: 'F1-score macro',              value: '{0, 1}' },
+    { role: 'Control',       name: 'Semilla, hardware, hp',       value: 'seed=42 · A100 · lr=2e-5' },
+  ];
+
+  readonly checklist = [
+    'Falsable', 'Variables nombradas', 'Métrica cuantificable',
+    'Umbral explícito', 'Prueba estadística', 'H0 declarada'
+  ];
+}

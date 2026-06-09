@@ -17,121 +17,92 @@ interface Baseline {
       sectionNumber="04"
       sectionTitle="Comparación con otras técnicas"
       sectionDescription="Baselines, condiciones de comparación justa y pruebas estadísticas que permitirán validar o refutar la hipótesis."
-      [rubricWeight]="20"
       status="in-progress"
       prevLink="/metodologia"
       prevLabel="Metodología"
-      [nextLink]="null">
+      nextLink="/redaccion"
+      nextLabel="Redacción">
 
-      <div class="space-y-8">
+      <div class="stack-xl">
 
-        <!-- Baselines table -->
         <article class="card">
-          <h2 class="mb-4 flex items-center gap-2">
-            <span class="section-num">4.1</span>
-            <span>Baselines a evaluar</span>
+          <h2 class="font-display text-xl font-semibold text-forest mb-4 flex items-center gap-2">
+            <span class="section-num">4.1</span><span>Baselines a evaluar</span>
           </h2>
 
-          <div class="grid gap-3 md:grid-cols-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             @for (b of baselines; track b.name) {
-              <div class="rounded-lg border bg-white p-4 transition-all"
-                   [class.border-sage-200]="b.type !== 'sota'"
-                   [class.border-forest-500]="b.type === 'sota'"
-                   [class.shadow-card]="b.type === 'sota'">
+              <div class="rounded-lg border bg-white p-4"
+                   [style.border-color]="b.type === 'sota' ? '#04202C' : '#DFE4E0'">
                 <div class="flex items-center justify-between gap-2 mb-2">
-                  <div class="text-brand-500 font-display font-medium">{{ b.name }}</div>
+                  <div class="text-forest font-display font-medium">{{ b.name }}</div>
                   @switch (b.type) {
-                    @case ('trivial')   { <span class="chip">Trivial</span> }
-                    @case ('classical') { <span class="chip">Clásico</span> }
-                    @case ('ablation')  { <span class="chip">Ablación</span> }
+                    @case ('trivial')   { <span class="badge-inactive">Trivial</span> }
+                    @case ('classical') { <span class="badge-inactive">Clásico</span> }
+                    @case ('ablation')  { <span class="badge-inactive">Ablación</span> }
                     @case ('sota')      { <span class="badge-forest">Estado del arte</span> }
                   }
                 </div>
                 <div class="flex items-center gap-2 mb-2">
-                  <span class="text-xs text-sage-500 font-ui">F1 esperado:</span>
-                  <span class="mono text-sm text-forest-500 font-medium">{{ b.expectedF1 }}</span>
+                  <span class="text-xs text-moss font-mono">F1 esperado:</span>
+                  <span class="tag">{{ b.expectedF1 }}</span>
                 </div>
-                <p class="text-sm text-sage-600">{{ b.rationale }}</p>
+                <p class="text-sm text-pine">{{ b.rationale }}</p>
               </div>
             }
           </div>
         </article>
 
-        <!-- Comparación justa -->
         <article class="card">
-          <h2 class="mb-3 flex items-center gap-2">
-            <span class="section-num">4.2</span>
-            <span>Condiciones de comparación justa</span>
+          <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
+            <span class="section-num">4.2</span><span>Condiciones de comparación justa</span>
           </h2>
-          <p class="text-sm text-sage-700 mb-4">
+          <p class="text-sm text-pine mb-4">
             Todos los métodos se evalúan bajo las mismas condiciones para que la comparación sea científicamente válida.
           </p>
-          <div class="grid sm:grid-cols-2 gap-2">
+          <div class="grid form-grid">
             @for (c of fairness; track c) {
-              <div class="rounded-md border border-sage-200 bg-sage-50/50 p-3 flex items-start gap-2 text-sm">
-                <span class="text-success mt-0.5">✓</span>
-                <span class="text-sage-700">{{ c }}</span>
+              <div class="rounded-md border border-fog bg-gray-50 p-3 flex items-start gap-2 text-sm">
+                <span style="color:#059669" class="mt-0.5">✓</span>
+                <span class="text-pine">{{ c }}</span>
               </div>
             }
           </div>
         </article>
 
-        <!-- Pruebas estadísticas -->
         <article class="card">
-          <h2 class="mb-3 flex items-center gap-2">
-            <span class="section-num">4.3</span>
-            <span>Pruebas estadísticas</span>
+          <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
+            <span class="section-num">4.3</span><span>Pruebas estadísticas</span>
           </h2>
-          <div class="space-y-3">
-            <div class="rounded-lg border border-sage-200 bg-sage-50/50 p-4">
-              <div class="flex items-center justify-between mb-1">
-                <div class="text-brand-500 font-display font-medium">Wilcoxon signed-rank</div>
-                <span class="chip mono">pareada · no paramétrica</span>
+          <div class="stack-sm">
+            @for (t of tests; track t.name) {
+              <div class="rounded-lg border border-fog bg-gray-50 p-4">
+                <div class="flex items-center justify-between mb-1">
+                  <div class="text-forest font-display font-medium">{{ t.name }}</div>
+                  <span class="tag">{{ t.scope }}</span>
+                </div>
+                <p class="text-sm text-pine">{{ t.note }}</p>
               </div>
-              <p class="text-sm text-sage-600">
-                Comparación pareada de F1 entre RoBERTuito-MX y cada baseline sobre 5 seeds.
-                No asume normalidad, robusta a outliers. Nivel α = 0.05.
-              </p>
-            </div>
-            <div class="rounded-lg border border-sage-200 bg-sage-50/50 p-4">
-              <div class="flex items-center justify-between mb-1">
-                <div class="text-brand-500 font-display font-medium">Bootstrap (n=1000)</div>
-                <span class="chip mono">IC 95%</span>
-              </div>
-              <p class="text-sm text-sage-600">
-                Intervalo de confianza no paramétrico para el F1 macro de cada método sobre test.
-              </p>
-            </div>
-            <div class="rounded-lg border border-sage-200 bg-sage-50/50 p-4">
-              <div class="flex items-center justify-between mb-1">
-                <div class="text-brand-500 font-display font-medium">Corrección de Holm</div>
-                <span class="chip mono">múltiples comparaciones</span>
-              </div>
-              <p class="text-sm text-sage-600">
-                Comparamos contra 4 baselines ⇒ controlar FWER mediante Holm step-down.
-              </p>
-            </div>
+            }
           </div>
         </article>
 
-        <!-- Resultados esperados -->
-        <article class="card border-forest-500/40 bg-forest-500/5">
-          <h2 class="mb-3 flex items-center gap-2 text-forest-500">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-5 w-5">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v18h18M7 14l4-4 3 3 5-5"/>
+        <article class="card" style="border-color: #04202C">
+          <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="w-5 h-5">
+              <path d="M3 3v18h18M7 14l4-4 3 3 5-5"/>
             </svg>
             Resultados esperados
           </h2>
-          <p class="text-sage-700 leading-relaxed">
+          <p class="text-pine leading-relaxed">
             Si la hipótesis se confirma, esperamos
-            <strong class="text-brand-500">F1 ≥ 0.83</strong> para RoBERTuito-MX
-            (vs <span class="mono text-forest-500">0.71</span> del baseline zero-shot),
-            con
-            <span class="mono">p &lt; 0.01</span>
-            tras corrección de Holm.
+            <strong class="text-forest">F1 ≥ 0.83</strong> para RoBERTuito-MX
+            (vs <span class="font-mono">0.71</span> del baseline zero-shot),
+            con <span class="font-mono">p &lt; 0.01</span> tras corrección de Holm.
             Si la hipótesis se refuta, la mejora será inferior al umbral de
-            <span class="mono">8 puntos</span>
-            o no significativa, lo que sugeriría que el shift dialectal
+            <span class="font-mono">8 puntos</span>, lo que sugeriría que el shift dialectal
             requiere intervenciones más profundas que el simple fine-tuning.
           </p>
         </article>
@@ -142,38 +113,24 @@ interface Baseline {
 })
 export class ComparacionComponent {
   readonly baselines: Baseline[] = [
-    {
-      name: 'Mayoría (clase frecuente)',
-      type: 'trivial',
-      expectedF1: '~0.42',
-      rationale: 'Suelo absoluto. Garantiza que cualquier método tenga sentido.',
-    },
-    {
-      name: 'Logistic Regression + TF-IDF',
-      type: 'classical',
-      expectedF1: '~0.62',
-      rationale: 'Baseline clásico de referencia para clasificación de texto.',
-    },
-    {
-      name: 'XLM-RoBERTa-large zero-shot',
-      type: 'sota',
-      expectedF1: '~0.71',
-      rationale: 'Estado del arte actual sin fine-tuning dialectal. La métrica a superar.',
-    },
-    {
-      name: 'RoBERTuito-MX (ours) sin preprocessing',
-      type: 'ablation',
-      expectedF1: '~0.78',
-      rationale: 'Ablación: aislamos el efecto del preprocesamiento (URLs, mentions).',
-    },
+    { name: 'Mayoría (clase frecuente)',           type: 'trivial',   expectedF1: '~0.42', rationale: 'Suelo absoluto. Garantiza que cualquier método tenga sentido.' },
+    { name: 'Logistic Regression + TF-IDF',        type: 'classical', expectedF1: '~0.62', rationale: 'Baseline clásico de referencia para clasificación de texto.' },
+    { name: 'XLM-RoBERTa-large zero-shot',         type: 'sota',      expectedF1: '~0.71', rationale: 'Estado del arte actual sin fine-tuning dialectal.' },
+    { name: 'RoBERTuito-MX (ours) sin preprocess', type: 'ablation',  expectedF1: '~0.78', rationale: 'Ablación: aislamos el efecto del preprocesamiento.' },
   ];
 
-  readonly fairness: string[] = [
+  readonly fairness = [
     'Mismo conjunto de test, intocado durante desarrollo.',
-    'Mismas métricas definidas con la misma implementación (scikit-learn).',
+    'Mismas métricas con la misma implementación (scikit-learn).',
     'Mismo presupuesto computacional (≤ 4 GPU-horas por método).',
     'Mismas 5 semillas aleatorias para promediar varianza.',
     'Mismo preprocesamiento aplicado a todos (o ablación explícita).',
     'Hiperparámetros tuneados con el mismo protocolo sobre val.',
+  ];
+
+  readonly tests = [
+    { name: 'Wilcoxon signed-rank', scope: 'pareada · no paramétrica', note: 'Comparación pareada de F1 entre RoBERTuito-MX y cada baseline sobre 5 seeds. α = 0.05.' },
+    { name: 'Bootstrap (n=1000)',   scope: 'IC 95%',                   note: 'Intervalo de confianza no paramétrico para el F1 macro sobre test.' },
+    { name: 'Corrección de Holm',   scope: 'múltiples comparaciones',  note: 'Comparamos contra 4 baselines ⇒ controlar FWER mediante Holm step-down.' },
   ];
 }
