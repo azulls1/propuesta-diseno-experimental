@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
+import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
+
+type BaselineType = 'trivial' | 'classical' | 'sota' | 'ablation';
 
 interface Baseline {
   name: string;
-  type: 'trivial' | 'classical' | 'sota' | 'ablation';
+  type: BaselineType;
   expectedF1: string;
   rationale: string;
+  details: string;
 }
 
 @Component({
   selector: 'app-comparacion',
   standalone: true,
-  imports: [SectionLayoutComponent],
+  imports: [SectionLayoutComponent, ExpandCardComponent],
   template: `
     <app-section-layout
       sectionNumber="04"
@@ -26,31 +30,59 @@ interface Baseline {
       <div class="stack-xl">
 
         <article class="card">
-          <h2 class="font-display text-xl font-semibold text-forest mb-4 flex items-center gap-2">
-            <span class="section-num">4.1</span><span>Baselines a evaluar</span>
-          </h2>
+          <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
+            <h2 class="font-display text-xl font-semibold text-forest flex items-center gap-2">
+              <span class="section-num">4.1</span><span>Baselines a evaluar</span>
+            </h2>
+            <span class="text-xs text-moss font-mono">click una tarjeta para ver detalles →</span>
+          </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            @for (b of baselines; track b.name) {
-              <div class="rounded-lg border bg-white p-4"
-                   [style.border-color]="b.type === 'sota' ? '#04202C' : '#DFE4E0'">
-                <div class="flex items-center justify-between gap-2 mb-2">
-                  <div class="text-forest font-display font-medium">{{ b.name }}</div>
-                  @switch (b.type) {
-                    @case ('trivial')   { <span class="badge-inactive">Trivial</span> }
-                    @case ('classical') { <span class="badge-inactive">Clásico</span> }
-                    @case ('ablation')  { <span class="badge-inactive">Ablación</span> }
-                    @case ('sota')      { <span class="badge-forest">Estado del arte</span> }
-                  }
-                </div>
-                <div class="flex items-center gap-2 mb-2">
-                  <span class="text-xs text-moss font-mono">F1 esperado:</span>
-                  <span class="tag">{{ b.expectedF1 }}</span>
-                </div>
-                <p class="text-sm text-pine">{{ b.rationale }}</p>
-              </div>
+          <!-- Filter chips -->
+          <div class="filter-pills mb-4">
+            @for (f of filters; track f.id) {
+              <button type="button"
+                      (click)="activeFilter.set(f.id)"
+                      class="filter-pill"
+                      [class.active]="activeFilter() === f.id">
+                {{ f.label }}
+                <span class="ml-1 text-[10px] opacity-70">{{ countFor(f.id) }}</span>
+              </button>
             }
           </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            @for (b of filteredBaselines(); track b.name) {
+              <app-expand-card>
+                <div summary>
+                  <div class="flex items-center justify-between gap-2 mb-2">
+                    <div class="text-forest font-display font-medium">{{ b.name }}</div>
+                    @switch (b.type) {
+                      @case ('trivial')   { <span class="badge-inactive">Trivial</span> }
+                      @case ('classical') { <span class="badge-inactive">Clásico</span> }
+                      @case ('ablation')  { <span class="badge-inactive">Ablación</span> }
+                      @case ('sota')      { <span class="badge-forest">Estado del arte</span> }
+                    }
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-moss font-mono">F1 esperado:</span>
+                    <span class="tag">{{ b.expectedF1 }}</span>
+                  </div>
+                </div>
+                <div details>
+                  <p class="text-sm text-pine mb-3">{{ b.rationale }}</p>
+                  <div class="rounded border border-fog bg-gray-50 p-3 text-xs text-pine font-mono leading-relaxed">
+                    {{ b.details }}
+                  </div>
+                </div>
+              </app-expand-card>
+            }
+          </div>
+
+          @if (filteredBaselines().length === 0) {
+            <div class="text-center py-8 text-moss">
+              No hay baselines para el filtro <strong>{{ activeFilter() }}</strong>.
+            </div>
+          }
         </article>
 
         <article class="card">
@@ -74,15 +106,20 @@ interface Baseline {
           <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
             <span class="section-num">4.3</span><span>Pruebas estadísticas</span>
           </h2>
-          <div class="stack-sm">
+          <div class="space-y-3">
             @for (t of tests; track t.name) {
-              <div class="rounded-lg border border-fog bg-gray-50 p-4">
-                <div class="flex items-center justify-between mb-1">
-                  <div class="text-forest font-display font-medium">{{ t.name }}</div>
-                  <span class="tag">{{ t.scope }}</span>
+              <app-expand-card>
+                <div summary>
+                  <div class="flex items-center justify-between gap-2 mb-1">
+                    <div class="text-forest font-display font-medium">{{ t.name }}</div>
+                    <span class="tag">{{ t.scope }}</span>
+                  </div>
                 </div>
-                <p class="text-sm text-pine">{{ t.note }}</p>
-              </div>
+                <div details>
+                  <p class="text-sm text-pine mb-2">{{ t.note }}</p>
+                  <div class="rounded border border-fog bg-gray-50 p-2 text-xs text-pine font-mono">{{ t.code }}</div>
+                </div>
+              </app-expand-card>
             }
           </div>
         </article>
@@ -112,11 +149,38 @@ interface Baseline {
   `,
 })
 export class ComparacionComponent {
+  protected activeFilter = signal<BaselineType | 'all'>('all');
+
+  protected filteredBaselines = computed(() => {
+    const f = this.activeFilter();
+    return f === 'all' ? this.baselines : this.baselines.filter(b => b.type === f);
+  });
+
+  countFor(filter: BaselineType | 'all'): number {
+    return filter === 'all' ? this.baselines.length : this.baselines.filter(b => b.type === filter).length;
+  }
+
+  readonly filters: { id: BaselineType | 'all'; label: string }[] = [
+    { id: 'all',       label: 'Todos' },
+    { id: 'trivial',   label: 'Trivial' },
+    { id: 'classical', label: 'Clásico' },
+    { id: 'sota',      label: 'Estado del arte' },
+    { id: 'ablation',  label: 'Ablación' },
+  ];
+
   readonly baselines: Baseline[] = [
-    { name: 'Mayoría (clase frecuente)',           type: 'trivial',   expectedF1: '~0.42', rationale: 'Suelo absoluto. Garantiza que cualquier método tenga sentido.' },
-    { name: 'Logistic Regression + TF-IDF',        type: 'classical', expectedF1: '~0.62', rationale: 'Baseline clásico de referencia para clasificación de texto.' },
-    { name: 'XLM-RoBERTa-large zero-shot',         type: 'sota',      expectedF1: '~0.71', rationale: 'Estado del arte actual sin fine-tuning dialectal.' },
-    { name: 'RoBERTuito-MX (ours) sin preprocess', type: 'ablation',  expectedF1: '~0.78', rationale: 'Ablación: aislamos el efecto del preprocesamiento.' },
+    { name: 'Mayoría (clase frecuente)', type: 'trivial', expectedF1: '~0.42',
+      rationale: 'Suelo absoluto. Garantiza que cualquier método tenga sentido.',
+      details: 'sklearn.dummy.DummyClassifier(strategy="most_frequent")' },
+    { name: 'Logistic Regression + TF-IDF', type: 'classical', expectedF1: '~0.62',
+      rationale: 'Baseline clásico de referencia para clasificación de texto.',
+      details: 'TfidfVectorizer(max_features=20000, ngram_range=(1,2)) + LogReg(C=1.0)' },
+    { name: 'XLM-RoBERTa-large zero-shot', type: 'sota', expectedF1: '~0.71',
+      rationale: 'Estado del arte actual sin fine-tuning dialectal.',
+      details: 'transformers: pipeline("text-classification", model="xlm-roberta-large")' },
+    { name: 'RoBERTuito-MX sin preprocessing', type: 'ablation', expectedF1: '~0.78',
+      rationale: 'Ablación: aislamos el efecto del preprocesamiento.',
+      details: 'Mismo modelo, sin las normalizaciones de URL/mention/emoji.' },
   ];
 
   readonly fairness = [
@@ -129,8 +193,14 @@ export class ComparacionComponent {
   ];
 
   readonly tests = [
-    { name: 'Wilcoxon signed-rank', scope: 'pareada · no paramétrica', note: 'Comparación pareada de F1 entre RoBERTuito-MX y cada baseline sobre 5 seeds. α = 0.05.' },
-    { name: 'Bootstrap (n=1000)',   scope: 'IC 95%',                   note: 'Intervalo de confianza no paramétrico para el F1 macro sobre test.' },
-    { name: 'Corrección de Holm',   scope: 'múltiples comparaciones',  note: 'Comparamos contra 4 baselines ⇒ controlar FWER mediante Holm step-down.' },
+    { name: 'Wilcoxon signed-rank', scope: 'pareada · no paramétrica',
+      note: 'Comparación pareada de F1 entre RoBERTuito-MX y cada baseline sobre 5 seeds. α = 0.05.',
+      code: 'scipy.stats.wilcoxon(scores_ours, scores_baseline)' },
+    { name: 'Bootstrap (n=1000)', scope: 'IC 95%',
+      note: 'Intervalo de confianza no paramétrico para el F1 macro sobre test.',
+      code: 'np.percentile([f1(resample(test)) for _ in range(1000)], [2.5, 97.5])' },
+    { name: 'Corrección de Holm', scope: 'múltiples comparaciones',
+      note: 'Comparamos contra 4 baselines ⇒ controlar FWER mediante Holm step-down.',
+      code: 'statsmodels.stats.multitest.multipletests(pvalues, method="holm")' },
   ];
 }

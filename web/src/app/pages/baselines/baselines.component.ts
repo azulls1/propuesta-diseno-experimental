@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
+import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
+
+type BType = 'trivial' | 'classical' | 'sota' | 'ablation';
 
 @Component({
   selector: 'app-baselines',
   standalone: true,
-  imports: [SectionLayoutComponent],
+  imports: [SectionLayoutComponent, ExpandCardComponent],
   template: `
     <app-section-layout
       sectionNumber="07"
@@ -28,16 +31,50 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
         </article>
 
         <article class="card">
-          <h2 class="font-display text-xl font-semibold text-forest mb-4">Tipos de baselines incluidos</h2>
+          <div class="flex items-center justify-between gap-4 mb-3 flex-wrap">
+            <h2 class="font-display text-xl font-semibold text-forest">Tipos de baselines incluidos</h2>
+            <span class="text-xs text-moss font-mono">filtrar →</span>
+          </div>
+
+          <div class="filter-pills mb-4">
+            @for (f of filters; track f.id) {
+              <button type="button"
+                      (click)="active.set(f.id)"
+                      class="filter-pill"
+                      [class.active]="active() === f.id">
+                {{ f.label }}
+                <span class="ml-1 text-[10px] opacity-70">{{ countFor(f.id) }}</span>
+              </button>
+            }
+          </div>
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            @for (t of types; track t.type) {
-              <div class="rounded-lg border border-fog bg-gray-50 p-4">
-                <div class="flex items-center justify-between gap-2 mb-2">
-                  <div class="text-forest font-display font-medium">{{ t.type }}</div>
-                  <span class="tag">{{ t.example }}</span>
+            @for (t of filtered(); track t.type) {
+              <app-expand-card>
+                <div summary>
+                  <div class="flex items-center justify-between gap-2 mb-2">
+                    <div class="text-forest font-display font-medium">{{ t.type }}</div>
+                    <span class="tag">{{ t.example }}</span>
+                  </div>
+                  <p class="text-sm text-pine">{{ t.why }}</p>
                 </div>
-                <p class="text-sm text-pine">{{ t.why }}</p>
-              </div>
+                <div details>
+                  <div class="space-y-2">
+                    <div>
+                      <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">F1 esperado</div>
+                      <div class="text-forest font-mono">{{ t.expectedF1 }}</div>
+                    </div>
+                    <div>
+                      <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Riesgo</div>
+                      <div class="text-sm text-pine">{{ t.risk }}</div>
+                    </div>
+                    <div>
+                      <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Implementación</div>
+                      <div class="text-xs font-mono bg-gray-50 border border-fog rounded px-2 py-1 text-evergreen">{{ t.impl }}</div>
+                    </div>
+                  </div>
+                </div>
+              </app-expand-card>
             }
           </div>
         </article>
@@ -61,15 +98,42 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
   `,
 })
 export class BaselinesComponent {
+  protected active = signal<BType | 'all'>('all');
+
+  protected filtered = computed(() => {
+    const f = this.active();
+    return f === 'all' ? this.types : this.types.filter(t => t.id === f);
+  });
+
+  countFor(filter: BType | 'all'): number {
+    return filter === 'all' ? this.types.length : this.types.filter(t => t.id === filter).length;
+  }
+
+  readonly filters: { id: BType | 'all'; label: string }[] = [
+    { id: 'all',       label: 'Todos' },
+    { id: 'trivial',   label: 'Trivial' },
+    { id: 'classical', label: 'Clásico' },
+    { id: 'sota',      label: 'Estado del arte' },
+    { id: 'ablation',  label: 'Ablación' },
+  ];
+
   readonly types = [
-    { type: 'Trivial', example: 'Random / Mayoría',
-      why: 'Suelo absoluto. Garantiza que el problema no es trivialmente fácil.' },
-    { type: 'Clásico', example: 'Logistic Regression + TF-IDF',
-      why: 'Baseline competitivo barato; benchmark estándar en NLP.' },
-    { type: 'Estado del arte', example: 'XLM-RoBERTa-large',
-      why: 'La métrica más alta publicada — lo que queremos superar.' },
-    { type: 'Ablación', example: 'Nuestro método sin componente X',
-      why: 'Aísla la contribución individual de cada parte de la propuesta.' },
+    { id: 'trivial' as BType, type: 'Trivial', example: 'Random / Mayoría',
+      why: 'Suelo absoluto. Garantiza que el problema no es trivialmente fácil.',
+      expectedF1: '~0.42', risk: 'Si tu modelo no supera esto, hay algo gravemente mal.',
+      impl: 'sklearn.dummy.DummyClassifier' },
+    { id: 'classical' as BType, type: 'Clásico', example: 'Logistic Regression + TF-IDF',
+      why: 'Baseline competitivo barato; benchmark estándar en NLP.',
+      expectedF1: '~0.62', risk: 'A veces sorprendentemente competitivo en datasets pequeños.',
+      impl: 'TfidfVectorizer + LogReg' },
+    { id: 'sota' as BType, type: 'Estado del arte', example: 'XLM-RoBERTa-large',
+      why: 'La métrica más alta publicada — lo que queremos superar.',
+      expectedF1: '~0.71', risk: 'Riesgo de comparar contra una versión NO óptima si no usamos la oficial.',
+      impl: 'transformers.AutoModelForSequenceClassification' },
+    { id: 'ablation' as BType, type: 'Ablación', example: 'Nuestro método sin componente X',
+      why: 'Aísla la contribución individual de cada parte de la propuesta.',
+      expectedF1: '~0.78', risk: 'Olvidar ablaciones es el error #1 en papers de NLP.',
+      impl: 'Mismo pipeline con flag --no-preprocessing' },
   ];
 
   readonly conditions = [

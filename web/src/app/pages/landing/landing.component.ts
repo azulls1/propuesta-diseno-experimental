@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CounterComponent } from '../../shared/interactive/animated-counter.component';
 
 interface RubricCriterion {
   id: string;
@@ -19,7 +20,7 @@ interface ModuleLink {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, CounterComponent],
   template: `
     <!-- HERO -->
     <section class="card-hero mb-8">
@@ -52,26 +53,30 @@ interface ModuleLink {
       </div>
     </section>
 
-    <!-- STATS -->
+    <!-- STATS (animated counters) -->
     <section class="grid-stats mb-10">
       <div class="card-stat">
         <div class="card-stat__label">Páginas máx.</div>
-        <div class="card-stat__value">5</div>
+        <div class="card-stat__value"><app-counter [value]="5" /></div>
         <div class="card-stat__desc">Calibri 12 · 1.5</div>
       </div>
       <div class="card-stat">
         <div class="card-stat__label">Criterios rúbrica</div>
-        <div class="card-stat__value">4</div>
+        <div class="card-stat__value"><app-counter [value]="4" [startDelay]="100" /></div>
         <div class="card-stat__desc">10 puntos · 100%</div>
       </div>
       <div class="card-stat" style="border-color: #04202C">
         <div class="card-stat__label">Peso del rigor</div>
-        <div class="card-stat__value" style="color:#04202C">40%</div>
+        <div class="card-stat__value" style="color:#04202C">
+          <app-counter [value]="40" [startDelay]="200" suffix="%" />
+        </div>
         <div class="card-stat__desc">Criterio 3 (el más alto)</div>
       </div>
       <div class="card-stat">
         <div class="card-stat__label">Calificación obj.</div>
-        <div class="card-stat__value">10/10</div>
+        <div class="card-stat__value">
+          <app-counter [value]="10" [startDelay]="300" />/10
+        </div>
         <div class="card-stat__desc">Sin descuentos</div>
       </div>
     </section>

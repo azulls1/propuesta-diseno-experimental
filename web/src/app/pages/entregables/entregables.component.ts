@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
+import { ChecklistComponent, ChecklistItem } from '../../shared/interactive/checklist.component';
 
 @Component({
   selector: 'app-entregables',
   standalone: true,
-  imports: [SectionLayoutComponent],
+  imports: [SectionLayoutComponent, ChecklistComponent],
   template: `
     <app-section-layout
       sectionNumber="08"
@@ -46,23 +47,11 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
         </div>
 
         <article class="card">
-          <h2 class="font-display text-xl font-semibold text-forest mb-3">Cronología</h2>
-          <ol class="stack-sm">
-            @for (m of milestones; track m.label) {
-              <li class="flex gap-3 items-start">
-                <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-mono"
-                      [style.background]="m.done ? '#04202C' : '#F7F8F7'"
-                      [style.color]="m.done ? '#fff' : '#5B7065'"
-                      [style.border]="m.done ? 'none' : '1px solid #DFE4E0'">
-                  {{ m.done ? '✓' : '○' }}
-                </span>
-                <div class="flex-1 pt-0.5">
-                  <div class="text-forest font-display font-medium">{{ m.label }}</div>
-                  <div class="text-xs text-moss font-mono">{{ m.when }}</div>
-                </div>
-              </li>
-            }
-          </ol>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-display text-xl font-semibold text-forest">Cronología de hitos</h2>
+            <span class="text-xs text-moss font-mono">click para marcar como hecho · persiste en este navegador</span>
+          </div>
+          <app-checklist storageKey="entregables-milestones" [initialItems]="milestones" />
         </article>
       </div>
     </app-section-layout>
@@ -93,12 +82,14 @@ export class EntregablesComponent {
     },
   ];
 
-  readonly milestones = [
-    { label: 'Wiki de análisis del enunciado',     when: '2026-06-09', done: true  },
-    { label: 'Scaffold Angular + Tailwind + Forest', when: '2026-06-09', done: true  },
-    { label: 'Despliegue inicial al VPS',           when: '2026-06-09', done: true  },
-    { label: 'Restyle con Forest DS',               when: '2026-06-09', done: true  },
-    { label: 'Backend FastAPI + Supabase',          when: 'Próximo',    done: false },
-    { label: 'Documento .docx redactado',           when: 'Antes del cierre', done: false },
+  readonly milestones: ChecklistItem[] = [
+    { text: 'Wiki de análisis del enunciado', done: true },
+    { text: 'Scaffold Angular + Tailwind + Forest DS', done: true },
+    { text: 'Despliegue inicial al VPS', done: true },
+    { text: '11 módulos con sidebar y navegación', done: true },
+    { text: 'Componentes interactivos (tabs, filtros, expand)', done: true },
+    { text: 'Backend FastAPI + Supabase', done: false },
+    { text: 'Documento .docx redactado', done: false },
+    { text: 'Entrega final al maestro', done: false },
   ];
 }

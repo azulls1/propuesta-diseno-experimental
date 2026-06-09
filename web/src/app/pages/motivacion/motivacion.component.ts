@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
+import { ChecklistComponent, ChecklistItem } from '../../shared/interactive/checklist.component';
+import { ExpandCardComponent } from '../../shared/interactive/expand-card.component';
 
 @Component({
   selector: 'app-motivacion',
   standalone: true,
-  imports: [SectionLayoutComponent],
+  imports: [SectionLayoutComponent, ChecklistComponent, ExpandCardComponent],
   template: `
     <app-section-layout
       sectionNumber="01"
@@ -44,16 +46,29 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
             <h2 class="font-display text-xl font-semibold text-forest mb-3 flex items-center gap-2">
               <span class="section-num">1.2</span>
               <span>Estado del arte</span>
+              <span class="text-xs text-moss font-mono ml-auto">click para expandir →</span>
             </h2>
             <div class="stack-sm">
               @for (s of stateOfArt; track s.method) {
-                <div class="rounded-lg border border-fog bg-gray-50 p-4">
-                  <div class="flex items-center justify-between gap-3 mb-1">
+                <app-expand-card>
+                  <div summary class="flex items-center justify-between gap-3">
                     <div class="font-display font-medium text-forest">{{ s.method }}</div>
                     <span class="tag">{{ s.metric }}</span>
                   </div>
-                  <p class="text-sm text-pine">{{ s.note }}</p>
-                </div>
+                  <div details>
+                    <p class="text-sm text-pine mb-2">{{ s.note }}</p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                      <div class="rounded border border-fog bg-gray-50 p-2">
+                        <div class="text-moss font-mono">Variante</div>
+                        <div class="text-forest">{{ s.variant }}</div>
+                      </div>
+                      <div class="rounded border border-fog bg-gray-50 p-2">
+                        <div class="text-moss font-mono">Limitación</div>
+                        <div class="text-forest">{{ s.limitation }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </app-expand-card>
               }
             </div>
           </article>
@@ -93,15 +108,8 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
           </div>
 
           <div class="card">
-            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Checklist</div>
-            <ul class="text-sm stack-sm text-pine">
-              @for (item of checklist; track item.text) {
-                <li class="flex gap-2">
-                  <span [style.color]="item.done ? '#059669' : '#D97706'">{{ item.done ? '✓' : '○' }}</span>
-                  <span>{{ item.text }}</span>
-                </li>
-              }
-            </ul>
+            <div class="text-xs uppercase tracking-wider text-moss font-mono mb-3">Checklist · click para marcar</div>
+            <app-checklist storageKey="motivacion-checklist" [initialItems]="checklist" />
           </div>
 
           <div class="card">
@@ -121,11 +129,17 @@ import { SectionLayoutComponent } from '../../shared/section-layout/section-layo
 export class MotivacionComponent {
   readonly stateOfArt = [
     { method: 'BETO + fine-tuning multilingual', metric: 'F1 0.84 (ES-ES)',
-      note: 'Línea base reportada en HatEval 2019, no evalúa dialectos LatAm.' },
+      note: 'Línea base reportada en HatEval 2019, no evalúa dialectos LatAm.',
+      variant: 'Español peninsular',
+      limitation: 'Sin evaluación dialectal' },
     { method: 'XLM-RoBERTa-large zero-shot LatAm', metric: 'F1 0.71 (MX)',
-      note: 'Sin fine-tuning dialectal — base de comparación realista del problema.' },
+      note: 'Sin fine-tuning dialectal — base de comparación realista del problema.',
+      variant: 'Multilingüe genérico',
+      limitation: 'Drop de 13 pts en MX' },
     { method: 'RoBERTuito + adaptación dominio', metric: 'F1 0.78 (AR)',
-      note: 'Mejor para rioplatense, no validado en español mexicano.' },
+      note: 'Mejor para rioplatense, no validado en español mexicano.',
+      variant: 'Rioplatense',
+      limitation: 'No transfer a MX' },
   ];
 
   readonly gaps = [
@@ -134,7 +148,7 @@ export class MotivacionComponent {
     'La literatura no cuantifica el costo en F1 del shift dialectal con pruebas estadísticas pareadas.',
   ];
 
-  readonly checklist = [
+  readonly checklist: ChecklistItem[] = [
     { text: 'Problema con datos cuantitativos', done: true },
     { text: '2-3 referencias reales citadas', done: true },
     { text: 'Hueco específico identificado', done: true },
