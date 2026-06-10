@@ -194,41 +194,6 @@ interface TechItem {
           </app-modal>
         }
 
-        <article class="card">
-          <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <h2 class="font-display text-xl font-semibold text-forest">Pipeline de despliegue</h2>
-            <span class="text-xs text-moss font-mono">click para expandir · copia los comandos</span>
-          </div>
-          <div class="stack-sm">
-            @for (step of pipeline; track step.id) {
-              <app-expand-card>
-                <div summary>
-                  <div class="flex items-center gap-3">
-                    <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-forest text-white text-xs font-mono font-semibold">
-                      {{ step.id }}
-                    </span>
-                    <div class="flex-1">
-                      <div class="text-forest font-display font-medium">{{ step.title }}</div>
-                      <div class="text-sm text-pine">{{ step.detail }}</div>
-                    </div>
-                  </div>
-                </div>
-                <div details>
-                  @if (step.cmd) {
-                    <div class="flex items-start gap-2">
-                      <div class="flex-1 text-xs font-mono bg-gray-50 border border-fog rounded px-3 py-2 text-evergreen overflow-x-auto whitespace-pre">{{ step.cmd }}</div>
-                      <app-copy [text]="step.cmd" />
-                    </div>
-                  }
-                  @if (step.note) {
-                    <p class="text-xs text-pine mt-2">{{ step.note }}</p>
-                  }
-                </div>
-              </app-expand-card>
-            }
-          </div>
-        </article>
-
       </div>
     </app-section-layout>
   `,
@@ -275,17 +240,4 @@ export class AutorComponent {
       docs: 'https://docs.docker.com' },
   ];
 
-  // Pipeline a nivel conceptual (sin comandos ni rutas, por seguridad en sitio público)
-  readonly pipeline = [
-    { id: '01', title: 'Desarrollo local',
-      detail: 'Servidor de desarrollo con recarga en caliente mientras se programa.', cmd: '', note: '' },
-    { id: '02', title: 'Control de versiones',
-      detail: 'Los cambios se versionan en un repositorio público de GitHub.', cmd: '', note: '' },
-    { id: '03', title: 'Integración continua',
-      detail: 'El servidor toma el último commit y construye la imagen del contenedor.', cmd: '', note: '' },
-    { id: '04', title: 'Despliegue',
-      detail: 'La nueva imagen se publica detrás del reverse proxy, sin downtime.', cmd: '', note: '' },
-    { id: '05', title: 'HTTPS automático',
-      detail: 'El certificado TLS se emite y renueva automáticamente (Let\'s Encrypt).', cmd: '', note: '' },
-  ];
 }
