@@ -55,25 +55,31 @@ const COLOR: Record<Criterio, string> = {
           </div>
           <h2 class="card-hero__title">Descarga toda la entrega</h2>
           <p class="card-hero__desc">
-            Un ZIP único que contiene el reporte PDF (5 páginas), el desglose
-            del enunciado (método Karpathy), el .docx original del maestro y la
-            descripción del sitio web.
+            <strong class="text-white">Un solo ZIP con todo:</strong> el reporte PDF (5 páginas),
+            el reporte DOCX, el desglose del enunciado (método Karpathy), el .docx
+            original del maestro y la descripción del sitio web. Si solo quieres una
+            cosa, este botón ya incluye todos los archivos del catálogo de abajo.
           </p>
-          <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div class="mt-8 flex flex-col items-center gap-4">
+            <!-- BOTÓN PRINCIPAL: descargar todo -->
             <a href="downloads/entregable-actividad-1-adonai-hernandez-mata.zip"
-               download class="btn-cta">
-              ⇩ Descargar entregable completo (ZIP)
-            </a>
-            <a href="downloads/reporte.pdf"
-               target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
-              ↗ Reporte PDF
-            </a>
-            <a href="downloads/reporte.docx"
                download
-               class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
-              ⇩ Reporte DOCX (Word)
+               class="btn-cta !text-base !px-8 !py-4 shadow-xl ring-2 ring-white/30 hover:ring-white/60 hover:scale-[1.02] transition-transform">
+              ⇩ Descargar TODO el entregable (ZIP{{ manifest() ? ' · ' + formatBytes(manifest()!.zip.size) : '' }})
             </a>
+            <!-- Atajos secundarios -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <a href="downloads/reporte.pdf"
+                 target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
+                ↗ Solo el Reporte PDF
+              </a>
+              <a href="downloads/reporte.docx"
+                 download
+                 class="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium border border-white/40 text-white hover:bg-white/10 transition-colors">
+                ⇩ Solo el Reporte DOCX (Word)
+              </a>
+            </div>
           </div>
           @if (manifest()) {
             <div class="mt-6 inline-flex items-center gap-2 text-xs font-mono text-white/70">
@@ -166,6 +172,19 @@ const COLOR: Record<Criterio, string> = {
                 </div>
               </div>
             }
+          </div>
+
+          <!-- RECORDATORIO: todo en un ZIP -->
+          <div class="mt-5 rounded-lg border border-forest/30 bg-forest/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-sm text-pine">
+              <strong class="text-forest">¿No quieres bajarlos uno por uno?</strong>
+              Todos estos archivos vienen empaquetados en un único ZIP.
+            </p>
+            <a href="downloads/entregable-actividad-1-adonai-hernandez-mata.zip"
+               download
+               class="btn-primary text-sm px-4 py-2 shrink-0">
+              ⇩ Descargar TODO en un ZIP{{ manifest() ? ' · ' + formatBytes(manifest()!.zip.size) : '' }}
+            </a>
           </div>
         </article>
 
