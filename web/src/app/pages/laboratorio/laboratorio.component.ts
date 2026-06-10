@@ -50,17 +50,17 @@ import { SupabaseService, Comment } from '../../core/supabase.service';
             <div class="grid-stats mt-4">
               <div class="card-stat">
                 <div class="card-stat__label">Fallo · Clásico (APN)</div>
-                <div class="card-stat__value" style="color:#D97706">5.0 m</div>
-                <div class="card-stat__desc">guiado sin compensar</div>
+                <div class="card-stat__value" style="color:#D97706">42.5 m</div>
+                <div class="card-stat__desc">no neutraliza la amenaza</div>
               </div>
               <div class="card-stat" style="border-color:#04202C">
                 <div class="card-stat__label">Fallo · IA (RL)</div>
-                <div class="card-stat__value" style="color:#04202C">2.1 m</div>
-                <div class="card-stat__desc">guiado adaptativo</div>
+                <div class="card-stat__value" style="color:#04202C">3.0 m</div>
+                <div class="card-stat__desc">impacto · amenaza neutralizada</div>
               </div>
               <div class="card-stat">
                 <div class="card-stat__label">Reducción del fallo</div>
-                <div class="card-stat__value">58%</div>
+                <div class="card-stat__value">93%</div>
                 <div class="card-stat__desc">supera el umbral H1 (≥30%)</div>
               </div>
             </div>
