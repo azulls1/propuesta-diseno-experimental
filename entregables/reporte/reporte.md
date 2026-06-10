@@ -1,31 +1,11 @@
 ---
-title: "Actividad 1 — Propuesta de Diseño Experimental"
-subtitle: "Detección de discurso de odio en español dialectal mexicano: fine-tuning de RoBERTuito vs zero-shot XLM-RoBERTa"
-author: "Adonai Samael Hernández Mata (azulls1)"
-date: "Junio 2026"
+title: "Detección de discurso de odio en español dialectal mexicano"
+subtitle: "Fine-tuning de RoBERTuito vs zero-shot XLM-RoBERTa — Propuesta de diseño experimental"
+author: "Adonai Samael Hernández Mata (azulls1) · azull.samael@gmail.com"
+date: "Maestría en IA · Investigación en Inteligencia Artificial · Actividad 1 · Junio 2026"
 lang: es
 documentclass: article
 ---
-
-\thispagestyle{empty}
-\begin{center}
-\vspace*{1cm}
-{\Large\textbf{Maestría en Inteligencia Artificial}}\\[4pt]
-{\large Asignatura: Investigación en Inteligencia Artificial · Primer semestre}\\[4pt]
-{\normalsize Actividad 1 — Propuesta de diseño experimental}\\[1.6cm]
-
-{\huge\textbf{Detección de discurso de odio}}\\[6pt]
-{\huge\textbf{en español dialectal mexicano}}\\[10pt]
-{\large Fine-tuning de RoBERTuito vs zero-shot XLM-RoBERTa}\\[2.5cm]
-
-\textbf{Autor:} Adonai Samael Hernández Mata (azulls1)\\
-\textbf{Correo:} azull.samael@gmail.com\\
-\textbf{Fecha:} Junio 2026\\[6pt]
-\textbf{Sitio del proyecto:} \href{https://propuesta-diseno-experimental.iagentek.com.mx}{propuesta-diseno-experimental.iagentek.com.mx}\\
-\textbf{Repositorio:} \href{https://github.com/azulls1/propuesta-diseno-experimental}{github.com/azulls1/propuesta-diseno-experimental}
-\end{center}
-\vfill
-\newpage
 
 # 1. Introducción y motivación
 
@@ -57,7 +37,7 @@ Estudio **experimental controlado** de tipo cuantitativo. Se compara la variable
 
 ## 3.2. Dataset y preprocesamiento
 
-Construiremos un dataset original, *HateSpeech-MX*, a partir de la API académica de X con la consulta `lang:es place_country:MX` durante seis meses. El tamaño objetivo es de **50 000 tuits**, justificado por la literatura de *fine-tuning* de modelos transformer de tamaño medio sobre tareas binarias [3, 5]. El balance esperado es de aproximadamente 30 % *hate* y 70 % *no-hate*, ajustable tras un piloto de calibración. Cada tuit será anotado por **tres hablantes nativos** reclutados vía Prolific con filtros de nacionalidad y país de residencia. Se descartarán los tuits con acuerdo inter-anotador *κ* < 0.70 (coeficiente Cohen). El preprocesamiento sustituye URLs y menciones por *placeholders* (`[URL]`, `[USER]`) para anonimización y reducción de ruido lexical. Las anotaciones se liberarán bajo licencia CC BY-SA 4.0; el contenido textual se distribuirá por `tweet_id` (rehidratable), conforme a los términos de uso de la plataforma.
+Construiremos un dataset original, *HateSpeech-MX*, a partir de la API académica de X con la consulta `lang:es place_country:MX` durante seis meses. El tamaño objetivo es de **50 000 tuits**, justificado por la literatura de *fine-tuning* de modelos transformer de tamaño medio sobre tareas binarias [3, 5]. El balance esperado es de aproximadamente 30 % *hate* y 70 % *no-hate*, ajustable tras un piloto de calibración. Cada tuit será anotado por **tres hablantes nativos** reclutados vía Prolific con filtros de nacionalidad y país de residencia. Se descartarán los tuits con acuerdo inter-anotador *κ* < 0.70 (coeficiente Cohen). **Participantes humanos y ética:** los anotadores otorgan *consentimiento informado* antes de participar, reciben una compensación justa (≥ salario mínimo local por hora) y pueden retirarse sin penalización, advertidos previamente del contenido potencialmente ofensivo; los datos personales no se almacenan y el protocolo se ciñe a los principios de mínima exposición. El panel se **equilibra por región (CDMX, Norte, Occidente, Sur-Sureste), género y rango etario (18–55 años)** para que la noción de "odio" no quede anclada a un único perfil sociolingüístico. El preprocesamiento sustituye URLs y menciones por *placeholders* (`[URL]`, `[USER]`) para anonimización y reducción de ruido lexical. Las anotaciones se liberarán bajo licencia CC BY-SA 4.0; el contenido textual se distribuirá por `tweet_id` (rehidratable), conforme a los términos de uso de la plataforma.
 
 ## 3.3. Conjuntos de entrenamiento y validación
 
@@ -76,7 +56,7 @@ Se realiza un **split estratificado 70/15/15** (train/val/test) por clase y **po
 
 ## 3.5. Métricas y análisis estadístico
 
-La métrica principal es **F1 macro**, robusta a desbalance y alineada con la hipótesis. Como métricas de soporte se reportan AUROC, precisión y *recall* por clase. La comparación entre métodos se realiza mediante **Wilcoxon signed-rank pareado** sobre los pares de F1 obtenidos en las cinco semillas. Se aplica **corrección de Holm** dado que se compara contra cuatro baselines. Los intervalos de confianza del 95 % para F1 se estiman vía *bootstrap* no paramétrico con *n* = 1 000 resamples.
+La métrica principal es **F1 macro**, robusta a desbalance y alineada con la hipótesis. Como métricas de soporte se reportan AUROC, precisión y *recall* por clase. La comparación entre métodos se realiza mediante **Wilcoxon signed-rank pareado** sobre los pares de F1 obtenidos en las cinco semillas. Se aplica **corrección de Holm** dado que se compara contra cuatro baselines. Los intervalos de confianza del 95 % para F1 se estiman vía *bootstrap* no paramétrico con *n* = 1 000 resamples. **Suficiencia y potencia muestral:** el conjunto de test (~7 500 tuits) produce estimaciones de F1 con un margen ≈ ±1.1 % (IC 95 %), de modo que la diferencia objetivo de 8 puntos supera con holgura el mínimo efecto detectable; un análisis de potencia *a priori* (α = 0.05, potencia = 0.80) confirma que el tamaño disponible es más que suficiente, mientras que las cinco semillas aportan las réplicas pareadas para la prueba de Wilcoxon.
 
 ## 3.6. Control de sesgos y amenazas a la validez
 
