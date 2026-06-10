@@ -229,24 +229,6 @@ interface TechItem {
           </div>
         </article>
 
-        <article class="card">
-          <h2 class="font-display text-xl font-semibold text-forest mb-3">Arquitectura en producción</h2>
-          <div class="grid form-grid">
-            @for (a of arch; track a.label) {
-              <div class="rounded-lg border border-fog bg-gray-50 p-4">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">{{ a.label }}</div>
-                    <div class="text-forest font-display font-medium" [class.font-mono]="a.mono">{{ a.value }}</div>
-                  </div>
-                  @if (a.copyable) {
-                    <app-copy [text]="a.value" label="" />
-                  }
-                </div>
-              </div>
-            }
-          </div>
-        </article>
       </div>
     </app-section-layout>
   `,
@@ -305,12 +287,5 @@ export class AutorComponent {
       detail: 'La nueva imagen se publica detrás del reverse proxy, sin downtime.', cmd: '', note: '' },
     { id: '05', title: 'HTTPS automático',
       detail: 'El certificado TLS se emite y renueva automáticamente (Let\'s Encrypt).', cmd: '', note: '' },
-  ];
-
-  readonly arch = [
-    { label: 'Dominio', value: 'propuesta-diseno-experimental.iagentek.com.mx', mono: true, copyable: true },
-    { label: 'Cifrado', value: 'HTTPS / TLS (Let\'s Encrypt)', mono: false, copyable: false },
-    { label: 'Entrega', value: 'Contenedor tras reverse proxy', mono: false, copyable: false },
-    { label: 'Datos', value: 'API gestionada (Supabase + RLS)', mono: false, copyable: false },
   ];
 }
