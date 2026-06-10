@@ -128,10 +128,10 @@ Ver [[06-req-4-comparacion]].
 Formato APA o IEEE — elige uno y sé consistente. Ejemplos:
 
 **APA**:
-> Smith, J., & Pérez, A. (2023). Hate speech detection in dialectal Spanish. *Journal of NLP Research*, 12(3), 145-160. https://doi.org/...
+> Gaudet, B., Linares, R., & Furfaro, R. (2020). Terminal adaptive guidance via reinforcement meta-learning: Applications to autonomous asteroid close-proximity operations. *Acta Astronautica*, 171, 1-13.
 
 **IEEE**:
-> [1] J. Smith and A. Pérez, "Hate speech detection in dialectal Spanish," *J. NLP Res.*, vol. 12, no. 3, pp. 145-160, 2023.
+> [1] B. Gaudet, R. Linares, and R. Furfaro, "Terminal adaptive guidance via reinforcement meta-learning: Applications to autonomous asteroid close-proximity operations," *Acta Astronautica*, vol. 171, pp. 1-13, 2020.
 
 Incluye 5-8 referencias relevantes. Más no necesariamente es mejor — calidad > cantidad.
 

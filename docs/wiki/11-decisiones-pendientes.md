@@ -10,7 +10,7 @@ El enunciado **no especifica el tema**, así que tienes libertad total dentro de
 
 ### NLP
 
-- Detección de discurso de odio en variantes dialectales del español.
+- Clasificación de intención en asistentes conversacionales en español.
 - Resumen automático en dominio médico/legal.
 - Detección de texto generado por LLMs (humano vs IA).
 - Traducción automática para lenguas indígenas (náhuatl, maya, etc.) con pocos datos.

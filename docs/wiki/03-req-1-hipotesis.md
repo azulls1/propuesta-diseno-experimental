@@ -17,7 +17,7 @@ Una afirmación del tipo: *"Existe un problema X que afecta a Y."*
 - Específico, no genérico ("la IA es muy útil" ❌).
 - Acotado a un dominio: visión, NLP, recomendación, robótica, ética, etc.
 
-**Ejemplo bueno**: "Los modelos de detección de discurso de odio en español tienen una precisión 15 puntos inferior cuando se aplican a variantes dialectales mexicanas frente al español peninsular sobre el cual fueron entrenados."
+**Ejemplo bueno**: "Los métodos clásicos de guiado para la intercepción de asteroides pierden precisión bajo incertidumbre de masa y perturbaciones (gravedad multicuerpo, presión de radiación solar), y no existe una comparación estadísticamente rigurosa frente a controladores aprendidos que recalculen la trayectoria en tiempo real a bordo."
 
 **Ejemplo malo**: "La IA puede ayudar a la sociedad."
 
@@ -43,7 +43,7 @@ Una afirmación del tipo: *"Si aplicamos X, entonces obtendremos una mejora cuan
 > "*H1: El uso de [técnica X] mejorará [métrica M] en al menos [umbral] en [tarea T] sobre [dataset/población] frente al baseline [B].*"
 
 **Ejemplo**:
-> "*H1: Hacer fine-tuning de BERT-base con un corpus de 50k tuits dialectales mexicanos mejorará el F1-score de detección de discurso de odio en al menos 8 puntos frente al modelo base entrenado solo con corpus peninsular.*"
+> "*H1: Un controlador de guiado por aprendizaje por refuerzo reducirá la distancia de fallo en la intercepción terminal de un asteroide en al menos 30 % frente al guiado clásico por navegación proporcional aumentada (APN), bajo incertidumbre de masa y perturbaciones (α = 0.05, prueba pareada).*"
 
 **Hipótesis nula** (opcional pero recomendado para rigor):
 > "*H0: No hay diferencia significativa (p > 0.05) entre el modelo afinado y el baseline.*"

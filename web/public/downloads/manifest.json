@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-10T19:10:55.720737+00:00",
+  "generated_at": "2026-06-10T19:30:21.338497+00:00",
   "zip": {
     "name": "entregable-actividad-1-adonai-hernandez-mata.zip",
-    "size": 144268,
-    "sha256": "3d2518a56bc54a62c11c851091911d17bf24010bb2f08557f9c810d752db80d0"
+    "size": 144368,
+    "sha256": "878e068fecb2b951c16570d3d281f3799af27e6330134809682faeb1e203af88"
   },
   "contents": [
     {
@@ -36,7 +36,7 @@
     },
     {
       "path": "02-wiki-analisis/03-req-1-hipotesis.md",
-      "sha256": "3b0a3c32931a401f305a73fe6fa8a601f7f46daaf8546d582a1ab4b2ca7a23dc"
+      "sha256": "7d42b323f21d4a188dd0ebb5d2ff403abf9a8454a3b581410182d5a3a86d4da7"
     },
     {
       "path": "02-wiki-analisis/04-req-2-metodologia.md",
@@ -60,7 +60,7 @@
     },
     {
       "path": "02-wiki-analisis/09-plan-redaccion.md",
-      "sha256": "2da8fc29823f9c1807206441a8b9e65eb489522cbe807c030358da28cd9715f3"
+      "sha256": "61ec1fe79f932adaf0a7790baa5296056795d7f024d284ff6ab908fe8e78d05c"
     },
     {
       "path": "02-wiki-analisis/10-checklist-final.md",
@@ -68,7 +68,7 @@
     },
     {
       "path": "02-wiki-analisis/11-decisiones-pendientes.md",
-      "sha256": "2aa8a51f5823c95d0869f9b7e77ac869ef6feaab22608881bb2313b42e8457a2"
+      "sha256": "e64227a73573b317bc15faea56aecf154d6943d80ec4de7c427c7a07ed6379a5"
     },
     {
       "path": "02-wiki-analisis/README.md",
