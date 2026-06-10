@@ -1,6 +1,6 @@
 ---
-title: "Detección de discurso de odio en español dialectal mexicano"
-subtitle: "Fine-tuning de RoBERTuito vs zero-shot XLM-RoBERTa — Propuesta de diseño experimental"
+title: "Corrección autónoma de trayectoria para la intercepción de asteroides peligrosos"
+subtitle: "Guiado por aprendizaje por refuerzo vs navegación proporcional aumentada — Propuesta de diseño experimental"
 author: "Adonai Samael Hernández Mata (azulls1) · azull.samael@gmail.com"
 date: "Maestría en IA · Investigación en Inteligencia Artificial · Actividad 1 · Junio 2026"
 lang: es
@@ -9,94 +9,93 @@ documentclass: article
 
 # 1. Introducción y motivación
 
-Los modelos de detección de discurso de odio en español han alcanzado niveles competitivos sobre benchmarks como **HatEval 2019** [1, 4], con F1-scores reportados en el rango 0.80–0.85 para subtask A en variantes peninsulares. Sin embargo, encuestas recientes en detección de lenguaje abusivo *multilingüe* y *multidialectal* documentan caídas sistemáticas de desempeño cuando los modelos se evalúan en variantes dialectales distintas a aquella con la que fueron entrenados [2]. En México, la moderación de contenido en plataformas con mayor base de usuarios (X, TikTok, Facebook) se apoya en clasificadores entrenados predominantemente con corpus ibéricos, lo cual genera dos errores opuestos: falsos positivos al censurar expresiones culturales no agresivas (por ejemplo, el uso afectivo de "güey" o "cabrón") y falsos negativos al dejar pasar agresiones encubiertas en jerga regional.
+La defensa planetaria ante objetos cercanos a la Tierra (NEOs) potencialmente peligrosos dejó de ser teórica: en septiembre de 2022 la misión **DART** de la NASA impactó el asteroide Dimorphos y midió una alteración real de su órbita —una reducción de 2.70 ± 0.10 mm/s en su velocidad orbital, con un factor de transferencia de momento *beta* entre 2.2 y 4.9 [1]—, demostrando que un impactador cinético es una estrategia de mitigación viable. Sin embargo, durante la **fase terminal de aproximación** el retardo de la señal Tierra–sonda (minutos) impide el control desde tierra: el guiado debe ser **autónomo y recalcularse a bordo en tiempo real**.
 
-Existen aproximaciones recientes para variantes latinoamericanas, como **RoBERTuito** [3], cuyo entrenamiento se basa en más de 500 millones de tuits en español. No obstante, su validación reportada se ha concentrado en variantes rioplatenses y peninsulares, sin un estudio cuantitativo sobre variantes mexicanas. El problema permanece parcialmente resuelto: no existe un *benchmark* dialectal mexicano público con anotación de hablantes nativos, ni comparaciones estadísticamente rigurosas entre estado del arte *zero-shot* y modelos afinados para esa variante específica. Esta propuesta busca cerrar ese hueco mediante un experimento controlado y reproducible.
+Los métodos clásicos de guiado —navegación proporcional y control óptimo basado en el problema de Lambert— son precisos, pero asumen una dinámica conocida y, bajo incertidumbre realista (masa y forma del objetivo desconocidas, gravedad multicuerpo, presión de radiación solar, ruido de sensores), pierden robustez o resultan computacionalmente costosos para ejecutarse a bordo. Trabajos recientes aplican **aprendizaje por refuerzo (RL)** al guiado de naves, con resultados prometedores en operaciones de proximidad a asteroides [2] y un creciente cuerpo de investigación en guiado y control basado en IA [3]. No obstante, persiste un hueco: **no existe una comparación cuantitativa y estadísticamente rigurosa entre el guiado aprendido y el clásico, bajo incertidumbre realista, para la intercepción de cuerpos pequeños**. Esta propuesta diseña —sin ejecutarlo— ese experimento controlado y reproducible.
 
 # 2. Hipótesis
 
-A partir del problema descrito, formulamos:
+**H1 (alternativa):** Un controlador de guiado basado en aprendizaje por refuerzo (política recurrente meta-entrenada) reducirá la **distancia de fallo** (*miss distance*) media en la intercepción terminal de un cuerpo pequeño en **al menos 30 %** respecto al guiado clásico por **navegación proporcional aumentada (APN)**, bajo incertidumbre en la masa del objetivo, perturbaciones de gravedad multicuerpo, presión de radiación solar y ruido de medición, evaluado con prueba pareada (α = 0.05).
 
-**H1 (alternativa):** El fine-tuning de RoBERTuito sobre un corpus anotado de 50 000 tuits en español mexicano incrementará el F1-score macro de detección de discurso de odio en al menos **8 puntos** respecto al baseline **XLM-RoBERTa-large zero-shot**, evaluado con prueba pareada (α = 0.05).
-
-**H0 (nula):** No existe diferencia estadísticamente significativa (*p* > 0.05) entre el F1-score del modelo afinado y el del baseline zero-shot sobre el corpus dialectal mexicano.
+**H0 (nula):** No existe diferencia estadísticamente significativa (*p* > 0.05) en la distancia de fallo media entre el controlador aprendido y el guiado clásico APN sobre el mismo conjunto de escenarios.
 
 **Variables:**
 
-- *Variable independiente*: estrategia de entrenamiento (zero-shot vs fine-tuned).
-- *Variable dependiente*: F1-score macro sobre el conjunto de test.
-- *Variables de control*: semilla aleatoria, hardware (NVIDIA A100 40 GB), tasa de aprendizaje (2×10⁻⁵), tamaño de batch (32), número de épocas (3).
+- *Variable independiente*: estrategia de guiado (APN clásico vs RL aprendido).
+- *Variable dependiente*: distancia de fallo (m), con métricas de soporte $\Delta v$ (coste de maniobra) y latencia de cómputo.
+- *Variables de control*: simulador y su versión, efemérides, semilla aleatoria, paso de integración, hardware de cómputo, horizonte temporal de la maniobra.
 
-**Criterio explícito de refutación:** la hipótesis se considerará **refutada** si, tras ejecutar el experimento con cinco semillas aleatorias distintas, el incremento promedio en F1-score es menor a 8 puntos *o* si la prueba de Wilcoxon pareada arroja *p* ≥ 0.05; en ese caso aceptaríamos H0.
+**Criterio explícito de refutación:** la hipótesis se considerará **refutada** si, sobre el conjunto de escenarios de prueba, la reducción media de la distancia de fallo es **menor a 30 %** *o* si la prueba de Wilcoxon pareada arroja *p* ≥ 0.05; en ese caso aceptaríamos H0.
 
 # 3. Metodología
 
 ## 3.1. Diseño experimental
 
-Estudio **experimental controlado** de tipo cuantitativo. Se compara la variable dependiente (F1 macro) entre dos condiciones de entrenamiento aplicadas sobre la misma partición de test. La unidad de análisis es el tuit individual con etiqueta binaria (*hate* / *no-hate*).
+Estudio **experimental controlado** de tipo cuantitativo mediante **simulación Monte Carlo**. La unidad de análisis es un *escenario de intercepción*. Se compara la variable dependiente entre las condiciones de guiado aplicadas sobre los **mismos escenarios** (diseño pareado), aislando el efecto de la estrategia de guiado.
 
-## 3.2. Dataset y preprocesamiento
+## 3.2. Escenarios, datos y muestreo
 
-Construiremos un dataset original, *HateSpeech-MX*, a partir de la API académica de X con la consulta `lang:es place_country:MX` durante seis meses. El tamaño objetivo es de **50 000 tuits**, justificado por la literatura de *fine-tuning* de modelos transformer de tamaño medio sobre tareas binarias [3, 5]. El balance esperado es de aproximadamente 30 % *hate* y 70 % *no-hate*, ajustable tras un piloto de calibración. Cada tuit será anotado por **tres hablantes nativos** reclutados vía Prolific con filtros de nacionalidad y país de residencia. Se descartarán los tuits con acuerdo inter-anotador *κ* < 0.70 (coeficiente Cohen). **Participantes humanos y ética:** los anotadores otorgan *consentimiento informado* antes de participar, reciben una compensación justa (≥ salario mínimo local por hora) y pueden retirarse sin penalización, advertidos previamente del contenido potencialmente ofensivo; los datos personales no se almacenan y el protocolo se ciñe a los principios de mínima exposición. El panel se **equilibra por región (CDMX, Norte, Occidente, Sur-Sureste), género y rango etario (18–55 años)** para que la noción de "odio" no quede anclada a un único perfil sociolingüístico. El preprocesamiento sustituye URLs y menciones por *placeholders* (`[URL]`, `[USER]`) para anonimización y reducción de ruido lexical. Las anotaciones se liberarán bajo licencia CC BY-SA 4.0; el contenido textual se distribuirá por `tweet_id` (rehidratable), conforme a los términos de uso de la plataforma.
+No se emplea un dataset descargable: los escenarios se generan con un **simulador de dinámica de N cuerpos de alta fidelidad**. Cada escenario muestrea los parámetros del asteroide objetivo —masa, tamaño, geometría y velocidad de aproximación— de distribuciones **ancladas en el catálogo real JPL Small-Body Database** de NEOs conocidos. Las perturbaciones modeladas incluyen gravedad de terceros cuerpos (Sol y planetas, vía efemérides DE440), presión de radiación solar y un modelo de ruido de sensores sobre la posición y velocidad relativas. El tamaño objetivo es de **10 000 escenarios**, suficiente para estimaciones de alta precisión (ver §3.5). La **representatividad** del conjunto frente a la población real de NEOs se verifica comparando las distribuciones muestreadas con el catálogo mediante una prueba de Kolmogorov–Smirnov (se exige *p* > 0.05, no se rechaza igualdad). El simulador, los parámetros y las semillas se liberan para auditoría bajo licencia abierta.
 
 ## 3.3. Conjuntos de entrenamiento y validación
 
-Se realiza un **split estratificado 70/15/15** (train/val/test) por clase y **por usuario** (no por tuit), de modo que un mismo autor jamás aparezca en dos particiones —evitando fuga por estilo idiosincrático—. La semilla aleatoria es `42`. Sobre el conjunto train + val ejecutamos **5-fold cross-validation** para estimar la varianza de la métrica. La representatividad se verifica mediante una prueba de Kolmogorov-Smirnov sobre las distribuciones de las features principales entre particiones, exigiendo *p* > 0.05 (no se rechaza igualdad). El conjunto de test permanece intocado durante el desarrollo.
+La política RL se entrena sobre un subconjunto de escenarios y se valida en otro; el conjunto de **prueba se reserva con una distribución desplazada** —tipos y tamaños de asteroide **no vistos** en entrenamiento— para medir generalización **fuera de distribución (OOD)**. El *split* es **70/15/15 estratificado por dificultad** (velocidad de aproximación y nivel de incertidumbre), con semilla `42` y **5-fold cross-validation** sobre train + val. El conjunto de prueba permanece intocado durante todo el desarrollo.
 
 ## 3.4. Procedimiento experimental
 
-1. **Recolección** de tuits con el filtro descrito.
-2. **Anonimización** automática (URLs, menciones, datos personales).
-3. **Anotación** triple con consenso por mayoría.
-4. **Particionado** estratificado por usuario, *seed=42*.
-5. **Baselines**: ejecución de XLM-RoBERTa-large *zero-shot* y de Logistic Regression sobre TF-IDF.
-6. **Fine-tuning** de RoBERTuito: 3 épocas, *lr*=2×10⁻⁵, batch=32, sobre cinco semillas distintas.
-7. **Evaluación** en el conjunto de test (intocado). Se reporta media ± desviación estándar.
-8. **Pruebas estadísticas**: Wilcoxon pareado con α = 0.05; corrección de Holm si se compara contra múltiples baselines.
+1. **Generación** de escenarios (muestreo de parámetros + perturbaciones).
+2. **Baselines**: balística sin corrección, navegación proporcional (PN), navegación proporcional aumentada (APN) y control óptimo (Lambert + optimización convexa).
+3. **Entrenamiento RL**: política recurrente optimizada con PPO [4] y meta-aprendizaje, sobre cinco semillas distintas.
+4. **Validación** y ajuste de hiperparámetros únicamente sobre *val*.
+5. **Evaluación** en el conjunto de prueba intocado; se reporta media ± desviación estándar.
+6. **Registro** de distancia de fallo, $\Delta v$, tasa de éxito y latencia de cómputo.
+7. **Pruebas estadísticas**: Wilcoxon pareado (α = 0.05) con corrección de Holm para comparaciones múltiples.
+
+Entorno: GPU NVIDIA A100, simulador con versión fijada y efemérides DE440; todos los hiperparámetros (tasa de aprendizaje, arquitectura recurrente, pasos por episodio) se documentan para reproducibilidad.
 
 ## 3.5. Métricas y análisis estadístico
 
-La métrica principal es **F1 macro**, robusta a desbalance y alineada con la hipótesis. Como métricas de soporte se reportan AUROC, precisión y *recall* por clase. La comparación entre métodos se realiza mediante **Wilcoxon signed-rank pareado** sobre los pares de F1 obtenidos en las cinco semillas. Se aplica **corrección de Holm** dado que se compara contra cuatro baselines. Los intervalos de confianza del 95 % para F1 se estiman vía *bootstrap* no paramétrico con *n* = 1 000 resamples. **Suficiencia y potencia muestral:** el conjunto de test (~7 500 tuits) produce estimaciones de F1 con un margen ≈ ±1.1 % (IC 95 %), de modo que la diferencia objetivo de 8 puntos supera con holgura el mínimo efecto detectable; un análisis de potencia *a priori* (α = 0.05, potencia = 0.80) confirma que el tamaño disponible es más que suficiente, mientras que las cinco semillas aportan las réplicas pareadas para la prueba de Wilcoxon.
+La métrica principal es la **distancia de fallo** (m). Como soporte se reportan el **coste de maniobra** $\Delta v$ (eficiencia), la **tasa de éxito** (% de escenarios con fallo menor al umbral operacional) y la **latencia de cómputo** (viabilidad de recálculo en tiempo real a bordo). La comparación entre métodos se realiza mediante **Wilcoxon signed-rank pareado** sobre los escenarios, con **corrección de Holm** dado que se compara contra cuatro baselines; los intervalos de confianza del 95 % se estiman vía *bootstrap* no paramétrico (*n* = 1 000). **Suficiencia y potencia muestral:** con 10 000 escenarios pareados, el margen del IC 95 % para la distancia de fallo es muy estrecho, de modo que la reducción objetivo de 30 % supera con holgura el mínimo efecto detectable; un análisis de potencia *a priori* (α = 0.05, potencia = 0.80) confirma que el tamaño disponible es más que suficiente para validar o refutar H1.
 
 ## 3.6. Control de sesgos y amenazas a la validez
 
-- **Sesgo de selección**: el muestreo aleatorio con filtro geográfico verificable y la liberación pública de la lista de `tweet_id` permiten auditoría externa.
-- **Sesgo del anotador**: la triple anotación con descarte por *κ* bajo y una ronda de consenso con un cuarto anotador experto en casos disputados mitigan la interpretación idiosincrática.
-- **Sobreajuste**: el conjunto de test queda intocado; cualquier ajuste de hiperparámetros se realiza solo sobre *val*; se promedian cinco semillas para estimar la varianza.
-- **Fuga de datos**: el *split* por usuario evita que el mismo autor aparezca en train y test, previniendo memorización de estilos.
-- **Sesgo demográfico**: se verifica y reporta la distribución regional dentro de México (CDMX, MTY, GDL, Sur, Norte); si una región excede el 50 %, se documenta como limitación de validez externa.
-- **Sesgo de publicación**: se reportan todas las semillas y, en caso de refutación, el resultado negativo —no se selecciona la mejor corrida.
+- **Brecha simulación→realidad (*sim2real*)**: principal amenaza a la validez externa; se mitiga con *randomización de dominio* y modelos de perturbación calibrados contra datos de misiones reales (DART [1]).
+- **Desplazamiento de distribución**: el conjunto de prueba OOD mide explícitamente la generalización a asteroides no vistos, evitando sobreestimar el desempeño.
+- **Sobreajuste y *reward hacking* del RL**: función de recompensa auditada, conjunto de prueba intocado y promedio sobre cinco semillas para estimar la varianza.
+- **Representatividad de la población de escenarios**: muestreo anclado al catálogo JPL; si un tipo de objeto domina la muestra, se documenta como límite de validez externa.
+- **Reproducibilidad**: se publican semillas, versión del simulador, efemérides e hiperparámetros, de modo que un tercero pueda replicar el experimento solo con el documento.
+- **Sin sujetos humanos**: el objeto de estudio es una simulación física; no aplican consideraciones éticas de participantes ni sesgo demográfico.
 
 # 4. Comparación con otras técnicas
 
-Se evalúa la propuesta frente a cuatro *baselines* bajo las mismas condiciones de test, métricas y presupuesto computacional (≤ 4 GPU-horas por método). Los F1 esperados se reportan como rangos plausibles a partir de mediciones de la literatura citada [1–4]; el valor final se computará en el experimento. La **Tabla 1** resume la configuración.
+Se evalúa la propuesta frente a cuatro *baselines* bajo idénticas condiciones de escenario, métricas y presupuesto computacional. Los valores esperados se reportan como rangos plausibles a partir de la literatura citada [2, 3]; el valor final se computará en el experimento. La **Tabla 1** resume la configuración.
 
-**Tabla 1.** Configuración de baselines y F1 macro esperado.
+**Tabla 1.** Configuración de baselines y desempeño esperado (distancia de fallo relativa; menor es mejor).
 
-| Método                                          | Tipo            | F1 esperado |
-|-------------------------------------------------|-----------------|-------------|
-| Mayoría (clase frecuente)                       | Trivial         | 0.40 – 0.45 |
-| Logistic Regression + TF-IDF                    | Clásico         | 0.55 – 0.65 |
-| XLM-RoBERTa-large *zero-shot*                   | Estado del arte | 0.68 – 0.74 |
-| RoBERTuito-MX (esta propuesta) sin preprocesamiento | Ablación    | 0.75 – 0.80 |
-| **RoBERTuito-MX (esta propuesta) con preprocesamiento** | **Propuesto** | **≥ 0.83**  |
+| Método                                              | Tipo            | Fallo relativo esperado |
+|-----------------------------------------------------|-----------------|-------------------------|
+| Balística sin corrección                            | Trivial         | 1.00 (referencia)       |
+| Navegación proporcional (PN)                        | Clásico         | 0.45 – 0.60             |
+| Navegación proporcional aumentada (APN)             | Clásico fuerte  | 0.30 – 0.45             |
+| Control óptimo (Lambert + convexo)                  | Estado del arte | 0.20 – 0.30             |
+| **Guiado RL meta-aprendido (esta propuesta)**       | **Propuesto**   | **≤ 0.21**              |
 
-**Condiciones de comparación justa**: mismo *test set* intocado, métricas idénticas (scikit-learn 1.4+), mismas cinco semillas aleatorias, mismo presupuesto computacional, mismos hiperparámetros tuneados con el mismo protocolo sobre *val*. Las diferencias entre métodos se evalúan con la prueba **Wilcoxon signed-rank pareada** y corrección de Holm para múltiples comparaciones.
+**Condiciones de comparación justa**: mismos escenarios de prueba intocados, mismas métricas, mismas cinco semillas, mismo presupuesto de cómputo a bordo y mismo modelo de perturbaciones. Las diferencias se evalúan con la prueba **Wilcoxon signed-rank pareada** y corrección de Holm. Nótese que el control óptimo clásico, aun siendo preciso, exige un coste computacional que puede ser inviable para el recálculo en tiempo real a bordo —ventaja potencial del enfoque aprendido que también se mide (latencia).
 
 # 5. Resultados esperados y discusión
 
-Si la hipótesis se confirma, esperamos F1 ≥ 0.83 con *p* < 0.01 tras corrección de Holm, lo cual demostraría que el *shift* dialectal puede mitigarse con *fine-tuning* específico, sin recurrir a arquitecturas mayores. La contribución sería un *benchmark* dialectal mexicano reproducible y un modelo con licencia abierta para uso académico.
+Si la hipótesis se confirma —reducción de la distancia de fallo ≥ 30 % con *p* < 0.01 tras corrección de Holm y latencia compatible con operación a bordo—, la implicación es que una política aprendida puede absorber la incertidumbre de masa y las perturbaciones mejor que el guiado clásico, ofreciendo intercepción más robusta sin un solucionador óptimo costoso. La contribución sería un **banco de escenarios de intercepción reproducible** y una política de guiado de licencia abierta para investigación en defensa planetaria.
 
-Si la hipótesis se refuta —incremento menor a 8 puntos o *p* ≥ 0.05—, la implicación práctica es que el *shift* dialectal mexicano requiere intervenciones más profundas que el *fine-tuning* simple: posiblemente *prompt engineering*, generación de datos sintéticos vía LLM, o ajuste de arquitectura. La inestabilidad del *fine-tuning* sobre datasets de tamaño moderado documentada en [5] motiva además reportar todas las semillas (no solo la mejor), de modo que un resultado negativo siga siendo informativo. En cualquier caso, el dataset *HateSpeech-MX* y la metodología publicada servirán como base para investigación posterior.
+Si la hipótesis se refuta —reducción menor a 30 % o *p* ≥ 0.05—, la implicación práctica es que el guiado clásico APN u óptimo sigue siendo preferible, y que los cuellos de botella del enfoque aprendido son la brecha *sim2real* y la generalización fuera de distribución, no la capacidad del modelo. En cualquier caso, reportar todas las semillas (incluido el resultado negativo) mantiene el valor informativo del estudio, y el banco de escenarios servirá como base para investigación posterior.
 
 # 6. Referencias
 
-[1] Plaza-del-Arco, F. M., Molina-González, M. D., Ureña-López, L. A., & Martín-Valdivia, M. T. (2021). *A multi-task learning approach to hate speech detection leveraging sentiment analysis*. IEEE Access, 9, 112478-112489.
+[1] Cheng, A. F., Agrusa, H. F., Barbee, B. W., *et al.* (2023). *Momentum transfer from the DART mission kinetic impact on asteroid Dimorphos*. Nature, 616, 457–460.
 
-[2] Pamungkas, E. W., Basile, V., & Patti, V. (2023). *Towards multidomain and multilingual abusive language detection: a survey*. Personal and Ubiquitous Computing, 27(1), 17-43.
+[2] Gaudet, B., Linares, R., & Furfaro, R. (2020). *Terminal adaptive guidance via reinforcement meta-learning: Applications to autonomous asteroid close-proximity operations*. Acta Astronautica, 171, 1–13.
 
-[3] Pérez, J. M., Furman, D. A., Alonso Alemany, L., & Luque, F. (2022). *RoBERTuito: a pre-trained language model for social media text in Spanish*. Proceedings of the Thirteenth Language Resources and Evaluation Conference (LREC).
+[3] Izzo, D., Märtens, M., & Pan, B. (2019). *A survey on artificial intelligence trends in spacecraft guidance dynamics and control*. Astrodynamics, 3(4), 287–299.
 
-[4] Basile, V. *et al.* (2019). *SemEval-2019 Task 5: Multilingual detection of hate speech against immigrants and women in Twitter (HatEval)*. Proceedings of the 13th International Workshop on Semantic Evaluation.
+[4] Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017). *Proximal Policy Optimization Algorithms*. arXiv:1707.06347.
 
-[5] Mosbach, M., Andriushchenko, M., & Klakow, D. (2021). *On the stability of fine-tuning BERT: Misconceptions, explanations, and strong baselines*. International Conference on Learning Representations (ICLR).
+[5] Gaudet, B., Linares, R., & Furfaro, R. (2020). *Adaptive guidance and integrated navigation with reinforcement meta-learning*. Acta Astronautica, 169, 180–190.
