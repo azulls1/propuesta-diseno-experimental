@@ -13,7 +13,7 @@ import { SupabaseService, Comment } from '../../core/supabase.service';
     <app-section-layout
       sectionNumber="06"
       sectionTitle="Laboratorio"
-      sectionDescription="Demos ejecutables: calculadora estadística, validador de hipótesis y muro de comentarios persistido en Supabase."
+      sectionDescription="Demos: simulación de intercepción (Python), calculadora estadística, validador de hipótesis y muro de comentarios persistido en Supabase."
       status="done"
       prevLink="/entregables"
       prevLabel="Entregables"
@@ -22,6 +22,54 @@ import { SupabaseService, Comment } from '../../core/supabase.service';
 
       <article class="card">
         <app-tabs [tabs]="tabs" [active]="active()" (activeChange)="active.set($event)" />
+
+        <!-- ════════ A. SIMULACIÓN (Python → GIF) ════════ -->
+        @if (active() === 'sim') {
+          <div class="animate-tab">
+            <div class="mb-4">
+              <h2 class="font-display text-lg font-semibold text-forest mb-1">Simulación de intercepción</h2>
+              <p class="text-sm text-pine">
+                Recálculo de trayectoria en tiempo real: un interceptor debe alcanzar un asteroide
+                cuya trayectoria se curva por una perturbación no modelada (presión de radiación solar).
+                Se comparan el guiado <strong class="text-forest">clásico (APN)</strong> y el
+                <strong class="text-forest">guiado por IA (RL)</strong>, midiendo la distancia de fallo.
+              </p>
+            </div>
+
+            <figure class="rounded-lg border border-fog bg-gray-50 overflow-hidden">
+              <img src="sim/interceptacion.gif"
+                   alt="Animación de intercepción de asteroide: guiado clásico APN vs IA RL"
+                   class="w-full block" loading="lazy" />
+              <figcaption class="text-xs text-moss px-3 py-2 border-t border-fog">
+                Animación generada con <span class="font-mono">Python (numpy + matplotlib)</span> ·
+                <span class="font-mono">tools/sim_interceptacion.py</span>. Simulación <strong>ilustrativa</strong>
+                del diseño experimental (no es la política RL entrenada; los valores reales se computan al ejecutar el estudio).
+              </figcaption>
+            </figure>
+
+            <div class="grid-stats mt-4">
+              <div class="card-stat">
+                <div class="card-stat__label">Fallo · Clásico (APN)</div>
+                <div class="card-stat__value" style="color:#D97706">5.0 m</div>
+                <div class="card-stat__desc">guiado sin compensar</div>
+              </div>
+              <div class="card-stat" style="border-color:#04202C">
+                <div class="card-stat__label">Fallo · IA (RL)</div>
+                <div class="card-stat__value" style="color:#04202C">2.1 m</div>
+                <div class="card-stat__desc">guiado adaptativo</div>
+              </div>
+              <div class="card-stat">
+                <div class="card-stat__label">Reducción del fallo</div>
+                <div class="card-stat__value">58%</div>
+                <div class="card-stat__desc">supera el umbral H1 (≥30%)</div>
+              </div>
+            </div>
+            <p class="text-xs text-moss mt-3">
+              El script es reproducible (semilla fija 42). Para regenerar la animación:
+              <span class="font-mono">python tools/sim_interceptacion.py</span>.
+            </p>
+          </div>
+        }
 
         <!-- ════════ B. CALCULADORA ESTADÍSTICA ════════ -->
         @if (active() === 'stats') {
@@ -209,8 +257,9 @@ import { SupabaseService, Comment } from '../../core/supabase.service';
 export class LaboratorioComponent {
   private supabase = inject(SupabaseService);
 
-  protected active = signal<string>('stats');
+  protected active = signal<string>('sim');
   readonly tabs: TabItem[] = [
+    { id: 'sim',        label: '🛰️ Simulación',    badge: 'Python' },
     { id: 'stats',      label: '📊 Estadística',   badge: 'Wilcoxon' },
     { id: 'validator',  label: '🎯 Hipótesis',     badge: '6 reglas' },
     { id: 'comments',   label: '💬 Comentarios',   badge: 'Supabase' },
