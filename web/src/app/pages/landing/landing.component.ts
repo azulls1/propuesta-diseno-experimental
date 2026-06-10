@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CounterComponent } from '../../shared/interactive/animated-counter.component';
-import { CopyButtonComponent } from '../../shared/interactive/copy-button.component';
 import { ModalComponent } from '../../shared/interactive/modal.component';
 
 interface RubricCriterion {
@@ -45,7 +44,7 @@ interface StatCard {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, CounterComponent, CopyButtonComponent, ModalComponent],
+  imports: [RouterLink, CounterComponent, ModalComponent],
   template: `
     <!-- HERO -->
     <section class="card-hero mb-8">
@@ -270,29 +269,6 @@ interface StatCard {
       </div>
     </section>
 
-    <!-- META INFO -->
-    <section class="card-section">
-      <div class="grid form-grid--3 gap-6">
-        <div>
-          <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Formato</div>
-          <div class="font-display text-forest font-semibold">Calibri 12 · interlineado 1.5</div>
-          <div class="text-sm text-pine">Máximo 5 páginas</div>
-        </div>
-        <div>
-          <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Stack</div>
-          <div class="font-display text-forest font-semibold">Angular 19 · Tailwind 4 · Forest DS</div>
-          <div class="text-sm text-pine">nginx · Supabase · Docker · Traefik</div>
-        </div>
-        <div>
-          <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Despliegue</div>
-          <div class="flex items-center gap-2 mb-1">
-            <div class="font-display text-forest font-semibold font-mono text-sm">propuesta-diseno-experimental.iagentek.com.mx</div>
-            <app-copy text="https://propuesta-diseno-experimental.iagentek.com.mx" label="" />
-          </div>
-          <div class="text-sm text-pine">Swarm + Traefik + Let's Encrypt</div>
-        </div>
-      </div>
-    </section>
   `,
 })
 export class LandingComponent {
