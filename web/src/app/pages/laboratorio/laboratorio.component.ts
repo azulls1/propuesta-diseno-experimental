@@ -198,7 +198,7 @@ interface HFResult { label: string; score: number; }
           <div class="animate-tab">
             <div class="mb-4">
               <h2 class="font-display text-lg font-semibold text-forest mb-1">Muro de comentarios</h2>
-              <p class="text-sm text-pine">Estos comentarios se guardan EN VIVO en una tabla <span class="font-mono">proposal_comments</span> de Supabase corriendo en el VPS. Cualquier visitante puede dejar uno.</p>
+              <p class="text-sm text-pine">Estos comentarios se guardan EN VIVO en una instancia self-hosted de Supabase, protegida con políticas RLS. Cualquier visitante puede dejar uno.</p>
             </div>
 
             <form (submit)="submitComment(); $event.preventDefault()" class="rounded-lg border border-fog bg-gray-50 p-4 mb-4">
