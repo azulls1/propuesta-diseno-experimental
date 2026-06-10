@@ -45,7 +45,7 @@ La política RL se entrena sobre un subconjunto de escenarios y se valida en otr
 
 1. **Generación** de escenarios (muestreo de parámetros + perturbaciones).
 2. **Baselines**: balística sin corrección, navegación proporcional (PN), navegación proporcional aumentada (APN) y control óptimo (Lambert + optimización convexa).
-3. **Entrenamiento RL**: política recurrente optimizada con PPO [4] y meta-aprendizaje, sobre cinco semillas distintas.
+3. **Entrenamiento RL**: política recurrente optimizada con PPO [4] y meta-aprendizaje con navegación integrada [5], sobre cinco semillas distintas.
 4. **Validación** y ajuste de hiperparámetros únicamente sobre *val*.
 5. **Evaluación** en el conjunto de prueba intocado; se reporta media ± desviación estándar.
 6. **Registro** de distancia de fallo, $\Delta v$, tasa de éxito y latencia de cómputo.
@@ -55,7 +55,7 @@ Entorno: GPU NVIDIA A100, simulador con versión fijada y efemérides DE440; tod
 
 ## 3.5. Métricas y análisis estadístico
 
-La métrica principal es la **distancia de fallo** (m). Como soporte se reportan el **coste de maniobra** $\Delta v$ (eficiencia), la **tasa de éxito** (% de escenarios con fallo menor al umbral operacional) y la **latencia de cómputo** (viabilidad de recálculo en tiempo real a bordo). La comparación entre métodos se realiza mediante **Wilcoxon signed-rank pareado** sobre los escenarios, con **corrección de Holm** dado que se compara contra cuatro baselines; los intervalos de confianza del 95 % se estiman vía *bootstrap* no paramétrico (*n* = 1 000). **Suficiencia y potencia muestral:** con 10 000 escenarios pareados, el margen del IC 95 % para la distancia de fallo es muy estrecho, de modo que la reducción objetivo de 30 % supera con holgura el mínimo efecto detectable; un análisis de potencia *a priori* (α = 0.05, potencia = 0.80) confirma que el tamaño disponible es más que suficiente para validar o refutar H1.
+La métrica principal es la **distancia de fallo** (m). Como soporte se reportan el **coste de maniobra** $\Delta v$ (eficiencia), la **tasa de éxito** (% de escenarios con fallo menor al umbral operacional) y la **latencia de cómputo** (viabilidad de recálculo en tiempo real a bordo). La comparación entre métodos se realiza mediante **Wilcoxon signed-rank pareado** sobre los escenarios, con **corrección de Holm** dado que se compara contra cuatro baselines; los intervalos de confianza del 95 % se estiman vía *bootstrap* no paramétrico (*n* = 1 000). **Suficiencia y potencia muestral:** con 10 000 escenarios pareados, el margen del IC 95 % para la distancia de fallo es muy estrecho, de modo que la reducción objetivo de 30 % supera con holgura el mínimo efecto detectable; un análisis de potencia *a priori* indica que, para detectar incluso un tamaño de efecto estandarizado pequeño-moderado (*d* ≈ 0.3) en la prueba pareada, bastarían unos 90 escenarios (α = 0.05, potencia = 0.80); con 10 000 disponibles la potencia efectiva supera 0.99, de modo que el diseño es más que suficiente para validar o refutar H1.
 
 ## 3.6. Control de sesgos y amenazas a la validez
 
