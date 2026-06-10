@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Genera entregables/reporte/reporte.docx desde reporte.md vía pandoc.
-# El docx queda con estilo Normal por defecto, que Word renderiza como
-# Calibri 12 + interlineado 1.5 al abrirlo (o ajustable en Style > Normal).
+# Pandoc usa por defecto el tema de Office (fuente Aptos, interlineado sencillo),
+# así que tras generar forzamos Calibri 12 + interlineado 1.5 (lo que pide el
+# enunciado) con tools/fix_docx_format.py.
 set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -11,7 +12,7 @@ DOCX="$RD/reporte.docx"
 
 if [ ! -f "$SRC" ]; then echo "[ERR] $SRC no existe" >&2; exit 1; fi
 
-echo "[1/1] Pandoc → docx"
+echo "[1/2] Pandoc → docx"
 docker run --rm \
   -v "$RD:/data" -w /data \
   pandoc/extra:latest \
@@ -21,6 +22,9 @@ docker run --rm \
   "reporte.md"
 
 if [ ! -f "$DOCX" ]; then echo "[ERR] No se generó el DOCX" >&2; exit 1; fi
+
+echo "[2/2] Forzar Calibri 12 + interlineado 1.5"
+python3 "$REPO/tools/fix_docx_format.py" "$DOCX"
 
 SIZE="$(du -h "$DOCX" | cut -f1)"
 SHA="$(sha256sum "$DOCX" | awk '{print $1}')"

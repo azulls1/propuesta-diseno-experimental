@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-06-10T17:05:51.317995+00:00",
+  "generated_at": "2026-06-10T17:18:51.885017+00:00",
   "zip": {
     "name": "entregable-actividad-1-adonai-hernandez-mata.zip",
-    "size": 145265,
-    "sha256": "aac90d85e4db9b7c1cf688c94fde16b3fd8729800c441312d52d39ee2647b777"
+    "size": 145177,
+    "sha256": "f9e1acb8bae60aa023528a480fcd3a204a5854b57f61d8b9362f9a1970671069"
   },
   "contents": [
     {
@@ -16,7 +16,7 @@
     },
     {
       "path": "01-reporte/reporte.docx",
-      "sha256": "785db6e5af480cefe56d8be51427042f10c0f5fbe5c80be750627eafda9fac76"
+      "sha256": "bcd59f8a44e0ede022836af27cfd93176647b04f44b050a7d7d90b1bea1947ef"
     },
     {
       "path": "01-reporte/_header.tex",
