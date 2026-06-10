@@ -22,35 +22,20 @@ export const routes: Routes = [
     title: 'Metodología — Propuesta de Diseño Experimental',
   },
   {
-    path: 'comparacion',
-    loadComponent: () => import('./pages/comparacion/comparacion.component').then(m => m.ComparacionComponent),
-    title: 'Comparación — Propuesta de Diseño Experimental',
-  },
-  {
     path: 'redaccion',
     loadComponent: () => import('./pages/redaccion/redaccion.component').then(m => m.RedaccionComponent),
     title: 'Redacción — Propuesta de Diseño Experimental',
-  },
-  {
-    path: 'datasets',
-    loadComponent: () => import('./pages/datasets/datasets.component').then(m => m.DatasetsComponent),
-    title: 'Datasets — Propuesta de Diseño Experimental',
-  },
-  {
-    path: 'baselines',
-    loadComponent: () => import('./pages/baselines/baselines.component').then(m => m.BaselinesComponent),
-    title: 'Baselines — Propuesta de Diseño Experimental',
   },
   {
     path: 'entregables',
     loadComponent: () => import('./pages/entregables/entregables.component').then(m => m.EntregablesComponent),
     title: 'Entregables — Propuesta de Diseño Experimental',
   },
-  {
-    path: 'como-funciona',
-    loadComponent: () => import('./pages/como-funciona/como-funciona.component').then(m => m.ComoFuncionaComponent),
-    title: 'Cómo funciona — Propuesta de Diseño Experimental',
-  },
+  // Redirects de módulos fusionados (preservan enlaces antiguos)
+  { path: 'comparacion', redirectTo: 'metodologia', pathMatch: 'full' },
+  { path: 'datasets',    redirectTo: 'metodologia', pathMatch: 'full' },
+  { path: 'baselines',   redirectTo: 'metodologia', pathMatch: 'full' },
+  { path: 'como-funciona', redirectTo: 'autor', pathMatch: 'full' },
   {
     path: 'autor',
     loadComponent: () => import('./pages/autor/autor.component').then(m => m.AutorComponent),

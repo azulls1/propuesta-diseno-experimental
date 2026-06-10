@@ -9,15 +9,15 @@ import { ChecklistComponent, ChecklistItem } from '../../shared/interactive/chec
   imports: [SectionLayoutComponent, ExpandCardComponent, ChecklistComponent],
   template: `
     <app-section-layout
-      sectionNumber="05"
+      sectionNumber="04"
       sectionTitle="Redacción y presentación"
       sectionDescription="Estructura del documento académico final (≤5 páginas, Calibri 12, interlineado 1.5). Cómo distribuir las páginas y qué se evalúa en el Criterio 4."
       [rubricWeight]="20"
       status="done"
-      prevLink="/comparacion"
-      prevLabel="Comparación"
-      nextLink="/datasets"
-      nextLabel="Datasets">
+      prevLink="/metodologia"
+      prevLabel="Metodología"
+      nextLink="/entregables"
+      nextLabel="Entregables">
 
       <div class="stack-xl">
 

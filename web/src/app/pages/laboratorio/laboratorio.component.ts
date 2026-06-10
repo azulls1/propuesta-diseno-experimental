@@ -14,13 +14,14 @@ interface HFResult { label: string; score: number; }
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-section-layout
-      sectionNumber="🧪"
+      sectionNumber="06"
       sectionTitle="Laboratorio"
       sectionDescription="Demos ejecutables: clasificador en vivo, calculadora estadística, validador de hipótesis y muro de comentarios persistido en Supabase."
       status="done"
-      prevLink="/autor"
-      prevLabel="Autor"
-      [nextLink]="null">
+      prevLink="/entregables"
+      prevLabel="Entregables"
+      nextLink="/autor"
+      nextLabel="Autor">
 
       <article class="card">
         <app-tabs [tabs]="tabs" [active]="active()" (activeChange)="active.set($event)" />

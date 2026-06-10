@@ -167,21 +167,6 @@ export class AppComponent {
       iconPath: 'M9 4v4M9 4H5a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h4M9 8l3-4h4l3 4-3 4h-4L9 8zM12 12v8M12 20l-3 1m3-1l3 1',
     },
     {
-      route: '/comparacion',
-      label: 'Comparación',
-      iconPath: 'M3 3v18h18M9 17V9m6 8v-4m-9 4v-2',
-    },
-    {
-      route: '/datasets',
-      label: 'Datasets',
-      iconPath: 'M21 12c0 1.7-4 3-9 3s-9-1.3-9-3M21 6c0 1.7-4 3-9 3s-9-1.3-9-3 4-3 9-3 9 1.3 9 3zm0 0v12c0 1.7-4 3-9 3s-9-1.3-9-3V6',
-    },
-    {
-      route: '/baselines',
-      label: 'Baselines',
-      iconPath: 'M3 6h18M3 12h12M3 18h6',
-    },
-    {
       route: '/redaccion',
       label: 'Redacción',
       criterio: 'C4',
@@ -193,19 +178,14 @@ export class AppComponent {
       iconPath: 'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12',
     },
     {
-      route: '/como-funciona',
-      label: 'Cómo funciona',
-      iconPath: 'M12 8v4l3 3M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z',
+      route: '/laboratorio',
+      label: 'Laboratorio',
+      iconPath: 'M9 2v6.5L3 19a2 2 0 0 0 1.73 3h14.54A2 2 0 0 0 21 19L15 8.5V2M9 2h6M9 14h6',
     },
     {
       route: '/autor',
       label: 'Autor',
       iconPath: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
-    },
-    {
-      route: '/laboratorio',
-      label: 'Laboratorio',
-      iconPath: 'M9 2v6.5L3 19a2 2 0 0 0 1.73 3h14.54A2 2 0 0 0 21 19L15 8.5V2M9 2h6M9 14h6',
     },
   ];
 }

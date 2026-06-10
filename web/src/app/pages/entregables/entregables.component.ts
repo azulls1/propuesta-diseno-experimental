@@ -34,14 +34,14 @@ const COLOR: Record<Criterio, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-section-layout
-      sectionNumber="08"
+      sectionNumber="05"
       sectionTitle="Entregables"
       sectionDescription="Catálogo único de archivos físicos que componen la entrega. Cada uno indica criterio de rúbrica, tamaño y hash SHA-256 para verificación."
       status="done"
-      prevLink="/baselines"
-      prevLabel="Baselines"
-      nextLink="/como-funciona"
-      nextLabel="Cómo funciona">
+      prevLink="/redaccion"
+      prevLabel="Redacción"
+      nextLink="/laboratorio"
+      nextLabel="Laboratorio">
 
       <div class="stack-xl">
 
