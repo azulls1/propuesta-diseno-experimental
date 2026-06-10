@@ -6,6 +6,7 @@ import { ModalComponent } from '../../shared/interactive/modal.component';
 
 interface Reference {
   id: string;
+  refNum: string;
   cite: string;
   full: string;
   authors: string;
@@ -47,31 +48,31 @@ interface Gap {
               <span>Contexto y problema</span>
             </h2>
             <p class="text-pine leading-relaxed mb-4">
-              Los modelos de detección de discurso de odio en español han avanzado considerablemente,
-              alcanzando F1-scores superiores a 0.85 en variantes peninsulares
-              <button type="button" (click)="selectedRef.set(refMap['plaza2021'])"
+              La defensa planetaria ante asteroides peligrosos dejó de ser teórica: en 2022 la misión
+              DART de la NASA impactó el asteroide Dimorphos y midió una alteración real de su órbita,
+              con un factor de transferencia de momento
+              <button type="button" (click)="selectedRef.set(refMap['cheng2023'])"
                       class="inline-flex items-center gap-1 rounded-md border border-fog bg-gray-50 px-1.5 py-0.5 font-mono text-xs text-forest hover:border-forest hover:bg-white transition-all">
-                [Plaza et al., 2021] ↗
+                [Cheng et al., 2023] ↗
               </button>.
-              Sin embargo, su desempeño cae sistemáticamente
+              Sin embargo, durante la fase terminal de aproximación el retardo de la señal Tierra–sonda
               <button type="button" (click)="showDataPoint.set('drop')"
                       class="inline-flex items-baseline rounded-md border-b-2 border-forest bg-forest/5 px-1 hover:bg-forest hover:text-white transition-colors">
-                <strong class="text-forest hover:text-white">entre 12 y 18 puntos</strong>
-              </button>
-              cuando se evalúan sobre variantes dialectales latinoamericanas
-              <button type="button" (click)="selectedRef.set(refMap['pamungkas2023'])"
+                <strong class="text-forest hover:text-white">impide el control desde tierra</strong>
+              </button>:
+              el guiado debe ser autónomo y recalcularse a bordo en tiempo real, y el aprendizaje por
+              refuerzo ya muestra resultados prometedores en operaciones de proximidad a asteroides
+              <button type="button" (click)="selectedRef.set(refMap['gaudet2020a'])"
                       class="inline-flex items-center gap-1 rounded-md border border-fog bg-gray-50 px-1.5 py-0.5 font-mono text-xs text-forest hover:border-forest hover:bg-white transition-all">
-                [Pamungkas et al., 2023] ↗
-              </button>,
-              particularmente las regionalismos mexicanos donde la frontera entre
-              insulto, broma y agresión cambia con el registro coloquial.
+                [Gaudet et al., 2020] ↗
+              </button>.
             </p>
             <p class="text-pine leading-relaxed">
-              Este fenómeno es relevante porque las plataformas con mayor presencia en México
-              (X, TikTok, Facebook) aplican filtros entrenados predominantemente con español
-              ibérico, generando dos errores opuestos: falsos positivos (censurar expresiones
-              culturales no agresivas) y falsos negativos (dejar pasar agresiones encubiertas
-              en jerga local).
+              El problema es relevante porque los métodos clásicos de guiado —navegación proporcional
+              y control óptimo basado en el problema de Lambert— asumen una dinámica conocida y, bajo
+              incertidumbre realista (masa y forma del objetivo desconocidas, gravedad multicuerpo,
+              presión de radiación solar, ruido de sensores), pierden robustez o resultan
+              computacionalmente costosos para ejecutarse a bordo.
             </p>
           </article>
 
@@ -170,7 +171,7 @@ interface Gap {
               @for (r of references; track r.id) {
                 <button type="button" (click)="selectedRef.set(r)"
                         class="w-full rounded-lg border border-fog bg-gray-50 p-3 text-left hover:border-forest hover:shadow-card transition-all">
-                  <div class="text-xs font-mono text-moss mb-1">[{{ r.id === 'plaza2021' ? '1' : r.id === 'pamungkas2023' ? '2' : '3' }}]</div>
+                  <div class="text-xs font-mono text-moss mb-1">[{{ r.refNum }}]</div>
                   <div class="text-sm text-forest font-display font-medium leading-tight">{{ r.cite }}</div>
                   <div class="text-xs text-pine mt-1">{{ r.venue }} · {{ r.year }}</div>
                 </button>
@@ -244,29 +245,30 @@ interface Gap {
       @if (showDataPoint() === 'drop') {
         <app-modal [open]="true"
                    eyebrow="Dato cuantitativo · §1.1"
-                   title="Caída de 12 a 18 puntos F1"
-                   subtitle="Por qué este número es el corazón de la motivación"
+                   title="El control desde tierra es inviable en fase terminal"
+                   subtitle="Por qué la autonomía a bordo es el corazón de la motivación"
                    maxWidth="640px"
                    (closeRequest)="showDataPoint.set(null)">
           <div class="stack-lg">
             <p class="text-pine leading-relaxed">
-              El rango <strong class="text-forest">12-18 puntos</strong> se refiere a la diferencia en F1-score
-              observada cuando un modelo entrenado con español peninsular (HatEval ES-ES o equivalente)
-              se evalúa sobre tuits de variantes latinoamericanas sin adaptación específica.
+              En la intercepción terminal de un cuerpo pequeño, el retardo de la señal Tierra–sonda
+              (minutos) hace imposible cerrar el lazo de control desde el centro de misión: para cuando
+              llega una corrección, la geometría del encuentro ya cambió. El guiado debe
+              <strong class="text-forest">recalcularse a bordo en tiempo real</strong>.
             </p>
             <div class="rounded-lg border-l-4 border-forest bg-gray-50 p-4">
               <div class="text-xs uppercase tracking-wider text-moss font-mono mb-2">Por qué es relevante para la hipótesis</div>
               <p class="text-sm text-pine">
-                Define el "techo de oportunidad" que tendría nuestra propuesta. Si el shift dialectal
-                cuesta hasta 18 puntos, un fine-tuning bien hecho podría recuperar varios de ellos.
-                Por eso H1 promete recuperar <strong class="text-forest">≥ 8 puntos</strong> — un objetivo
-                ambicioso pero alcanzable según la literatura citada.
+                Define el "techo de oportunidad" de la propuesta. Si el guiado clásico APN pierde robustez
+                bajo incertidumbre de masa y perturbaciones, una política aprendida podría absorberla mejor.
+                Por eso H1 promete reducir la distancia de fallo <strong class="text-forest">≥ 30 %</strong>
+                — un objetivo ambicioso pero plausible según la literatura citada.
               </p>
             </div>
             <button type="button"
-                    (click)="showDataPoint.set(null); selectedRef.set(refMap['pamungkas2023'])"
+                    (click)="showDataPoint.set(null); selectedRef.set(refMap['gaudet2020a'])"
                     class="btn-primary text-xs">
-              Ver paper que documenta este shift →
+              Ver paper de guiado RL para asteroides →
             </button>
           </div>
         </app-modal>
@@ -322,52 +324,53 @@ export class MotivacionComponent {
 
   // ─── Datos ───
   readonly stateOfArt = [
-    { method: 'BETO + fine-tuning multilingual', metric: 'F1 0.80-0.85 (ES-ES)',
-      note: 'Línea base reportada en HatEval 2019, no evalúa dialectos LatAm.',
-      variant: 'Español peninsular',
-      limitation: 'Sin evaluación dialectal' },
-    { method: 'XLM-RoBERTa-large zero-shot LatAm', metric: 'F1 0.68-0.74 (MX)',
-      note: 'Sin fine-tuning dialectal — base de comparación realista del problema.',
-      variant: 'Multilingüe genérico',
-      limitation: 'Drop de hasta 13 pts en MX' },
-    { method: 'RoBERTuito + adaptación dominio', metric: 'F1 0.75-0.80 (AR)',
-      note: 'Mejor para rioplatense, no validado en español mexicano.',
-      variant: 'Rioplatense',
-      limitation: 'No transfer a MX' },
+    { method: 'Navegación proporcional (PN) clásica', metric: 'Fallo rel. 0.45–0.60',
+      note: 'Ley de guiado madura y barata, pero asume dinámica conocida.',
+      variant: 'Guiado clásico',
+      limitation: 'Pierde robustez bajo incertidumbre' },
+    { method: 'Navegación proporcional aumentada (APN)', metric: 'Fallo rel. 0.30–0.45',
+      note: 'Baseline clásico fuerte — referencia principal de la hipótesis.',
+      variant: 'Guiado clásico fuerte',
+      limitation: 'Sensible a masa y perturbaciones' },
+    { method: 'Control óptimo (Lambert + convexo)', metric: 'Fallo rel. 0.20–0.30',
+      note: 'Estado del arte en precisión, pero costoso a bordo.',
+      variant: 'Estado del arte',
+      limitation: 'Latencia inviable en tiempo real' },
   ];
 
   readonly references: Reference[] = [
     {
-      id: 'plaza2021',
-      cite: 'Plaza-del-Arco et al. (2021)',
-      full: 'A multi-task learning approach to hate speech detection leveraging sentiment analysis',
-      authors: 'F. M. Plaza-del-Arco, M. D. Molina-González, L. A. Ureña-López, M. T. Martín-Valdivia',
-      year: 2021,
-      venue: 'IEEE Access · vol. 9',
-      doi: '10.1109/ACCESS.2021.3103697',
-      url: 'https://doi.org/10.1109/ACCESS.2021.3103697',
-      abstract: 'Propone un enfoque multi-tarea que combina detección de discurso de odio con análisis de sentimientos. Establece baselines competitivos para HatEval 2019 en español peninsular y demuestra que la información de sentimiento mejora el F1 macro entre 2-4 puntos.',
-    },
-    {
-      id: 'pamungkas2023',
-      cite: 'Pamungkas et al. (2023)',
-      full: 'Towards multidomain and multilingual abusive language detection: a survey',
-      authors: 'E. W. Pamungkas, V. Basile, V. Patti',
+      id: 'cheng2023',
+      refNum: '1',
+      cite: 'Cheng et al. (2023)',
+      full: 'Momentum transfer from the DART mission kinetic impact on asteroid Dimorphos',
+      authors: 'A. F. Cheng, H. F. Agrusa, B. W. Barbee, et al.',
       year: 2023,
-      venue: 'Personal and Ubiquitous Computing · vol. 27(1)',
-      doi: '10.1007/s00779-021-01609-1',
-      url: 'https://link.springer.com/article/10.1007/s00779-021-01609-1',
-      abstract: 'Survey que documenta los retos de la detección de lenguaje abusivo en escenarios multidominio y multilingüe. Reporta sistemáticamente las caídas de desempeño cross-dialectales y cross-lingual, motivando la necesidad de benchmarks específicos por variante.',
+      venue: 'Nature · vol. 616',
+      url: 'https://www.nature.com/articles/s41586-023-05878-z',
+      abstract: 'Reporta la medición del impacto cinético de la misión DART sobre el asteroide Dimorphos: una reducción de 2.70 ± 0.10 mm/s en su velocidad orbital con un factor de transferencia de momento β entre 2.2 y 4.9. Demuestra empíricamente que un impactador cinético es una estrategia viable de defensa planetaria.',
     },
     {
-      id: 'perez2022',
-      cite: 'Pérez et al. (2022)',
-      full: 'RoBERTuito: a pre-trained language model for social media text in Spanish',
-      authors: 'J. M. Pérez, D. A. Furman, L. Alonso Alemany, F. Luque',
-      year: 2022,
-      venue: 'LREC 2022',
-      url: 'https://aclanthology.org/2022.lrec-1.785/',
-      abstract: 'Presenta RoBERTuito, un modelo BERT-like pre-entrenado sobre 500M+ de tuits en español. Supera a BETO, BERTin y RoBERTa-BNE en tareas de redes sociales (detección de odio, análisis de sentimiento, ironía). Es el modelo base que esta propuesta busca afinar para variantes mexicanas.',
+      id: 'gaudet2020a',
+      refNum: '2',
+      cite: 'Gaudet et al. (2020)',
+      full: 'Terminal adaptive guidance via reinforcement meta-learning: Applications to autonomous asteroid close-proximity operations',
+      authors: 'B. Gaudet, R. Linares, R. Furfaro',
+      year: 2020,
+      venue: 'Acta Astronautica · vol. 171',
+      url: 'https://doi.org/10.1016/j.actaastro.2020.02.036',
+      abstract: 'Propone una política de guiado adaptativo terminal entrenada con meta-aprendizaje por refuerzo para operaciones de proximidad a asteroides. Muestra que una política recurrente puede adaptarse en línea a dinámicas inciertas, superando al guiado clásico en escenarios con masa y forma del objetivo desconocidas.',
+    },
+    {
+      id: 'izzo2019',
+      refNum: '3',
+      cite: 'Izzo et al. (2019)',
+      full: 'A survey on artificial intelligence trends in spacecraft guidance dynamics and control',
+      authors: 'D. Izzo, M. Märtens, B. Pan',
+      year: 2019,
+      venue: 'Astrodynamics · vol. 3(4)',
+      url: 'https://doi.org/10.1007/s42064-018-0053-6',
+      abstract: 'Revisión del creciente cuerpo de investigación en IA aplicada al guiado, dinámica y control de naves espaciales. Documenta tendencias en aprendizaje por refuerzo y optimización aprendida, y señala la falta de comparaciones rigurosas frente a métodos clásicos bajo incertidumbre realista.',
     },
   ];
 
@@ -378,25 +381,25 @@ export class MotivacionComponent {
 
   readonly gaps: Gap[] = [
     {
-      id: 'no-benchmark',
-      short: 'No existe un benchmark público de discurso de odio anotado por hablantes nativos de español mexicano.',
-      impact: 'Sin un benchmark dialectal, cualquier modelo desplegado en plataformas mexicanas se evalúa con métricas que sobrestiman su desempeño real. El maestro y la comunidad académica no pueden auditar el progreso real de la moderación automática en México.',
-      evidence: 'Las encuestas de Pamungkas et al. (2023) listan benchmarks por idioma pero no por variante regional. Los datasets ES disponibles (HatEval, OffendES) son peninsulares.',
-      refIds: ['pamungkas2023'],
+      id: 'no-comparison',
+      short: 'No existe una comparación cuantitativa y estadísticamente rigurosa entre el guiado aprendido (RL) y el clásico para la intercepción de cuerpos pequeños.',
+      impact: 'Sin esa comparación, las decisiones de misión sobre qué controlador embarcar se toman sin evidencia comparable. No se puede afirmar que el RL supere al guiado clásico bajo incertidumbre realista si nadie lo midió en condiciones idénticas.',
+      evidence: 'Izzo et al. (2019) revisan las tendencias de IA en guiado y control pero señalan la falta de comparaciones rigurosas frente a métodos clásicos bajo incertidumbre realista.',
+      refIds: ['izzo2019'],
     },
     {
-      id: 'no-evaluation',
-      short: 'Los modelos competitivos no se han evaluado sistemáticamente sobre dialectos mexicanos.',
-      impact: 'No tenemos certeza cuantitativa de cuánto cae el F1 al usar XLM-RoBERTa o RoBERTuito en variantes mexicanas. Las decisiones de despliegue se toman a ciegas o con evaluación informal.',
-      evidence: 'Pérez et al. (2022) validan RoBERTuito principalmente en datasets argentinos; su paper menciona cross-lingual pero no cross-dialectal MX explícitamente.',
-      refIds: ['perez2022', 'pamungkas2023'],
+      id: 'no-uncertainty',
+      short: 'El desempeño del guiado RL no se ha evaluado sistemáticamente bajo incertidumbre de masa, gravedad multicuerpo, presión de radiación solar y ruido de sensores.',
+      impact: 'No hay certeza cuantitativa de cuánto se degrada la distancia de fallo del guiado clásico cuando la dinámica deja de ser perfectamente conocida, ni de cuánto la absorbe una política aprendida.',
+      evidence: 'Gaudet et al. (2020) muestran guiado adaptativo por meta-RL en proximidad a asteroides, pero centrado en su propio método, sin un contraste pareado y estadístico contra APN y control óptimo.',
+      refIds: ['gaudet2020a', 'izzo2019'],
     },
     {
       id: 'no-stats',
-      short: 'La literatura no cuantifica el costo en F1 del shift dialectal con pruebas estadísticas pareadas.',
-      impact: 'Sin pruebas estadísticas (Wilcoxon, McNemar), las afirmaciones del tipo "X método es mejor que Y" no son rigurosas. Se necesitan comparaciones pareadas sobre múltiples seeds para concluir con base científica.',
-      evidence: 'Plaza-del-Arco et al. (2021) reportan F1 pero no aplican pruebas de significancia entre métodos. Mosbach et al. (2021) en ICLR documentan que el F1 de fine-tuning de BERT varía sustancialmente entre seeds, lo que hace mandatorio el análisis estadístico.',
-      refIds: ['plaza2021'],
+      short: 'La literatura no cuantifica la ventaja del guiado aprendido con pruebas estadísticas pareadas sobre los mismos escenarios.',
+      impact: 'Sin pruebas estadísticas (Wilcoxon pareado, corrección de Holm), las afirmaciones del tipo "X guiado es mejor que Y" no son rigurosas. Se necesitan comparaciones pareadas sobre múltiples semillas y escenarios para concluir con base científica.',
+      evidence: 'La medición real de DART (Cheng et al., 2023) valida el impactador cinético, pero la elección del controlador de guiado terminal sigue careciendo de un análisis estadístico comparativo.',
+      refIds: ['cheng2023'],
     },
   ];
 

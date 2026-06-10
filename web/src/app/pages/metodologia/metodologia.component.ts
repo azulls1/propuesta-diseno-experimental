@@ -64,7 +64,7 @@ interface Baseline {
 
         @if (active() === 'data') {
           <div class="animate-tab">
-            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.2 Dataset y preprocesamiento</h2>
+            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.2 Escenarios y muestreo</h2>
             <div class="table-responsive">
               <table class="table">
                 <thead><tr><th>Atributo</th><th>Valor</th><th>Justificación</th></tr></thead>
@@ -84,17 +84,17 @@ interface Baseline {
 
         @if (active() === 'splits') {
           <div class="animate-tab">
-            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.3 Particiones del dataset</h2>
+            <h2 class="font-display text-lg font-semibold text-forest mb-3">3.3 Particiones de los escenarios</h2>
             <div class="mb-4">
               <div class="flex h-12 w-full overflow-hidden rounded-lg border border-fog">
                 <div class="flex items-center justify-center text-white text-sm font-display font-medium"
                      style="width: 70%; background: #04202C">
-                  Train · 70% <span class="ml-2 text-xs font-mono opacity-80">35 000</span>
+                  Train · 70% <span class="ml-2 text-xs font-mono opacity-80">7 000</span>
                 </div>
                 <div class="flex items-center justify-center text-white text-sm font-display font-medium border-l-2 border-white"
                      style="width: 15%; background: #304040">Val · 15%</div>
                 <div class="flex items-center justify-center text-white text-sm font-display font-medium border-l-2 border-white"
-                     style="width: 15%; background: #5B7065">Test · 15%</div>
+                     style="width: 15%; background: #5B7065">Test · OOD 15%</div>
               </div>
             </div>
             <div class="grid form-grid">
@@ -227,12 +227,12 @@ interface Baseline {
         <h2 class="font-display text-xl font-semibold text-forest mb-1 flex items-center gap-2">
           <span class="section-num">3.7</span><span>Datos y muestreo</span>
         </h2>
-        <p class="text-sm text-pine mb-4">Origen de los datos, preprocesamiento, datasets de referencia y consideraciones éticas del muestreo.</p>
+        <p class="text-sm text-pine mb-4">Origen de los escenarios, parámetros de muestreo, fuentes de referencia y consideraciones de validez del muestreo.</p>
 
         <div class="stack-xl">
           <div>
             <div class="flex items-center justify-between gap-4 mb-3 flex-wrap">
-              <h3 class="font-display text-lg font-semibold text-forest">Dataset principal</h3>
+              <h3 class="font-display text-lg font-semibold text-forest">Banco de escenarios</h3>
               <span class="text-xs text-moss font-mono">hover para detalles · click ⧉ para copiar →</span>
             </div>
             <div class="grid form-grid">
@@ -258,10 +258,10 @@ interface Baseline {
 
           <div>
             <div class="flex items-center justify-between gap-4 mb-3 flex-wrap">
-              <h3 class="font-display text-lg font-semibold text-forest">Datasets de referencia</h3>
+              <h3 class="font-display text-lg font-semibold text-forest">Fuentes de referencia</h3>
               <span class="text-xs text-moss font-mono">click para más info →</span>
             </div>
-            <p class="text-sm text-pine mb-3">Datasets públicos que sirven como contraste o pre-entrenamiento.</p>
+            <p class="text-sm text-pine mb-3">Catálogos y efemérides públicos que anclan el muestreo de escenarios.</p>
             <div class="stack-sm">
               @for (d of references; track d.name) {
                 <app-expand-card>
@@ -297,10 +297,10 @@ interface Baseline {
 
           <div>
             <div class="flex items-center justify-between gap-4 mb-3 flex-wrap">
-              <h3 class="font-display text-lg font-semibold text-forest">Aspectos éticos</h3>
+              <h3 class="font-display text-lg font-semibold text-forest">Validez del muestreo</h3>
               <span class="text-xs text-moss font-mono">checklist persistente →</span>
             </div>
-            <p class="text-sm text-pine mb-3">Self-audit ético antes de publicar el dataset.</p>
+            <p class="text-sm text-pine mb-3">Self-audit de representatividad y reproducibilidad antes de publicar el banco de escenarios.</p>
             <app-checklist storageKey="datasets-ethics" [initialItems]="ethicsChecklist" />
           </div>
         </div>
@@ -326,9 +326,9 @@ interface Baseline {
           <span class="section-num">3.8</span><span>Baselines de comparación</span>
         </h2>
         <p class="text-pine leading-relaxed mb-4">
-          Un número de F1 sin contexto no tiene significado. La comparación con baselines establece el
-          <strong class="text-forest">suelo</strong> (lo mínimo que debería superar cualquier método razonable)
-          y el <strong class="text-forest">techo</strong> (lo que el estado del arte actual alcanza).
+          Una distancia de fallo sin contexto no tiene significado. La comparación con baselines establece el
+          <strong class="text-forest">suelo</strong> (la balística sin corrección, lo peor aceptable)
+          y el <strong class="text-forest">techo</strong> (el control óptimo clásico, lo más preciso conocido).
           Sin baselines, no podemos refutar nuestra hipótesis con rigor.
         </p>
 
@@ -362,7 +362,7 @@ interface Baseline {
               <div details>
                 <div class="space-y-2">
                   <div>
-                    <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">F1 esperado</div>
+                    <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Fallo rel. esperado</div>
                     <div class="text-forest font-mono">{{ t.expectedF1 }}</div>
                   </div>
                   <div>
@@ -435,7 +435,7 @@ interface Baseline {
                       }
                     </div>
                     <div class="flex items-center gap-2">
-                      <span class="text-xs text-moss font-mono">F1 esperado:</span>
+                      <span class="text-xs text-moss font-mono">Fallo rel. esperado:</span>
                       <span class="tag">{{ b.expectedF1 }}</span>
                     </div>
                   </div>
@@ -502,23 +502,24 @@ interface Baseline {
                 <div class="rounded-lg p-4" style="background:#ECFDF5; border: 1px solid #A7F3D0">
                   <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#059669">Escenario A — Hipótesis confirmada</div>
                   <p class="text-sm text-pine mb-2">
-                    <strong class="text-forest">F1 ≥ 0.83</strong> para RoBERTuito-MX
-                    (vs <span class="font-mono">0.71</span> del baseline zero-shot),
-                    con <span class="font-mono">p &lt; 0.01</span> tras corrección de Holm.
+                    <strong class="text-forest">Reducción de la distancia de fallo ≥ 30 %</strong>
+                    para el guiado RL frente a APN,
+                    con <span class="font-mono">p &lt; 0.01</span> tras corrección de Holm
+                    y latencia compatible con operación a bordo.
                   </p>
                   <div class="text-xs text-pine mt-2">
-                    <strong>Interpretación:</strong> el shift dialectal se mitiga con fine-tuning específico.
-                    Contribuimos un benchmark replicable.
+                    <strong>Interpretación:</strong> la política aprendida absorbe la incertidumbre de masa
+                    y las perturbaciones mejor que el guiado clásico. Contribuimos un banco de escenarios replicable.
                   </div>
                 </div>
                 <div class="rounded-lg p-4" style="background:#FEF2F2; border: 1px solid #FECACA">
                   <div class="text-xs uppercase tracking-wider font-mono mb-2" style="color:#DC2626">Escenario B — Hipótesis refutada</div>
                   <p class="text-sm text-pine mb-2">
-                    Mejora &lt; <span class="font-mono">8 puntos</span> o p ≥ 0.05.
+                    Reducción &lt; <span class="font-mono">30 %</span> o p ≥ 0.05.
                   </p>
                   <div class="text-xs text-pine mt-2">
-                    <strong>Interpretación:</strong> el dialecto MX requiere intervenciones más profundas
-                    (más datos, arquitectura distinta, prompt engineering, etc.).
+                    <strong>Interpretación:</strong> el guiado clásico APN u óptimo sigue siendo preferible;
+                    los cuellos de botella son la brecha sim2real y la generalización OOD, no la capacidad del modelo.
                   </div>
                 </div>
               </div>
@@ -546,8 +547,8 @@ export class MetodologiaComponent {
 
   readonly tabs: TabItem[] = [
     { id: 'design',  label: '3.1 Diseño' },
-    { id: 'data',    label: '3.2 Datos' },
-    { id: 'splits',  label: '3.3 Splits', badge: 'train/val/test' },
+    { id: 'data',    label: '3.2 Escenarios' },
+    { id: 'splits',  label: '3.3 Splits', badge: 'train/val/OOD' },
     { id: 'proc',    label: '3.4 Procedimiento', badge: '8 pasos' },
     { id: 'metrics', label: '3.5 Métricas' },
     { id: 'biases',  label: '3.6 Sesgos' },
@@ -555,125 +556,125 @@ export class MetodologiaComponent {
 
   readonly design: DesignItem[] = [
     { label: 'Tipo', value: 'Experimental controlado', note: 'Comparación pareada entre 2 condiciones.',
-      detail: 'Un experimento controlado manipula deliberadamente la variable independiente (estrategia de entrenamiento: zero-shot vs fine-tuned) y mide el efecto en la variable dependiente (F1 macro). Se contrasta con cuasi-experimental (sin asignación aleatoria) y observacional (sin manipulación). Aquí podemos asignar libremente las semillas y configs, así que cumple el criterio de "controlado".' },
-    { label: 'Paradigma', value: 'Cuantitativo', note: 'Métricas numéricas + pruebas de significancia.',
-      detail: 'Cuantitativo significa que la evidencia se expresa en números y se evalúa con métodos estadísticos. Es la opción correcta cuando la hipótesis se puede traducir a una métrica (F1). Un paradigma cualitativo (entrevistas, análisis temático) no aplicaría aquí porque no hay "interpretación de discurso" — hay clasificación binaria evaluada contra ground truth.' },
-    { label: 'Unidad', value: 'Tuit individual', note: 'Etiqueta binaria: hate / no-hate.',
-      detail: 'La unidad de análisis es la observación más pequeña sobre la que se aplica la métrica. Aquí es cada tuit por separado. Alternativas hubieran sido: unidad por usuario (agregando sus tuits), unidad por conversación (varios tuits enlazados). Elegimos tuit por simplicidad y porque la moderación de plataforma se aplica por tuit individual.' },
+      detail: 'Un experimento controlado manipula deliberadamente la variable independiente (estrategia de guiado: APN clásico vs RL aprendido) y mide el efecto en la variable dependiente (distancia de fallo). Se contrasta con cuasi-experimental (sin asignación aleatoria) y observacional (sin manipulación). Aquí controlamos el simulador, las semillas y los escenarios, así que cumple el criterio de "controlado".' },
+    { label: 'Paradigma', value: 'Cuantitativo (Monte Carlo)', note: 'Métricas numéricas + pruebas de significancia.',
+      detail: 'Cuantitativo significa que la evidencia se expresa en números y se evalúa con métodos estadísticos. La hipótesis se traduce a una métrica física (distancia de fallo en metros) estimada por simulación Monte Carlo sobre miles de escenarios. Un paradigma cualitativo no aplicaría: aquí hay una trayectoria evaluada contra el objetivo, no interpretación subjetiva.' },
+    { label: 'Unidad', value: 'Escenario de intercepción', note: 'Mismo escenario evaluado en ambas condiciones.',
+      detail: 'La unidad de análisis es un escenario de intercepción individual: un asteroide objetivo con su masa, geometría y velocidad de aproximación muestreadas, más sus perturbaciones. El diseño es pareado: el mismo escenario se resuelve con APN y con RL, aislando el efecto de la estrategia de guiado.' },
   ];
 
   readonly dataset = [
-    { attr: 'Fuente',                 value: 'X (Twitter) API académica', why: 'Mayor representatividad de discurso público mexicano.' },
-    { attr: 'Tamaño objetivo',        value: '50 000 tuits',              why: 'Suficiente para fine-tuning + validación robusta.' },
-    { attr: 'Filtro geográfico',      value: 'place_country=MX',          why: 'Garantiza variante dialectal mexicana.' },
-    { attr: 'Anotadores',             value: '3 nativos por tuit',        why: 'Reduce sesgo individual; consenso por mayoría.' },
-    { attr: 'Acuerdo inter-anotador', value: "Cohen's κ ≥ 0.70",          why: 'Umbral de calidad para inclusión.' },
-    { attr: 'Preprocesamiento',       value: 'URLs→[URL], &#64;user→[USER]',    why: 'Anonimización + reducción de ruido lexical.' },
+    { attr: 'Origen',                 value: 'Simulador N cuerpos',         why: 'No hay dataset descargable; los escenarios se generan por simulación.' },
+    { attr: 'Tamaño objetivo',        value: '10 000 escenarios',           why: 'Suficiente para estimaciones de alta precisión y potencia ≥ 0.80.' },
+    { attr: 'Anclaje',                value: 'JPL Small-Body Database',     why: 'Parámetros muestreados del catálogo real de NEOs conocidos.' },
+    { attr: 'Perturbaciones',         value: 'Gravedad 3.º · SRP · ruido',  why: 'Sol y planetas (DE440), presión de radiación y ruido de sensores.' },
+    { attr: 'Representatividad',      value: 'KS-test vs catálogo',         why: 'Se exige p > 0.05: no se rechaza igualdad con la población real.' },
+    { attr: 'Reproducibilidad',      value: 'Semillas + versión liberadas', why: 'Simulador, parámetros y semillas se publican para auditoría.' },
   ];
 
   readonly splitInfo = [
-    { label: 'Estrategia',       value: 'Estratificada por clase',         note: 'Mantiene proporción hate/no-hate.' },
+    { label: 'Estrategia',       value: 'Estratificada por dificultad',    note: 'Por velocidad de aproximación y nivel de incertidumbre.' },
     { label: 'Semilla',          value: 'seed=42',                         note: 'Reproducibilidad — split idéntico ante repeticiones.' },
     { label: 'Validación',       value: '5-fold CV sobre train + val',     note: 'Estima varianza de la métrica.' },
-    { label: 'Representatividad',value: 'KS-test entre particiones',       note: 'p > 0.05 ⇒ no se rechaza igualdad de distribución.' },
+    { label: 'Prueba OOD',       value: 'Tipos/tamaños no vistos',         note: 'Conjunto intocado, distribución desplazada (fuera de distribución).' },
   ];
 
   readonly procedure = [
-    { id: '01', title: 'Recolección',          detail: 'Scrape vía API académica con filtro place_country=MX durante 6 meses.', more: 'Comando: twarc2 search "lang:es place_country:MX" --limit 100000' },
-    { id: '02', title: 'Anonimización',        detail: 'Sustitución de URLs, mentions y datos personales.', more: 'Regex: re.sub(r"https?://\\S+", "[URL]", text); re.sub(r"@\\w+", "[USER]", text)' },
-    { id: '03', title: 'Anotación',            detail: '3 hablantes nativos por tuit; descarte si κ < 0.70.', more: 'Plataforma: Prolific filtrando MX nationality. Pago $0.20 USD por tuit. Tiempo estimado: 2 sem.' },
-    { id: '04', title: 'Particionado',         detail: 'Split estratificado 70/15/15 con seed=42.', more: 'sklearn.model_selection.train_test_split(stratify=y, random_state=42)' },
-    { id: '05', title: 'Baselines',            detail: 'Ejecutar zero-shot XLM-RoBERTa-large + Logistic Regression con TF-IDF.', more: 'Sin tuning — usar configs publicadas en HF model card.' },
-    { id: '06', title: 'Fine-tuning',          detail: 'RoBERTuito sobre train, 3 epochs, lr=2e-5, batch=32, 5 seeds.', more: 'Tiempo estimado: 4 GPU-h por seed × 5 seeds = 20 GPU-h. Hardware: A100 40GB.' },
-    { id: '07', title: 'Evaluación',           detail: 'F1 macro sobre test intocado. Reportar media ± std.', more: 'sklearn.metrics.f1_score(y_true, y_pred, average="macro")' },
-    { id: '08', title: 'Pruebas estadísticas', detail: 'Wilcoxon signed-rank pareado entre métodos, α=0.05.', more: 'scipy.stats.wilcoxon(scores_ours, scores_baseline). Corrección Holm si comparamos contra varios.' },
+    { id: '01', title: 'Generación',           detail: 'Muestreo de parámetros del asteroide anclado al catálogo JPL + perturbaciones.', more: 'Masa, tamaño, geometría y velocidad de aproximación de distribuciones JPL Small-Body Database; gravedad de terceros (DE440), SRP y ruido de sensores.' },
+    { id: '02', title: 'Baselines clásicos',   detail: 'Balística sin corrección, PN, APN y control óptimo (Lambert + convexo).', more: 'APN es la referencia principal de la hipótesis; el control óptimo marca el techo de precisión a costa de latencia.' },
+    { id: '03', title: 'Entrenamiento RL',     detail: 'Política recurrente optimizada con PPO y meta-aprendizaje, sobre 5 semillas.', more: 'PPO (Schulman et al., 2017) + meta-learning para adaptación en línea a dinámicas inciertas. Hardware: A100.' },
+    { id: '04', title: 'Particionado',         detail: 'Split estratificado 70/15/15 por dificultad con seed=42; test OOD.', more: 'El conjunto de prueba reserva tipos y tamaños de asteroide no vistos en entrenamiento, intocado durante todo el desarrollo.' },
+    { id: '05', title: 'Validación',           detail: 'Ajuste de hiperparámetros únicamente sobre val.', more: '5-fold cross-validation sobre train + val. El test no se mira durante el ajuste.' },
+    { id: '06', title: 'Evaluación',           detail: 'Ejecución en el test intocado. Reportar media ± desviación estándar.', more: 'Mismos escenarios para todos los métodos (diseño pareado). Tiempo y hardware fijados.' },
+    { id: '07', title: 'Registro de métricas', detail: 'Distancia de fallo, Δv, tasa de éxito y latencia de cómputo.', more: 'La distancia de fallo (m) es la métrica principal; las demás dan soporte de eficiencia y viabilidad a bordo.' },
+    { id: '08', title: 'Pruebas estadísticas', detail: 'Wilcoxon signed-rank pareado entre métodos, α=0.05.', more: 'scipy.stats.wilcoxon(miss_rl, miss_apn). Corrección de Holm al comparar contra los cuatro baselines.' },
   ];
 
   readonly metrics: MetricItem[] = [
-    { name: 'F1 macro', scope: 'principal',
-      why: 'Robusta a desbalance, alineada con la hipótesis.',
-      formula: 'F1_macro = (1/C) · Σ 2·(P_c · R_c) / (P_c + R_c)',
-      range: '[0, 1]. F1=1 perfecto. F1=0.5 baseline trivial. F1 macro promedia sin ponderar por tamaño de clase, así que castiga el ignorar la clase minoritaria.' },
-    { name: 'AUROC', scope: 'soporte',
-      why: 'Independiente del umbral, útil para análisis fino.',
-      formula: 'AUROC = ∫ TPR(t) dFPR(t)',
-      range: '[0, 1]. AUC=0.5 azar. AUC=1 separación perfecta. Útil cuando el umbral de decisión es ajustable en producción.' },
-    { name: 'Precision / Recall', scope: 'desglose',
-      why: 'Identifica si el modelo falla más en falsos positivos o falsos negativos.',
-      formula: 'P = TP/(TP+FP)  ·  R = TP/(TP+FN)',
-      range: 'Ambas [0,1]. Tradeoff típico: subir P sacrifica R y viceversa. Importante reportar ambas, no solo F1.' },
+    { name: 'Distancia de fallo', scope: 'principal',
+      why: 'Métrica física directa de la calidad de intercepción; menor es mejor.',
+      formula: 'd_miss = mín_t ‖ r_sonda(t) − r_objetivo(t) ‖',
+      range: 'En metros, ≥ 0. d=0 sería impacto perfecto. La hipótesis exige reducir su media ≥ 30 % frente a APN.' },
+    { name: 'Δv (coste de maniobra)', scope: 'soporte',
+      why: 'Mide la eficiencia de propulsante de la trayectoria corregida.',
+      formula: 'Δv = ∫ ‖ a_control(t) ‖ dt',
+      range: 'En m/s, ≥ 0. Un guiado puede acertar gastando demasiado Δv; por eso se reporta junto al fallo.' },
+    { name: 'Tasa de éxito / latencia', scope: 'desglose',
+      why: 'Éxito = % de escenarios bajo el umbral operacional; latencia = viabilidad a bordo.',
+      formula: 'éxito = #(d_miss < umbral) / N',
+      range: 'Éxito en [0,1]; latencia en ms por recálculo. La latencia decide si el método es ejecutable en tiempo real a bordo.' },
     { name: 'Wilcoxon p-value', scope: 'estadística',
-      why: 'Comparación pareada no paramétrica entre seeds.',
+      why: 'Comparación pareada no paramétrica sobre los escenarios.',
       formula: 'W = Σ rank(|x_i - y_i|) · sign(x_i - y_i)',
-      range: 'p ∈ [0, 1]. Rechazamos H0 si p < α (=0.05). No asume normalidad — adecuado para muestras pequeñas (5 seeds).' },
+      range: 'p ∈ [0, 1]. Rechazamos H0 si p < α (=0.05). No asume normalidad — adecuado para distribuciones de fallo sesgadas.' },
   ];
 
   readonly biases: BiasItem[] = [
-    { name: 'Selección',
-      mitigation: 'Muestreo aleatorio con filtro geográfico verificable.',
-      how: 'Documentar la query exacta usada en la API académica (lang:es place_country:MX) y el rango temporal. Hacer pública la lista de tweet_id para que terceros puedan auditar la selección.',
-      example: 'Filtrar solo tuits con muchos likes — sesga la muestra hacia contenido viral, no representativo del discurso ordinario.' },
-    { name: 'Anotador',
-      mitigation: 'Triple anotación + descarte por κ bajo + ronda de consenso.',
-      how: 'Cada tuit se envía a 3 anotadores independientes. Calculamos Cohen\'s κ por par de anotadores. Si κ promedio < 0.70, descartamos el tuit. Los casos en disputa van a una ronda de consenso con un cuarto anotador experto.',
-      example: 'Un solo anotador interpreta "güey" como agresión cuando culturalmente es informal — sesgo individual queda como ground truth.' },
-    { name: 'Sobreajuste',
-      mitigation: 'Test intocado; hp tuning solo sobre val; 5 seeds para varianza.',
-      how: 'El test set NUNCA se ve durante desarrollo. Cualquier decisión (arquitectura, hp, early stopping) usa solo val. El test se mira UNA vez para reportar la métrica final. Repetimos con 5 semillas distintas para que la varianza no nos engañe.',
-      example: 'Tunear hiperparámetros para minimizar loss en test — el F1 reportado infla artificialmente y no generaliza a datos nuevos.' },
-    { name: 'Fuga de datos',
-      mitigation: 'Split por usuario (no por tuit) para evitar mismo autor en train y test.',
-      how: 'Antes del split estratificado, agrupamos los tuits por user_id. Asignamos usuarios enteros a train, val o test. Así el mismo autor jamás aparece en dos splits — evita que el modelo "memorice" estilos.',
-      example: 'Dos tuits del mismo usuario, uno en train y uno en test. El modelo aprende rasgos idiosincráticos (emojis, jerga personal) y "ahorra" puntos en test.' },
-    { name: 'Demográfico',
-      mitigation: 'Verificar distribución regional MX y reportar limitaciones.',
-      how: 'Analizamos place_name de los tuits para verificar que estén distribuidos por regiones (CDMX, MTY, GDL, Sur, etc.). Si una región domina >50%, lo reportamos como limitación de validez externa.',
-      example: 'Todos los tuits son de CDMX. El modelo aprende dialecto chilango y falla en yucateco o norteño — pero el paper dice "español mexicano" sin matizar.' },
-    { name: 'Publicación',
-      mitigation: 'Reportar resultados negativos y todas las seeds, no solo la mejor.',
-      how: 'Tabla con media ± std de las 5 seeds. Reportamos también las seeds individuales en el apéndice. Si la hipótesis se refuta, lo decimos — no escondemos el experimento.',
-      example: 'Mostrar solo la seed con mejor F1. Otros investigadores no pueden replicar y la "evidencia" es ruido seleccionado.' },
+    { name: 'Brecha sim2real',
+      mitigation: 'Randomización de dominio + modelos de perturbación calibrados contra DART.',
+      how: 'Se aleatorizan los parámetros de masa, forma y perturbaciones en cada episodio, y los modelos de ruido y dinámica se calibran contra datos de misiones reales (DART, Cheng et al. 2023). Es la principal amenaza a la validez externa.',
+      example: 'Entrenar y evaluar solo en un simulador idealizado: la política aprende a explotar artefactos del simulador que no existen en vuelo real.' },
+    { name: 'Desplazamiento de distribución (OOD)',
+      mitigation: 'Conjunto de prueba con tipos y tamaños de asteroide no vistos en entrenamiento.',
+      how: 'El test reserva una distribución desplazada respecto a train/val para medir explícitamente la generalización fuera de distribución, evitando sobreestimar el desempeño.',
+      example: 'Entrenar solo con asteroides rocosos pequeños y reportar éxito como si aplicara a cualquier NEO — sin probar tamaños o composiciones nuevas.' },
+    { name: 'Reward hacking / sobreajuste',
+      mitigation: 'Función de recompensa auditada; test intocado; 5 semillas para varianza.',
+      how: 'La recompensa se audita para que optimice realmente la distancia de fallo y no un proxy. El test NUNCA se ve durante el desarrollo; el ajuste usa solo val. Se promedia sobre 5 semillas para estimar la varianza.',
+      example: 'La política minimiza Δv ignorando el fallo, o explota una métrica proxy — luce bien en entrenamiento y falla la intercepción real.' },
+    { name: 'Representatividad de escenarios',
+      mitigation: 'Muestreo anclado al catálogo JPL y verificado con KS-test.',
+      how: 'Los parámetros se muestrean del JPL Small-Body Database y se compara la distribución muestreada con el catálogo mediante Kolmogorov–Smirnov (p > 0.05). Si un tipo de objeto domina la muestra, se documenta como límite de validez externa.',
+      example: 'Sobre-representar asteroides grandes y lentos hace que el guiado luzca robusto, pero no generaliza a objetivos rápidos y pequeños.' },
+    { name: 'Reproducibilidad',
+      mitigation: 'Publicar semillas, versión del simulador, efemérides e hiperparámetros.',
+      how: 'Se liberan todas las semillas, la versión fijada del simulador, las efemérides DE440 y los hiperparámetros, de modo que un tercero pueda replicar el experimento solo con el documento.',
+      example: 'Reportar resultados sin la versión del simulador ni la semilla: nadie puede reproducir la distancia de fallo y la evidencia no es auditable.' },
+    { name: 'Sin sujetos humanos',
+      mitigation: 'El objeto de estudio es una simulación física; no aplican consideraciones de participantes.',
+      how: 'No hay datos de personas ni anotación humana: los escenarios son físicos. Aun así, se reportan todos los resultados (incluidos los negativos y todas las semillas) para mantener el valor informativo.',
+      example: 'Mostrar solo la semilla con mejor fallo. Otros investigadores no pueden replicar y la "evidencia" es ruido seleccionado.' },
   ];
 
   // ══════════════ 3.7 Datos y muestreo (fusionado desde Datasets) ══════════════
   protected selectedAttr = signal<AttrItem | null>(null);
 
   readonly attributes: AttrItem[] = [
-    { label: 'Nombre', value: 'HateSpeech-MX (propio)', note: 'A construir vía API académica de X.', mono: false, copyable: false,
-      detail: 'Dataset original que crearemos como contribución del proyecto. No existe equivalente público con anotación dialectal mexicana validada por hablantes nativos.' },
-    { label: 'Tamaño objetivo', value: '50 000 tuits', note: 'Balanceado al ~30/70 hate/no-hate.', mono: true, copyable: false,
-      detail: '50k es un umbral razonable para fine-tuning de modelos transformer de tamaño medio (RoBERTuito) sin overfitting catastrófico. La proporción 30/70 refleja la prevalencia real estimada del discurso de odio en X (no es 50/50).' },
-    { label: 'Idioma / variante', value: 'Español mexicano', note: 'Filtro place_country=MX.', mono: false, copyable: false,
-      detail: 'El "español mexicano" no es monolítico — incluye chilango, norteño, yucateco, etc. Para esta primera versión usaremos un filtro nacional MX. Reportaremos distribución regional en limitaciones.' },
-    { label: 'Filtro de query', value: 'lang:es place_country:MX', note: 'Comando Twarc2 para scraping.', mono: true, copyable: true,
-      detail: 'Query reproducible para la API académica. lang:es asegura idioma español detectado por X. place_country:MX usa la geolocalización declarada en la cuenta o el tuit. Combinación permite excluir hispanohablantes residentes en EEUU.' },
-    { label: 'Licencia', value: 'CC BY-SA 4.0', note: 'Anotaciones liberadas, contenido por tweet_id.', mono: false, copyable: false,
-      detail: 'Creative Commons Attribution-ShareAlike 4.0 — terceros pueden usar las anotaciones citando la fuente y bajo la misma licencia. El contenido textual se distribuye SOLO por tweet_id (rehidratable con la API), respetando los TOS de X.' },
-    { label: 'Plataforma anotación', value: 'Prolific MX', note: 'Hablantes nativos verificados. ~$0.20 USD/tuit.', mono: false, copyable: false,
-      detail: 'Prolific filtra participantes por nationality, native_language y country_of_residence. A ~$0.20 USD por tuit y 3 anotadores, el costo total es ~$30,000 USD. Reduciremos a un subset de 10k tuits para fit dentro del presupuesto académico.' },
+    { label: 'Nombre', value: 'Banco de escenarios (propio)', note: 'Generado por simulación de N cuerpos.', mono: false, copyable: false,
+      detail: 'Banco de escenarios de intercepción que generamos como contribución del proyecto. No hay un dataset descargable: cada escenario se sintetiza con un simulador de dinámica de N cuerpos de alta fidelidad y se libera bajo licencia abierta para auditoría.' },
+    { label: 'Tamaño objetivo', value: '10 000 escenarios', note: 'Potencia a priori ≥ 0.80 (α=0.05).', mono: true, copyable: false,
+      detail: '10 000 escenarios pareados dan un margen del IC 95 % muy estrecho para la distancia de fallo, de modo que la reducción objetivo de 30 % supera con holgura el mínimo efecto detectable. Un análisis de potencia a priori confirma suficiencia muestral.' },
+    { label: 'Anclaje', value: 'JPL Small-Body Database', note: 'Masa, tamaño, geometría, velocidad.', mono: false, copyable: false,
+      detail: 'Los parámetros del asteroide objetivo se muestrean de distribuciones ancladas en el catálogo real JPL Small-Body Database de NEOs conocidos, para que la población de escenarios sea representativa de objetivos reales.' },
+    { label: 'Perturbaciones', value: 'Gravedad 3.º · SRP · ruido', note: 'Efemérides DE440 + ruido de sensores.', mono: true, copyable: true,
+      detail: 'Cada escenario modela gravedad de terceros cuerpos (Sol y planetas, vía efemérides DE440), presión de radiación solar y un modelo de ruido de sensores sobre la posición y velocidad relativas. Son las fuentes de incertidumbre que el guiado debe absorber.' },
+    { label: 'Licencia', value: 'Abierta (auditable)', note: 'Simulador, parámetros y semillas liberados.', mono: false, copyable: false,
+      detail: 'El simulador, los parámetros de muestreo y las semillas se publican bajo licencia abierta, de modo que un tercero pueda regenerar el banco de escenarios completo y reproducir la evaluación.' },
+    { label: 'Representatividad', value: 'KS-test vs catálogo', note: 'Se exige p > 0.05.', mono: false, copyable: false,
+      detail: 'La representatividad del banco frente a la población real de NEOs se verifica comparando las distribuciones muestreadas con el catálogo JPL mediante una prueba de Kolmogorov–Smirnov: se exige p > 0.05 para no rechazar la igualdad de distribución.' },
   ];
 
   readonly references = [
-    { name: 'HatEval 2019 (ES-ES)', size: '6 600 tuits',
-      use: 'Pre-entrenamiento opcional; valida transferencia ES→MX.',
-      source: 'SemEval-2019 Task 5 — España',
-      license: 'CC BY-NC-SA 4.0',
-      url: 'https://github.com/msang/hateval2019' },
-    { name: 'OffendES (ES-ES)', size: '32 000 ej.',
-      use: 'Datos adicionales para zero-shot baselines.',
-      source: 'Plaza-del-Arco et al. 2021',
-      license: 'Académica',
-      url: 'https://github.com/fmplaza/OffendES' },
+    { name: 'JPL Small-Body Database', size: 'Catálogo NEO',
+      use: 'Ancla el muestreo de masa, tamaño, geometría y velocidad de aproximación.',
+      source: 'NASA JPL — Center for Near-Earth Object Studies',
+      license: 'Pública (NASA/JPL)',
+      url: 'https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html' },
+    { name: 'Efemérides DE440', size: 'Efemérides',
+      use: 'Posiciones de Sol y planetas para la gravedad de terceros cuerpos.',
+      source: 'JPL Planetary and Lunar Ephemerides',
+      license: 'Pública (NASA/JPL)',
+      url: 'https://ssd.jpl.nasa.gov/planets/eph_export.html' },
   ];
 
   readonly ethicsChecklist: ChecklistItem[] = [
-    { text: 'No se almacenan datos personales identificables; solo tweet_id + texto anonimizado.', done: false },
-    { text: 'URLs y menciones reemplazadas por placeholders [URL] / [USER].',                       done: false },
-    { text: 'Anotadores informados sobre el contenido sensible; opción de retirarse.',              done: false },
-    { text: 'Resultados se reportan agregados, nunca a nivel de usuario individual.',               done: false },
-    { text: 'Cumplimiento con la política de uso de la API académica de X.',                        done: false },
-    { text: 'Acuerdo de confidencialidad firmado con la plataforma de anotación.',                  done: false },
-    { text: 'Plan de retirada de datos en caso de queja DMCA o ARCO.',                              done: false },
+    { text: 'Parámetros muestreados del catálogo JPL, no inventados.',                              done: false },
+    { text: 'Representatividad verificada con KS-test (p > 0.05) frente al catálogo.',              done: false },
+    { text: 'Conjunto de prueba OOD intocado durante todo el desarrollo.',                          done: false },
+    { text: 'Resultados reportados como media ± std sobre las 5 semillas.',                         done: false },
+    { text: 'Versión del simulador y efemérides DE440 fijadas y documentadas.',                     done: false },
+    { text: 'Semillas e hiperparámetros publicados para replicación.',                              done: false },
+    { text: 'Sin sujetos humanos: el objeto de estudio es una simulación física.',                  done: false },
   ];
 
   // ══════════════ 3.8 Baselines de comparación (fusionado desde Baselines) ══════════════
@@ -697,30 +698,30 @@ export class MetodologiaComponent {
   ];
 
   readonly baselineTypes = [
-    { id: 'trivial' as BaselineType, type: 'Trivial', example: 'Random / Mayoría',
-      why: 'Suelo absoluto. Garantiza que el problema no es trivialmente fácil.',
-      expectedF1: '~0.42', risk: 'Si tu modelo no supera esto, hay algo gravemente mal.',
-      impl: 'sklearn.dummy.DummyClassifier' },
-    { id: 'classical' as BaselineType, type: 'Clásico', example: 'Logistic Regression + TF-IDF',
-      why: 'Baseline competitivo barato; benchmark estándar en NLP.',
-      expectedF1: '~0.62', risk: 'A veces sorprendentemente competitivo en datasets pequeños.',
-      impl: 'TfidfVectorizer + LogReg' },
-    { id: 'sota' as BaselineType, type: 'Estado del arte', example: 'XLM-RoBERTa-large',
-      why: 'La métrica más alta publicada — lo que queremos superar.',
-      expectedF1: '~0.71', risk: 'Riesgo de comparar contra una versión NO óptima si no usamos la oficial.',
-      impl: 'transformers.AutoModelForSequenceClassification' },
-    { id: 'ablation' as BaselineType, type: 'Ablación', example: 'Nuestro método sin componente X',
-      why: 'Aísla la contribución individual de cada parte de la propuesta.',
-      expectedF1: '~0.78', risk: 'Olvidar ablaciones es el error #1 en papers de NLP.',
-      impl: 'Mismo pipeline con flag --no-preprocessing' },
+    { id: 'trivial' as BaselineType, type: 'Trivial', example: 'Balística sin corrección',
+      why: 'Suelo absoluto: trayectoria sin guiado, referencia de fallo relativo 1.00.',
+      expectedF1: '1.00 (ref.)', risk: 'Si un método no supera esto, no aporta guiado alguno.',
+      impl: 'Propagación balística sin control' },
+    { id: 'classical' as BaselineType, type: 'Clásico', example: 'PN / APN',
+      why: 'Leyes de guiado clásicas; APN es la referencia principal de la hipótesis.',
+      expectedF1: '0.30 – 0.60', risk: 'Pierden robustez bajo incertidumbre de masa y perturbaciones.',
+      impl: 'Navegación proporcional (aumentada)' },
+    { id: 'sota' as BaselineType, type: 'Estado del arte', example: 'Control óptimo (Lambert + convexo)',
+      why: 'Lo más preciso conocido, pero costoso de recalcular a bordo.',
+      expectedF1: '0.20 – 0.30', risk: 'Latencia potencialmente inviable en tiempo real a bordo.',
+      impl: 'Lambert + optimización convexa' },
+    { id: 'ablation' as BaselineType, type: 'Ablación', example: 'RL sin meta-aprendizaje',
+      why: 'Aísla la contribución de cada componente de la política propuesta.',
+      expectedF1: '≤ 0.21', risk: 'Olvidar ablaciones impide atribuir la mejora a la parte correcta.',
+      impl: 'Misma política RL con flag --no-meta' },
   ];
 
   readonly fairConditions = [
-    'Mismo test set, sin filtrado diferencial.',
-    'Mismas métricas con la misma librería e idéntica configuración.',
+    'Mismos escenarios de prueba intocados, sin filtrado diferencial.',
+    'Mismas métricas (distancia de fallo, Δv, latencia) con idéntica configuración.',
     'Mismas semillas aleatorias (al menos 5) para promediar varianza.',
-    'Mismo presupuesto de cómputo (GPU-horas reportadas).',
-    'Mismo preprocesamiento o, si difiere, ablación documentada.',
+    'Mismo presupuesto de cómputo a bordo (latencia reportada).',
+    'Mismo modelo de perturbaciones aplicado a todos los métodos.',
     'Pruebas estadísticas pareadas con corrección por múltiples comparaciones.',
   ];
 
@@ -745,36 +746,36 @@ export class MetodologiaComponent {
   ];
 
   readonly baselines: Baseline[] = [
-    { name: 'Mayoría (clase frecuente)', type: 'trivial', expectedF1: '~0.42',
-      rationale: 'Suelo absoluto. Garantiza que cualquier método tenga sentido.',
-      details: 'sklearn.dummy.DummyClassifier(strategy="most_frequent")' },
-    { name: 'Logistic Regression + TF-IDF', type: 'classical', expectedF1: '~0.62',
-      rationale: 'Baseline clásico de referencia para clasificación de texto.',
-      details: 'TfidfVectorizer(max_features=20000, ngram_range=(1,2)) + LogReg(C=1.0)' },
-    { name: 'XLM-RoBERTa-large zero-shot', type: 'sota', expectedF1: '~0.71',
-      rationale: 'Estado del arte actual sin fine-tuning dialectal.',
-      details: 'transformers: pipeline("text-classification", model="xlm-roberta-large")' },
-    { name: 'RoBERTuito-MX sin preprocessing', type: 'ablation', expectedF1: '~0.78',
-      rationale: 'Ablación: aislamos el efecto del preprocesamiento.',
-      details: 'Mismo modelo, sin las normalizaciones de URL/mention/emoji.' },
+    { name: 'Balística sin corrección', type: 'trivial', expectedF1: '1.00 (ref.)',
+      rationale: 'Suelo absoluto. Trayectoria sin guiado; cualquier método debe superarla.',
+      details: 'Propagación de la dinámica sin maniobra de corrección.' },
+    { name: 'Navegación proporcional aumentada (APN)', type: 'classical', expectedF1: '0.30 – 0.45',
+      rationale: 'Baseline clásico fuerte y referencia principal de la hipótesis.',
+      details: 'Ley APN con ganancia ajustada; también se evalúa PN simple (0.45 – 0.60).' },
+    { name: 'Control óptimo (Lambert + convexo)', type: 'sota', expectedF1: '0.20 – 0.30',
+      rationale: 'Estado del arte en precisión; costoso de recalcular a bordo.',
+      details: 'Solución del problema de Lambert + optimización convexa por tramos.' },
+    { name: 'Guiado RL meta-aprendido (propuesta)', type: 'ablation', expectedF1: '≤ 0.21',
+      rationale: 'Política recurrente con PPO + meta-aprendizaje; lo que queremos validar.',
+      details: 'Política recurrente optimizada con PPO sobre 5 semillas; ablación --no-meta.' },
   ];
 
   readonly fairnessChecklist: ChecklistItem[] = [
-    { text: 'Mismo conjunto de test, intocado durante desarrollo.',           done: false },
-    { text: 'Mismas métricas con la misma implementación (scikit-learn).',     done: false },
-    { text: 'Mismo presupuesto computacional (≤ 4 GPU-horas por método).',    done: false },
+    { text: 'Mismos escenarios de prueba OOD, intocados durante desarrollo.',  done: false },
+    { text: 'Mismas métricas con la misma implementación del simulador.',      done: false },
+    { text: 'Mismo presupuesto de cómputo a bordo (latencia por recálculo).',  done: false },
     { text: 'Mismas 5 semillas aleatorias para promediar varianza.',          done: false },
-    { text: 'Mismo preprocesamiento aplicado a todos (o ablación explícita).',done: false },
-    { text: 'Hiperparámetros tuneados con el mismo protocolo sobre val.',     done: false },
+    { text: 'Mismo modelo de perturbaciones aplicado a todos los métodos.',   done: false },
+    { text: 'Hiperparámetros ajustados con el mismo protocolo sobre val.',     done: false },
   ];
 
   readonly statTests = [
     { name: 'Wilcoxon signed-rank', scope: 'pareada · no paramétrica',
-      note: 'Comparación pareada de F1 entre RoBERTuito-MX y cada baseline sobre 5 seeds. α = 0.05.',
-      code: 'scipy.stats.wilcoxon(scores_ours, scores_baseline)' },
+      note: 'Comparación pareada de la distancia de fallo entre el guiado RL y cada baseline sobre los mismos escenarios. α = 0.05.',
+      code: 'scipy.stats.wilcoxon(miss_rl, miss_apn)' },
     { name: 'Bootstrap (n=1000)', scope: 'IC 95%',
-      note: 'Intervalo de confianza no paramétrico para el F1 macro sobre test.',
-      code: 'np.percentile([f1(resample(test)) for _ in range(1000)], [2.5, 97.5])' },
+      note: 'Intervalo de confianza no paramétrico para la distancia de fallo sobre el test.',
+      code: 'np.percentile([miss(resample(test)) for _ in range(1000)], [2.5, 97.5])' },
     { name: 'Corrección de Holm', scope: 'múltiples comparaciones',
       note: 'Comparamos contra 4 baselines ⇒ controlar FWER mediante Holm step-down.',
       code: 'statsmodels.stats.multitest.multipletests(pvalues, method="holm")' },

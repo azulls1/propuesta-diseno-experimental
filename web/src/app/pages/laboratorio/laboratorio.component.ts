@@ -1,11 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { SectionLayoutComponent } from '../../shared/section-layout/section-layout.component';
 import { TabsComponent, TabItem } from '../../shared/interactive/tabs.component';
 import { SupabaseService, Comment } from '../../core/supabase.service';
-
-interface HFResult { label: string; score: number; }
 
 @Component({
   selector: 'app-laboratorio',
@@ -16,7 +13,7 @@ interface HFResult { label: string; score: number; }
     <app-section-layout
       sectionNumber="06"
       sectionTitle="Laboratorio"
-      sectionDescription="Demos ejecutables: clasificador en vivo, calculadora estadística, validador de hipótesis y muro de comentarios persistido en Supabase."
+      sectionDescription="Demos ejecutables: calculadora estadística, validador de hipótesis y muro de comentarios persistido en Supabase."
       status="done"
       prevLink="/entregables"
       prevLabel="Entregables"
@@ -26,89 +23,33 @@ interface HFResult { label: string; score: number; }
       <article class="card">
         <app-tabs [tabs]="tabs" [active]="active()" (activeChange)="active.set($event)" />
 
-        <!-- ════════ A. CLASIFICADOR ════════ -->
-        @if (active() === 'classifier') {
-          <div class="animate-tab">
-            <div class="mb-4">
-              <h2 class="font-display text-lg font-semibold text-forest mb-1">Demo del clasificador</h2>
-              <p class="text-sm text-pine">Escribe un texto en español → llamamos a <span class="font-mono">Hate-speech-CNERG/dehatebert-mono-spanish</span> en HuggingFace Inference API y vemos qué dice. Es exactamente el tipo de modelo que mediremos en el experimento.</p>
-            </div>
-            <textarea [(ngModel)]="hfInput"
-                      rows="3"
-                      placeholder="Escribe aquí un tuit en español…"
-                      class="w-full rounded-lg border border-fog bg-white p-3 text-sm font-mono text-forest focus:outline-none focus:border-forest"></textarea>
-            <div class="mt-3 flex items-center gap-2 flex-wrap">
-              <button type="button" (click)="classify()"
-                      [disabled]="hfLoading() || !hfInput.trim()"
-                      class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
-                @if (hfLoading()) { <span>Clasificando…</span> }
-                @else             { <span>Clasificar</span> }
-              </button>
-              @for (s of hfSamples; track s) {
-                <button type="button" (click)="hfInput = s; classify()"
-                        class="filter-pill text-xs">
-                  {{ s.length > 40 ? s.slice(0,40) + '…' : s }}
-                </button>
-              }
-            </div>
-
-            @if (hfError()) {
-              <div class="mt-4 rounded-lg p-3 text-sm" style="background:#FEF2F2; color:#DC2626; border:1px solid #FECACA">
-                <strong>Error:</strong> {{ hfError() }}
-                @if (hfError()?.includes('loading')) {
-                  <div class="mt-1 text-xs">El modelo se está cargando en HF (cold start, ~20s). Vuelve a darle clic.</div>
-                }
-              </div>
-            }
-
-            @if (hfResults().length > 0) {
-              <div class="mt-4 stack-sm">
-                @for (r of hfResults(); track r.label) {
-                  <div class="rounded-lg border border-fog bg-gray-50 p-4">
-                    <div class="flex items-center justify-between mb-2">
-                      <span class="text-forest font-display font-medium">{{ labelEs(r.label) }}</span>
-                      <span class="tag">{{ (r.score * 100).toFixed(1) }}%</span>
-                    </div>
-                    <div class="h-2 w-full rounded-full bg-gray-100 overflow-hidden">
-                      <div class="h-full rounded-full transition-all duration-500"
-                           [style.background]="r.label.toLowerCase().includes('hate') ? '#DC2626' : '#059669'"
-                           [style.width.%]="r.score * 100"></div>
-                    </div>
-                  </div>
-                }
-              </div>
-              <p class="mt-3 text-xs text-moss font-mono">↑ Resultado real de HuggingFace · este modelo fue entrenado en español peninsular y muestra el shift dialectal del que habla la hipótesis.</p>
-            }
-          </div>
-        }
-
         <!-- ════════ B. CALCULADORA ESTADÍSTICA ════════ -->
         @if (active() === 'stats') {
           <div class="animate-tab">
             <div class="mb-4">
               <h2 class="font-display text-lg font-semibold text-forest mb-1">Wilcoxon signed-rank (pareado)</h2>
-              <p class="text-sm text-pine">Mete F1 de 5 seeds para dos métodos. Calcula W, p-value aproximado y si se rechaza H0 con α=0.05.</p>
+              <p class="text-sm text-pine">Mete la distancia de fallo de 5 semillas para dos métodos (p. ej. APN vs RL). Calcula W, p-value aproximado y si se rechaza H0 con α=0.05.</p>
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
               <div>
-                <label class="text-xs uppercase tracking-wider text-moss font-mono mb-1 block">Método A (5 seeds)</label>
+                <label class="text-xs uppercase tracking-wider text-moss font-mono mb-1 block">APN — fallo (m) · 5 semillas</label>
                 <textarea [(ngModel)]="statsA" rows="6"
                           class="w-full rounded-lg border border-fog bg-white p-3 text-sm font-mono text-forest focus:outline-none focus:border-forest"
-                          placeholder="0.71
-0.72
-0.70
-0.71
-0.73"></textarea>
+                          placeholder="42.0
+44.5
+41.2
+43.8
+45.1"></textarea>
               </div>
               <div>
-                <label class="text-xs uppercase tracking-wider text-moss font-mono mb-1 block">Método B (5 seeds)</label>
+                <label class="text-xs uppercase tracking-wider text-moss font-mono mb-1 block">RL — fallo (m) · 5 semillas</label>
                 <textarea [(ngModel)]="statsB" rows="6"
                           class="w-full rounded-lg border border-fog bg-white p-3 text-sm font-mono text-forest focus:outline-none focus:border-forest"
-                          placeholder="0.82
-0.83
-0.81
-0.84
-0.82"></textarea>
+                          placeholder="28.1
+27.4
+29.0
+26.8
+28.6"></textarea>
               </div>
             </div>
             <button type="button" (click)="runWilcoxon()" class="btn-primary mt-3">Calcular Wilcoxon</button>
@@ -157,7 +98,7 @@ interface HFResult { label: string; score: number; }
               <p class="text-sm text-pine">Escribe tu hipótesis y te la califico contra los 6 criterios de falsabilidad. Las reglas se ejecutan en el navegador.</p>
             </div>
             <textarea [(ngModel)]="hypInput" rows="4"
-                      placeholder="Ejemplo: El fine-tuning de RoBERTuito sobre 50k tuits MX incrementará el F1 macro en al menos 8 puntos respecto al baseline zero-shot (α=0.05, prueba pareada)."
+                      placeholder="Ejemplo: El guiado por aprendizaje por refuerzo reducirá la distancia de fallo en al menos 30% respecto al baseline APN sobre 10 000 escenarios simulados (α=0.05, prueba pareada)."
                       class="w-full rounded-lg border border-fog bg-white p-3 text-sm text-forest focus:outline-none focus:border-forest"></textarea>
 
             @if (hypInput.trim()) {
@@ -266,63 +207,18 @@ interface HFResult { label: string; score: number; }
   `],
 })
 export class LaboratorioComponent {
-  private http = inject(HttpClient);
   private supabase = inject(SupabaseService);
 
-  protected active = signal<string>('classifier');
+  protected active = signal<string>('stats');
   readonly tabs: TabItem[] = [
-    { id: 'classifier', label: '🤖 Clasificador',  badge: 'HuggingFace' },
     { id: 'stats',      label: '📊 Estadística',   badge: 'Wilcoxon' },
     { id: 'validator',  label: '🎯 Hipótesis',     badge: '6 reglas' },
     { id: 'comments',   label: '💬 Comentarios',   badge: 'Supabase' },
   ];
 
-  // ─── A. Classifier (HF Inference API) ───
-  hfInput = '';
-  protected hfLoading = signal(false);
-  protected hfError = signal<string | null>(null);
-  protected hfResults = signal<HFResult[]>([]);
-  readonly hfSamples = [
-    'No me gustó nada el plan que propusieron en clase, qué fastidio.',
-    'Eres un imbécil, lárgate de aquí.',
-    'Qué bonito día para tomar café con los compas.',
-  ];
-  labelEs(label: string): string {
-    const l = label.toLowerCase();
-    if (l.includes('hate') || l === 'label_1') return '🔴 Discurso de odio';
-    if (l.includes('non') || l === 'label_0')  return '🟢 No es discurso de odio';
-    return label;
-  }
-  classify() {
-    const text = this.hfInput.trim();
-    if (!text) return;
-    this.hfLoading.set(true);
-    this.hfError.set(null);
-    this.hfResults.set([]);
-    this.http.post<any>(
-      'https://api-inference.huggingface.co/models/Hate-speech-CNERG/dehatebert-mono-spanish',
-      { inputs: text },
-    ).subscribe({
-      next: (res) => {
-        const arr: HFResult[] = Array.isArray(res?.[0]) ? res[0] : res;
-        if (!Array.isArray(arr)) {
-          this.hfError.set('Respuesta inesperada de HF');
-        } else {
-          this.hfResults.set(arr.sort((a, b) => b.score - a.score));
-        }
-        this.hfLoading.set(false);
-      },
-      error: (err) => {
-        const msg = err?.error?.error || err?.message || 'Error al llamar a HuggingFace';
-        this.hfError.set(msg);
-        this.hfLoading.set(false);
-      },
-    });
-  }
-
   // ─── B. Wilcoxon ───
-  statsA = '0.71\n0.72\n0.70\n0.71\n0.73';
-  statsB = '0.82\n0.83\n0.81\n0.84\n0.82';
+  statsA = '42.0\n44.5\n41.2\n43.8\n45.1';
+  statsB = '28.1\n27.4\n29.0\n26.8\n28.6';
   protected wilcoxonResult = signal<{ n: number; W: number; p: number } | null>(null);
   protected statsError = signal<string | null>(null);
   runWilcoxon() {
@@ -374,8 +270,8 @@ export class LaboratorioComponent {
     const t = this.hypInput.toLowerCase();
     return [
       { id: 'metric', label: 'Especifica una métrica cuantificable',
-        pass: /\b(f1|accuracy|precision|recall|bleu|rouge|auroc|auc|mae|mse|rmse|kappa)\b/i.test(this.hypInput),
-        hint: 'Buscamos: F1, accuracy, precision, recall, BLEU, AUROC, etc.' },
+        pass: /\b(f1|accuracy|precision|recall|bleu|rouge|auroc|auc|mae|mse|rmse|kappa)\b/i.test(this.hypInput) || /(distancia de fallo|miss distance|δv|delta-?v|latencia|tasa de éxito)/i.test(this.hypInput),
+        hint: 'Buscamos: distancia de fallo, Δv, latencia, tasa de éxito (o F1, accuracy, AUROC…).' },
       { id: 'threshold', label: 'Define un umbral cuantitativo',
         pass: /(\d+(\.\d+)?\s*(puntos|pts|%|p))/i.test(this.hypInput) || /(al menos|≥|>=|>|por encima de|por lo menos)\s+\d/i.test(this.hypInput),
         hint: 'Ej: "al menos 8 puntos", "≥0.85", "más del 10%".' },
@@ -389,8 +285,8 @@ export class LaboratorioComponent {
         pass: /(mejorar|reducir|aumentar|incrementar|disminuir|superar|mayor|menor)/i.test(t),
         hint: 'Verbos: mejorará, reducirá, superará, incrementará.' },
       { id: 'data', label: 'Especifica el dataset o población',
-        pass: /(dataset|corpus|tuit|tweet|imagen|paciente|usuario|sobre\s+\d+|n\s*=\s*\d+|mexicano|español|inglés)/i.test(t),
-        hint: 'Sobre qué datos/población se prueba.' },
+        pass: /(dataset|corpus|escenario|simulaci|asteroide|intercep|trayectoria|imagen|paciente|usuario|sobre\s+\d+|n\s*=\s*\d+)/i.test(t),
+        hint: 'Sobre qué datos/población se prueba (p. ej. escenarios simulados).' },
     ];
   });
   protected hypScore = computed(() => this.hypResults().filter(r => r.pass).length);

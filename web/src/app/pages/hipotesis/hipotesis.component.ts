@@ -30,12 +30,13 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
               <span class="badge-inactive">Hipótesis alternativa</span>
             </div>
             <p class="text-lg text-forest leading-relaxed italic border-l-4 border-forest pl-4 font-display">
-              El fine-tuning de RoBERTuito sobre un corpus anotado de
-              <strong class="not-italic">50 000 tuits en español mexicano</strong>
-              incrementará el F1-score macro de detección de discurso de odio en
-              <strong class="not-italic">al menos 8 puntos</strong>
-              respecto al baseline XLM-RoBERTa-large zero-shot
-              (<span class="font-mono text-sm">α = 0.05</span>, prueba pareada).
+              Un controlador de guiado basado en aprendizaje por refuerzo (política recurrente
+              meta-entrenada) reducirá la <strong class="not-italic">distancia de fallo media</strong>
+              en la intercepción terminal de un cuerpo pequeño en
+              <strong class="not-italic">al menos 30 %</strong>
+              respecto al guiado clásico por navegación proporcional aumentada (APN), bajo
+              incertidumbre de masa, gravedad multicuerpo, presión de radiación solar y ruido de
+              medición (<span class="font-mono text-sm">α = 0.05</span>, prueba pareada).
             </p>
           </article>
 
@@ -48,8 +49,8 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
             </div>
             <p class="text-pine leading-relaxed italic border-l-2 border-fog pl-4">
               No existe diferencia estadísticamente significativa
-              (<span class="font-mono">p &gt; 0.05</span>) entre el F1-score del modelo
-              afinado y el baseline zero-shot sobre el corpus dialectal mexicano.
+              (<span class="font-mono">p &gt; 0.05</span>) en la distancia de fallo media entre
+              el controlador aprendido y el guiado clásico APN sobre el mismo conjunto de escenarios.
             </p>
           </article>
 
@@ -88,9 +89,8 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
             <p class="text-pine leading-relaxed">
               La hipótesis H1 se considerará
               <strong class="text-forest">refutada</strong>
-              si, tras ejecutar el experimento con 5 semillas aleatorias distintas,
-              el incremento promedio en F1-score es
-              <span class="font-mono text-forest">&lt; 8 puntos</span>
+              si, sobre el conjunto de escenarios de prueba, la reducción media de la distancia de fallo es
+              <span class="font-mono text-forest">&lt; 30 %</span>
               o si la prueba de Wilcoxon pareada arroja
               <span class="font-mono text-forest">p ≥ 0.05</span>.
               En ese caso aceptaríamos H0.
@@ -113,8 +113,8 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
                 La nuestra cumple porque:
               </p>
               <ul class="text-xs space-y-1.5 text-pine">
-                <li>· Define un umbral cuantitativo (8 puntos)</li>
-                <li>· Especifica una métrica concreta (F1 macro)</li>
+                <li>· Define un umbral cuantitativo (≥ 30 %)</li>
+                <li>· Especifica una métrica concreta (distancia de fallo)</li>
                 <li>· Indica el método estadístico (Wilcoxon, α=0.05)</li>
                 <li>· Dice qué resultado la refutaría</li>
               </ul>
@@ -137,12 +137,12 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
                 [técnica X] mejorará [métrica M] en al menos [umbral] en [tarea T] sobre [población] frente a [baseline].
               </p>
               <div class="rounded border border-fog bg-gray-50 p-3 text-xs space-y-1">
-                <div><span class="text-moss font-mono">X:</span> <span class="text-forest">fine-tuning de RoBERTuito</span></div>
-                <div><span class="text-moss font-mono">M:</span> <span class="text-forest">F1-score macro</span></div>
-                <div><span class="text-moss font-mono">umbral:</span> <span class="text-forest">8 puntos</span></div>
-                <div><span class="text-moss font-mono">T:</span> <span class="text-forest">detección de discurso de odio</span></div>
-                <div><span class="text-moss font-mono">población:</span> <span class="text-forest">español dialectal MX</span></div>
-                <div><span class="text-moss font-mono">baseline:</span> <span class="text-forest">XLM-RoBERTa-large zero-shot</span></div>
+                <div><span class="text-moss font-mono">X:</span> <span class="text-forest">guiado por aprendizaje por refuerzo</span></div>
+                <div><span class="text-moss font-mono">M:</span> <span class="text-forest">distancia de fallo (miss distance)</span></div>
+                <div><span class="text-moss font-mono">umbral:</span> <span class="text-forest">reducción ≥ 30 %</span></div>
+                <div><span class="text-moss font-mono">T:</span> <span class="text-forest">intercepción terminal de un cuerpo pequeño</span></div>
+                <div><span class="text-moss font-mono">población:</span> <span class="text-forest">escenarios de intercepción simulados</span></div>
+                <div><span class="text-moss font-mono">baseline:</span> <span class="text-forest">navegación proporcional aumentada (APN)</span></div>
               </div>
             </div>
           </app-expand-card>
@@ -154,11 +154,11 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
 })
 export class HipotesisComponent {
   readonly variables = [
-    { role: 'Independiente', name: 'Estrategia de entrenamiento', value: 'zero-shot · fine-tuned',
+    { role: 'Independiente', name: 'Estrategia de guiado', value: 'APN clásico · RL aprendido',
       detail: 'La condición que manipulamos para observar su efecto.' },
-    { role: 'Dependiente',   name: 'F1-score macro',              value: '{0, 1}',
+    { role: 'Dependiente',   name: 'Distancia de fallo (m)', value: 'Δv · latencia (soporte)',
       detail: 'Lo que medimos como resultado del experimento.' },
-    { role: 'Control',       name: 'Semilla, hardware, hp',       value: 'seed=42 · A100 · lr=2e-5',
+    { role: 'Control',       name: 'Simulador, efemérides, semilla', value: 'DE440 · seed=42 · A100',
       detail: 'Variables que mantenemos constantes para aislar el efecto.' },
   ];
 
