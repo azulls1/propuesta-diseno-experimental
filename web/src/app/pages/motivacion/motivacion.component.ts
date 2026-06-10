@@ -49,8 +49,8 @@ interface Gap {
             </h2>
             <p class="text-pine leading-relaxed mb-4">
               La defensa planetaria ante asteroides peligrosos dejó de ser teórica: en 2022 la misión
-              DART de la NASA impactó el asteroide Dimorphos y midió una alteración real de su órbita,
-              con un factor de transferencia de momento
+              DART de la NASA impactó el asteroide Dimorphos y midió una alteración real de su órbita
+              (−2.70 ± 0.10 mm/s), con un factor de transferencia de momento β entre 2.2 y 4.9
               <button type="button" (click)="selectedRef.set(refMap['cheng2023'])"
                       class="inline-flex items-center gap-1 rounded-md border border-fog bg-gray-50 px-1.5 py-0.5 font-mono text-xs text-forest hover:border-forest hover:bg-white transition-all">
                 [Cheng et al., 2023] ↗
@@ -241,7 +241,7 @@ interface Gap {
         </app-modal>
       }
 
-      <!-- MODAL: data point "12-18 puntos" -->
+      <!-- MODAL: data point · control desde tierra inviable en fase terminal -->
       @if (showDataPoint() === 'drop') {
         <app-modal [open]="true"
                    eyebrow="Dato cuantitativo · §1.1"

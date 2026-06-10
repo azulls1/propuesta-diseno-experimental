@@ -17,12 +17,12 @@ interface AttrItem {
 }
 
 // Fusionado desde Comparación / Baselines
-type BaselineType = 'trivial' | 'classical' | 'sota' | 'ablation';
+type BaselineType = 'trivial' | 'classical' | 'sota' | 'ablation' | 'proposed';
 
 interface Baseline {
   name: string;
   type: BaselineType;
-  expectedF1: string;
+  expectedMiss: string;
   rationale: string;
   details: string;
 }
@@ -363,7 +363,7 @@ interface Baseline {
                 <div class="space-y-2">
                   <div>
                     <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Fallo rel. esperado</div>
-                    <div class="text-forest font-mono">{{ t.expectedF1 }}</div>
+                    <div class="text-forest font-mono">{{ t.expectedMiss }}</div>
                   </div>
                   <div>
                     <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Riesgo</div>
@@ -431,12 +431,13 @@ interface Baseline {
                         @case ('trivial')   { <span class="badge-inactive">Trivial</span> }
                         @case ('classical') { <span class="badge-inactive">Clásico</span> }
                         @case ('ablation')  { <span class="badge-inactive">Ablación</span> }
-                        @case ('sota')      { <span class="badge-forest">Estado del arte</span> }
+                        @case ('sota')      { <span class="badge-inactive">Estado del arte</span> }
+                        @case ('proposed')  { <span class="badge-forest">Propuesto</span> }
                       }
                     </div>
                     <div class="flex items-center gap-2">
                       <span class="text-xs text-moss font-mono">Fallo rel. esperado:</span>
-                      <span class="tag">{{ b.expectedF1 }}</span>
+                      <span class="tag">{{ b.expectedMiss }}</span>
                     </div>
                   </div>
                   <div details>
@@ -700,19 +701,19 @@ export class MetodologiaComponent {
   readonly baselineTypes = [
     { id: 'trivial' as BaselineType, type: 'Trivial', example: 'Balística sin corrección',
       why: 'Suelo absoluto: trayectoria sin guiado, referencia de fallo relativo 1.00.',
-      expectedF1: '1.00 (ref.)', risk: 'Si un método no supera esto, no aporta guiado alguno.',
+      expectedMiss: '1.00 (ref.)', risk: 'Si un método no supera esto, no aporta guiado alguno.',
       impl: 'Propagación balística sin control' },
     { id: 'classical' as BaselineType, type: 'Clásico', example: 'PN / APN',
       why: 'Leyes de guiado clásicas; APN es la referencia principal de la hipótesis.',
-      expectedF1: '0.30 – 0.60', risk: 'Pierden robustez bajo incertidumbre de masa y perturbaciones.',
+      expectedMiss: '0.30 – 0.60', risk: 'Pierden robustez bajo incertidumbre de masa y perturbaciones.',
       impl: 'Navegación proporcional (aumentada)' },
     { id: 'sota' as BaselineType, type: 'Estado del arte', example: 'Control óptimo (Lambert + convexo)',
       why: 'Lo más preciso conocido, pero costoso de recalcular a bordo.',
-      expectedF1: '0.20 – 0.30', risk: 'Latencia potencialmente inviable en tiempo real a bordo.',
+      expectedMiss: '0.20 – 0.30', risk: 'Latencia potencialmente inviable en tiempo real a bordo.',
       impl: 'Lambert + optimización convexa' },
     { id: 'ablation' as BaselineType, type: 'Ablación', example: 'RL sin meta-aprendizaje',
       why: 'Aísla la contribución de cada componente de la política propuesta.',
-      expectedF1: '≤ 0.21', risk: 'Olvidar ablaciones impide atribuir la mejora a la parte correcta.',
+      expectedMiss: '≤ 0.21', risk: 'Olvidar ablaciones impide atribuir la mejora a la parte correcta.',
       impl: 'Misma política RL con flag --no-meta' },
   ];
 
@@ -742,22 +743,22 @@ export class MetodologiaComponent {
     { id: 'trivial',   label: 'Trivial' },
     { id: 'classical', label: 'Clásico' },
     { id: 'sota',      label: 'Estado del arte' },
-    { id: 'ablation',  label: 'Ablación' },
+    { id: 'proposed',  label: 'Propuesto' },
   ];
 
   readonly baselines: Baseline[] = [
-    { name: 'Balística sin corrección', type: 'trivial', expectedF1: '1.00 (ref.)',
+    { name: 'Balística sin corrección', type: 'trivial', expectedMiss: '1.00 (ref.)',
       rationale: 'Suelo absoluto. Trayectoria sin guiado; cualquier método debe superarla.',
       details: 'Propagación de la dinámica sin maniobra de corrección.' },
-    { name: 'Navegación proporcional aumentada (APN)', type: 'classical', expectedF1: '0.30 – 0.45',
+    { name: 'Navegación proporcional aumentada (APN)', type: 'classical', expectedMiss: '0.30 – 0.45',
       rationale: 'Baseline clásico fuerte y referencia principal de la hipótesis.',
       details: 'Ley APN con ganancia ajustada; también se evalúa PN simple (0.45 – 0.60).' },
-    { name: 'Control óptimo (Lambert + convexo)', type: 'sota', expectedF1: '0.20 – 0.30',
+    { name: 'Control óptimo (Lambert + convexo)', type: 'sota', expectedMiss: '0.20 – 0.30',
       rationale: 'Estado del arte en precisión; costoso de recalcular a bordo.',
       details: 'Solución del problema de Lambert + optimización convexa por tramos.' },
-    { name: 'Guiado RL meta-aprendido (propuesta)', type: 'ablation', expectedF1: '≤ 0.21',
-      rationale: 'Política recurrente con PPO + meta-aprendizaje; lo que queremos validar.',
-      details: 'Política recurrente optimizada con PPO sobre 5 semillas; ablación --no-meta.' },
+    { name: 'Guiado RL meta-aprendido (esta propuesta)', type: 'proposed', expectedMiss: '≤ 0.21',
+      rationale: 'Política recurrente con PPO + meta-aprendizaje; el método que queremos validar (H1).',
+      details: 'Política recurrente optimizada con PPO sobre 5 semillas. Se compara también una ablación (RL sin meta-aprendizaje) para aislar la contribución del meta-aprendizaje.' },
   ];
 
   readonly fairnessChecklist: ChecklistItem[] = [
