@@ -49,3 +49,6 @@ pnpm-debug.log*
 # Local backups
 *.bak
 *.orig
+
+# Notas internas de handoff (NUNCA publicar: datos del VPS)
+contexto/
