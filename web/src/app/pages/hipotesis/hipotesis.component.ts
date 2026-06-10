@@ -14,7 +14,7 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
       sectionTitle="Hipótesis"
       sectionDescription="Formulación falsable con variables, métricas y criterio explícito de refutación. La hipótesis debe poder ser puesta a prueba por la metodología propuesta."
       [rubricWeight]="20"
-      status="in-progress"
+      status="done"
       prevLink="/motivacion"
       prevLabel="Motivación"
       nextLink="/metodologia"

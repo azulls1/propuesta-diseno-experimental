@@ -37,7 +37,7 @@ const COLOR: Record<Criterio, string> = {
       sectionNumber="08"
       sectionTitle="Entregables"
       sectionDescription="Catálogo único de archivos físicos que componen la entrega. Cada uno indica criterio de rúbrica, tamaño y hash SHA-256 para verificación."
-      status="in-progress"
+      status="done"
       prevLink="/baselines"
       prevLabel="Baselines"
       nextLink="/como-funciona"
@@ -82,10 +82,12 @@ const COLOR: Record<Criterio, string> = {
             </div>
           </div>
           @if (manifest()) {
-            <div class="mt-6 inline-flex items-center gap-2 text-xs font-mono text-white/70">
-              <span>SHA-256 ZIP:</span>
-              <span class="text-white/90 truncate max-w-xs sm:max-w-sm">{{ manifest()!.zip.sha256 }}</span>
-            </div>
+            <details class="mt-6 text-xs text-white/70">
+              <summary class="cursor-pointer hover:text-white/90 select-none">Verificar integridad (SHA-256)</summary>
+              <div class="mt-2 inline-flex items-center gap-2 font-mono">
+                <span class="text-white/90 break-all">{{ manifest()!.zip.sha256 }}</span>
+              </div>
+            </details>
           }
         </article>
 
@@ -263,17 +265,17 @@ export class EntregablesComponent implements OnInit {
     },
     {
       criterio: '—', tipo: 'ZIP completo',
-      nombre: 'entregable-actividad-1-adonai-hernandez-mata.zip',
-      detalle: 'Bundle final con reporte, wiki, enunciado original y README del sitio. Incluye LEEME.md con mapeo a rúbrica + hashes de cada archivo.',
+      nombre: 'Entregable completo — Adonai Hernández Mata',
+      detalle: 'Bundle final (entregable-actividad-1-adonai-hernandez-mata.zip) con reporte, wiki, enunciado original y README del sitio. Incluye LEEME.md con mapeo a rúbrica + hashes de cada archivo.',
       url: 'downloads/entregable-actividad-1-adonai-hernandez-mata.zip',
-      size: '127 KB',
+      size: '142 KB',
     },
     {
       criterio: 'C1', tipo: 'Wiki',
-      nombre: 'Wiki: Motivación (req 1)',
+      nombre: 'Wiki: Motivación (descripción del problema)',
       detalle: 'Material de apoyo para entender el Criterio 1. Método LLM-wiki Karpathy.',
-      url: 'https://github.com/azulls1/propuesta-diseno-experimental/blob/main/docs/wiki/03-req-1-hipotesis.md',
-      size: '4 KB',
+      url: 'https://github.com/azulls1/propuesta-diseno-experimental/blob/main/docs/wiki/02-descripcion-detallada.md',
+      size: '7 KB',
       pesoRubrica: '20%',
     },
     {
@@ -289,7 +291,7 @@ export class EntregablesComponent implements OnInit {
       nombre: 'Wiki: Metodología + Train/Val + Sesgos',
       detalle: 'Análisis profundo del Criterio 3 — el más pesado (40%).',
       url: 'https://github.com/azulls1/propuesta-diseno-experimental/blob/main/docs/wiki/04-req-2-metodologia.md',
-      size: '12 KB',
+      size: '6 KB',
       pesoRubrica: '40%',
     },
     {
@@ -297,7 +299,7 @@ export class EntregablesComponent implements OnInit {
       nombre: 'Wiki: Plan de redacción + Checklist final',
       detalle: 'Estructura de 5 páginas + reglas de estilo para el Criterio 4.',
       url: 'https://github.com/azulls1/propuesta-diseno-experimental/blob/main/docs/wiki/09-plan-redaccion.md',
-      size: '10 KB',
+      size: '6 KB',
       pesoRubrica: '20%',
     },
     {

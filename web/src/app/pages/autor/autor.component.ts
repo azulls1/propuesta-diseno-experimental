@@ -12,7 +12,7 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
       sectionNumber="10"
       sectionTitle="Autor"
       sectionDescription="Información sobre quién desarrolla esta propuesta de diseño experimental."
-      status="in-progress"
+      status="done"
       prevLink="/como-funciona"
       prevLabel="Cómo funciona"
       [nextLink]="null">
@@ -102,8 +102,8 @@ import { ExpandCardComponent } from '../../shared/interactive/expand-card.compon
             </div>
             <div details>
               <p class="text-sm text-pine mb-3">
-                iagentek es la plataforma personal donde despliego proyectos de IA aplicada.
-                Aloja varios productos (rover, astar, portal-act3, este sitio, etc.) bajo el dominio iagentek.com.mx.
+                iagentek es la plataforma personal donde despliego proyectos de IA aplicada,
+                incluido este sitio, bajo el dominio iagentek.com.mx.
               </p>
               <a href="https://iagentek.com.mx" target="_blank" rel="noopener" class="btn-ghost text-xs">
                 iagentek.com.mx →

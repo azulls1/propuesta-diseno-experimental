@@ -22,7 +22,7 @@ interface Baseline {
       sectionNumber="04"
       sectionTitle="Comparación con otras técnicas"
       sectionDescription="Baselines, condiciones de comparación justa y pruebas estadísticas que permitirán validar o refutar la hipótesis."
-      status="in-progress"
+      status="done"
       prevLink="/metodologia"
       prevLabel="Metodología"
       nextLink="/redaccion"

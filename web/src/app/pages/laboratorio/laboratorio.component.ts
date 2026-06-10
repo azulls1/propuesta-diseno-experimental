@@ -17,7 +17,7 @@ interface HFResult { label: string; score: number; }
       sectionNumber="🧪"
       sectionTitle="Laboratorio"
       sectionDescription="Demos ejecutables: clasificador en vivo, calculadora estadística, validador de hipótesis y muro de comentarios persistido en Supabase."
-      status="in-progress"
+      status="done"
       prevLink="/autor"
       prevLabel="Autor"
       [nextLink]="null">

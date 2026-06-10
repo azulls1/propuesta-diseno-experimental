@@ -1,6 +1,6 @@
 # Deployment — Propuesta de Diseño Experimental
 
-Stack desplegado con **Docker Swarm + Traefik + Let's Encrypt** en el VPS `iagentek`.
+Stack desplegado con **Docker Swarm + Traefik + Let's Encrypt** en un VPS Linux.
 
 ## 🔧 Archivos
 
@@ -13,10 +13,10 @@ Stack desplegado con **Docker Swarm + Traefik + Let's Encrypt** en el VPS `iagen
 
 ```bash
 # Conectarse al VPS
-ssh -p 22000 root@<VPS-IP-REDACTED>
+ssh -p <PUERTO-SSH> <usuario>@<VPS-IP-REDACTED>
 
 # Clonar el repo (primera vez)
-cd /opt
+cd <ruta-de-despliegue>
 git clone https://github.com/azulls1/propuesta-diseno-experimental.git
 cd propuesta-diseno-experimental
 
@@ -31,7 +31,7 @@ chmod +x deployment/deploy.sh
 ## 🔄 Re-despliegue (actualizaciones)
 
 ```bash
-cd /opt/propuesta-diseno-experimental
+cd <ruta-de-despliegue>/propuesta-diseno-experimental
 ./deployment/deploy.sh --pull
 ```
 

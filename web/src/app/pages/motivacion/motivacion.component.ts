@@ -34,7 +34,7 @@ interface Gap {
       sectionTitle="Motivación"
       sectionDescription="Identificación de un problema real en IA, sustento en literatura previa y argumentación del hueco de investigación que justifica esta propuesta."
       [rubricWeight]="20"
-      status="in-progress"
+      status="done"
       nextLink="/hipotesis"
       nextLabel="Hipótesis">
 

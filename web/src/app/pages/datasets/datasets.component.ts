@@ -19,7 +19,7 @@ interface AttrItem {
       sectionNumber="06"
       sectionTitle="Datasets"
       sectionDescription="Origen de los datos, preprocesamiento, particiones train/val/test y consideraciones éticas."
-      status="in-progress"
+      status="done"
       prevLink="/redaccion"
       prevLabel="Redacción"
       nextLink="/baselines"
@@ -146,11 +146,6 @@ export class DatasetsComponent {
       source: 'Plaza-del-Arco et al. 2021',
       license: 'Académica',
       url: 'https://github.com/fmplaza/OffendES' },
-    { name: 'MexHate (proyecto académico)', size: '8 000 tuits',
-      use: 'Subset existente para validación cruzada.',
-      source: 'Universidad Nacional Autónoma de México',
-      license: 'CC BY 4.0',
-      url: '' },
   ];
 
   readonly ethicsChecklist: ChecklistItem[] = [

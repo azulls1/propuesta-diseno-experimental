@@ -17,7 +17,7 @@ interface BiasItem   { name: string; mitigation: string; how: string; example: s
       sectionTitle="Metodología"
       sectionDescription="Diseño experimental, datos, muestreo, particiones train/val/test, procedimiento, métricas y control de sesgos. Es la sección con mayor peso en la rúbrica (40%)."
       [rubricWeight]="40"
-      status="in-progress"
+      status="done"
       prevLink="/hipotesis"
       prevLabel="Hipótesis"
       nextLink="/comparacion"

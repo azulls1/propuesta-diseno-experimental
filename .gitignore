@@ -52,3 +52,10 @@ pnpm-debug.log*
 
 # Notas internas de handoff (NUNCA publicar: datos del VPS)
 contexto/
+
+# Artefactos de build del entregable (la copia servida vive en web/public/downloads/)
+entregables/*.zip
+entregables/manifest.json
+entregables/README-sitio.md
+entregables/reporte/reporte.pdf
+entregables/reporte/reporte.docx

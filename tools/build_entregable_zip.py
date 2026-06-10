@@ -96,8 +96,7 @@ El sitio público acompañante de esta propuesta está disponible en:
 
 Angular 19 · Tailwind 4 · Forest DS · Docker Swarm · Traefik · Let's Encrypt.
 
-Backend del laboratorio: HuggingFace Inference API + Supabase
-(stack supabase-maestria del VPS iagentek).
+Backend del laboratorio: HuggingFace Inference API + Supabase (instancia self-hosted).
 """
 
 def sha256_of(path: Path) -> str:

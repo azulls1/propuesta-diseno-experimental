@@ -25,7 +25,7 @@ interface TechItem {
       sectionNumber="09"
       sectionTitle="Cómo funciona el sitio"
       sectionDescription="Arquitectura técnica del proyecto: stack, despliegue, dominio y CI/CD."
-      status="in-progress"
+      status="done"
       prevLink="/entregables"
       prevLabel="Entregables"
       nextLink="/autor"
@@ -148,22 +148,18 @@ export class ComoFuncionaComponent {
     { icon: '🌲', name: 'Forest DS', version: 'v1.0',
       role: 'Design system propio de iagentek. Light-only, paleta forest #04202C, fuentes Sora + DM Sans.',
       features: ['Light mode estricto', 'Paleta forest/pine/moss/fog', '8 archivos CSS modulares', 'Componentes: card, sidebar, badge, table'] },
-    { icon: '⚡', name: 'FastAPI', version: 'pendiente',
-      role: 'API REST + WebSockets en Python. Manejará la lógica de validación de hipótesis y los endpoints.',
-      features: ['Async/await nativo', 'OpenAPI auto-generado', 'Pydantic para validación', 'Soporte WebSocket'],
-      docs: 'https://fastapi.tiangolo.com' },
+    { icon: '🌐', name: 'nginx', version: '1.27-alpine',
+      role: 'Sirve el SPA de Angular ya compilado (archivos estáticos) dentro del contenedor. No hay backend propio: el frontend habla directo con Supabase REST.',
+      features: ['Sirve el build estático de Angular', 'SPA fallback a index.html', 'gzip + cache de assets', 'Security headers'],
+      docs: 'https://nginx.org/en/docs/' },
+    { icon: '🚦', name: 'Traefik', version: '3.x',
+      role: 'Reverse proxy y terminación TLS. Enruta el dominio al contenedor y gestiona el certificado Let\'s Encrypt automáticamente.',
+      features: ['Routing por labels de Docker', 'TLS automático (Let\'s Encrypt)', 'HTTP-01 challenge', 'Renovación sin downtime'],
+      docs: 'https://doc.traefik.io/traefik/' },
     { icon: '🟢', name: 'Supabase', version: 'self-hosted',
       role: 'PostgreSQL + Auth + Storage. Instancia self-hosted de Supabase sobre Docker, detrás del reverse proxy.',
       features: ['PostgreSQL 15 con RLS', 'Auth JWT + OAuth', 'Storage para archivos', 'Realtime sobre Postgres replication'],
       docs: 'https://supabase.com/docs' },
-    { icon: '🔴', name: 'Redis', version: '7.x',
-      role: 'Message broker para Celery y cache de sesiones FastAPI.',
-      features: ['Pub/Sub pattern', 'TTL para sessions', 'Lists para queues', 'Bajo overhead'],
-      docs: 'https://redis.io/docs' },
-    { icon: '🥬', name: 'Celery', version: '5.x',
-      role: 'Workers asíncronos en Python. Ejecutan tareas pesadas (entrenamiento, evaluación batch).',
-      features: ['Tareas distribuidas', 'Retry con backoff', 'Periodic tasks (Beat)', 'Result backend en Redis'],
-      docs: 'https://docs.celeryq.dev' },
     { icon: '🐳', name: 'Docker', version: '29.x',
       role: 'Containerización del frontend (multi-stage build → nginx alpine) y orquestación Swarm.',
       features: ['Multi-stage builds', 'Swarm en 1 nodo', 'Traefik con labels', 'Healthchecks integrados'],

@@ -281,7 +281,7 @@ interface StatCard {
         <div>
           <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Stack</div>
           <div class="font-display text-forest font-semibold">Angular 19 · Tailwind 4 · Forest DS</div>
-          <div class="text-sm text-pine">FastAPI · Supabase · Redis · Celery</div>
+          <div class="text-sm text-pine">nginx · Supabase · Docker · Traefik</div>
         </div>
         <div>
           <div class="text-xs uppercase tracking-wider text-moss font-mono mb-1">Despliegue</div>
@@ -409,5 +409,7 @@ export class LandingComponent {
       description: 'Stack, despliegue y arquitectura del sitio.' },
     { route: '/autor',         number: '10', title: 'Autor',
       description: 'Quién está detrás de la propuesta.' },
+    { route: '/laboratorio',   number: '11', title: 'Laboratorio',
+      description: 'Demos en vivo: clasificador HF, calculadora Wilcoxon y validador.' },
   ];
 }

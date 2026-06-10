@@ -7,7 +7,7 @@ Proyecto de la **Actividad 1** de la asignatura *Investigación en Inteligencia 
 ## 🌐 Despliegue
 
 - **URL**: https://propuesta-diseno-experimental.iagentek.com.mx
-- **VPS**: `iaGentek` (Ubuntu, <VPS-IP-REDACTED>:22000)
+- **VPS**: Linux (Ubuntu) · acceso por SSH
 - **Stack**: Docker Swarm + Traefik + Let's Encrypt
 - **Imagen**: `propuesta-diseno-experimental-frontend:latest`
 
@@ -20,7 +20,7 @@ Ver [`deployment/README.md`](deployment/README.md) para instrucciones detalladas
 ├── docs/
 │   ├── enunciado/                 # Documento original del maestro (.docx)
 │   └── wiki/                      # Desglose del enunciado (método LLM-wiki Karpathy)
-├── web/                           # Frontend Angular 19 + Tailwind 3
+├── web/                           # Frontend Angular 19 + Tailwind 4
 │   ├── src/app/pages/             # Landing, Motivación, Hipótesis, Metodología, Comparación
 │   ├── src/app/shared/            # Header, Footer, SectionLayout (reutilizables)
 │   ├── Dockerfile                 # Multi-stage: build → nginx
@@ -69,19 +69,18 @@ El análisis completo del enunciado vive en [`docs/wiki/`](docs/wiki/). Empieza 
 
 ## ⚙️ Stack del sitio
 
-- **Frontend**: Angular 19 (standalone components, lazy routing) + Tailwind CSS 3
+- **Frontend**: Angular 19 (standalone components, lazy routing) + Tailwind CSS 4 + Forest DS
+- **Servido por**: nginx (build estático del SPA). No hay backend propio.
+- **Datos**: Supabase REST consumido directo desde el navegador (comentarios del laboratorio), protegido con RLS
 - **Reverse proxy**: Traefik con Let's Encrypt (HTTP-01)
 - **Orquestación**: Docker Swarm (1 nodo)
-- **Backend** *(pendiente)*: FastAPI · Supabase (PostgreSQL) · Redis · Celery
 
 ## 📅 Estado
 
 - [x] Wiki de análisis del enunciado (13 archivos, método Karpathy)
 - [x] Repositorio inicializado en GitHub
-- [x] Frontend Angular con landing + 4 páginas de sección
+- [x] Frontend Angular con landing + 11 páginas de sección + laboratorio
 - [x] Dockerfile + nginx.conf + stack de Swarm
-- [ ] DNS del subdominio configurado en Hostinger
-- [ ] Desplegado en VPS
-- [ ] Tema del experimento finalizado *(placeholder: detección de hate speech dialectal MX)*
-- [ ] Documento académico (.docx) redactado
-- [ ] Backend FastAPI + integración Supabase
+- [x] DNS del subdominio configurado
+- [x] Desplegado en VPS con TLS
+- [x] Documento académico (.docx + .pdf) redactado y empaquetado
